@@ -22,8 +22,12 @@ reason to branch.
 - **Money uses `Decimal`, never `Double`.** `Decimal.doubleValue` exists for
   display maths only (ring fractions) and must never feed a stored total.
 - **Inject `Calendar`.** Never reach for `.current` inside domain code.
-- **Corrections are negative entries.** Never mutate or delete history to fix a
-  number.
+- **Entries are immutable once created** — add or remove them, never edit an
+  amount in place. That keeps sync conflict-free at the field level.
+  - Undoing a mistap **deletes** the entry. A tap made by accident is not
+    history worth keeping, and users expect undo to undo.
+  - Correcting a day you genuinely over-reported uses a **negative entry**, so
+    the original record survives and the day's total stays auditable.
 - **Soft-delete via `archivedAt`.** Hard deletion will fight CloudKit later.
 
 ## Models must stay CloudKit-compatible

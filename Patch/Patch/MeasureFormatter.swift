@@ -6,7 +6,11 @@ import PatchCore
 /// Lives in the app, not in PatchCore: how a number is written is a
 /// presentation concern, and it changes per language. The domain only ever
 /// deals in seconds, millilitres and metres.
-enum MeasureFormatter {
+///
+/// `nonisolated` because this is pure computation over value types. The app
+/// target defaults to `MainActor` isolation, which would otherwise make these
+/// callable only from the main actor and stop tests from using them at all.
+nonisolated enum MeasureFormatter {
     static func short(_ amount: Decimal, kind: MeasureKind) -> String {
         switch kind {
         case .duration:
@@ -34,7 +38,7 @@ enum MeasureFormatter {
         switch (hours, minutes) {
         case (0, let minutes): return "\(minutes) min"
         case (let hours, 0): return "\(hours) h"
-        case (let hours, let minutes): return "\(hours) h \(minutes)"
+        case (let hours, let minutes): return "\(hours) h \(minutes) min"
         }
     }
 

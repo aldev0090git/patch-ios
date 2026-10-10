@@ -6,7 +6,6 @@ struct ContentView: View {
     @State private var entries: [Entry] = []
 
     private let calculator = ProgressCalculator()
-    private let statistics = StatisticsCalculator()
 
     var body: some View {
         NavigationStack {
@@ -15,16 +14,27 @@ struct ContentView: View {
                     ForEach(todaysGoals) { goal in
                         GoalRow(
                             goal: goal,
-                            progress: calculator.progress(for: goal, entries: entries, on: .now)
-                        ) { amount in
-                            entries.append(Entry(goalID: goal.id, amount: amount))
-                        }
+                            progress: calculator.progress(for: goal, entries: entries, on: .now),
+                            loggedToday: loggedToday(for: goal),
+                            onLog: { amount in
+                                entries.append(Entry(goalID: goal.id, amount: amount))
+                            },
+                            onUndo: { undoLast(for: goal) }
+                        )
                     }
-                } header: {
-                    summaryHeader
                 }
             }
             .navigationTitle("Today")
+            // Inline, because the progress header below is the hero of this
+            // screen. A large title competes with it for the same space and
+            // loses, leaving the screen looking untitled.
+            .navigationBarTitleDisplayMode(.inline)
+            .safeAreaInset(edge: .top, spacing: 0) {
+                TodayProgressHeader(progress: todaysProgress)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 16)
+                    .background(.bar)
+            }
         }
     }
 
@@ -32,19 +42,34 @@ struct ContentView: View {
         goals.filter { !$0.isArchived && $0.schedule.isScheduled(on: .now) }
     }
 
-    private var summaryHeader: some View {
-        let summary = statistics.summary(for: goals, entries: entries, on: .now)
-        return Text("\(summary.completed) of \(summary.scheduled) done")
-            .font(.subheadline.weight(.medium))
-            .foregroundStyle(.secondary)
-            .textCase(nil)
+    private var todaysProgress: [DayProgress] {
+        todaysGoals.map { calculator.progress(for: $0, entries: entries, on: .now) }
+    }
+
+    private func loggedToday(for goal: Goal) -> Int {
+        entries.count { $0.goalID == goal.id && Calendar.current.isDateInToday($0.loggedAt) }
+    }
+
+    /// Removes the most recent entry logged today for this goal.
+    ///
+    /// A mistap is not history worth keeping, so it is deleted outright rather
+    /// than offset by a negative entry. Negative entries remain the right tool
+    /// for correcting a day you genuinely over-reported.
+    private func undoLast(for goal: Goal) {
+        let calendar = Calendar.current
+        guard let index = entries.lastIndex(where: {
+            $0.goalID == goal.id && calendar.isDateInToday($0.loggedAt)
+        }) else { return }
+        entries.remove(at: index)
     }
 }
 
 private struct GoalRow: View {
     let goal: Goal
     let progress: DayProgress
+    let loggedToday: Int
     let onLog: (Decimal) -> Void
+    let onUndo: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -76,6 +101,21 @@ private struct GoalRow: View {
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
+                }
+
+                if loggedToday > 0 {
+                    Spacer(minLength: 0)
+                    Button {
+                        withAnimation(.snappy) { onUndo() }
+                    } label: {
+                        Label("Undo", systemImage: "arrow.uturn.backward")
+                            .labelStyle(.iconOnly)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    .tint(.secondary)
+                    .accessibilityLabel("Undo last entry for \(goal.title)")
+                    .transition(.scale.combined(with: .opacity))
                 }
             }
         }
