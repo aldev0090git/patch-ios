@@ -74,11 +74,27 @@ private struct GoalCard: View {
     let progress: DayProgress
     let onLog: (Decimal) -> Void
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    /// Scaled so the ring and the tick grow with the text rather than shrinking
+    /// into a corner of it. A fixed 44pt circle beside accessibility-sized type
+    /// looks like a rendering bug.
+    @ScaledMetric(relativeTo: .headline) private var ringSize: CGFloat = 44
+    @ScaledMetric(relativeTo: .title3) private var statusIconSize: CGFloat = 30
+
     @State private var isEnteringManually = false
 
-    /// Four equal columns, so controls line up across every card no matter how
-    /// many a goal needs.
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 4)
+    /// Equal columns, so controls line up across every card no matter how many
+    /// a goal needs.
+    ///
+    /// Halved at accessibility text sizes. Four columns still fit there, but
+    /// only by shrinking the labels below the size the user asked for, which
+    /// defeats the point of asking. Two columns let the text render at full
+    /// size and wrap to a second row instead.
+    private var columns: [GridItem] {
+        let count = dynamicTypeSize.isAccessibilitySize ? 2 : 4
+        return Array(repeating: GridItem(.flexible(), spacing: 8), count: count)
+    }
 
     private var accent: Color {
         if progress.isAchieved { return .green }
@@ -115,7 +131,8 @@ private struct GoalCard: View {
             ProgressRing(
                 fraction: progress.isFailed ? 1 : progress.fraction,
                 symbolName: goal.symbolName,
-                accent: accent
+                accent: accent,
+                size: ringSize
             )
 
             VStack(alignment: .leading, spacing: 2) {
@@ -138,12 +155,12 @@ private struct GoalCard: View {
     private var statusIcon: some View {
         if progress.isAchieved {
             Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 30))
+                .font(.system(size: statusIconSize))
                 .foregroundStyle(.white, .green)
                 .transition(.scale.combined(with: .opacity))
         } else if progress.isFailed {
             Image(systemName: "exclamationmark.circle.fill")
-                .font(.system(size: 30))
+                .font(.system(size: statusIconSize))
                 .foregroundStyle(.white, .orange)
                 .transition(.scale.combined(with: .opacity))
         }
@@ -227,20 +244,26 @@ private struct ProgressRing: View {
     let fraction: Double
     let symbolName: String
     let accent: Color
+    let size: CGFloat
+
+    /// Keeps the stroke and glyph in proportion as the ring scales, so it reads
+    /// the same at every text size instead of turning into a thin hoop.
+    private var lineWidth: CGFloat { max(3, size * 0.09) }
+    private var glyphSize: CGFloat { size * 0.36 }
 
     var body: some View {
         ZStack {
             Circle()
-                .stroke(.quaternary, lineWidth: 4)
+                .stroke(.quaternary, lineWidth: lineWidth)
             Circle()
                 .trim(from: 0, to: fraction)
-                .stroke(accent, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                .stroke(accent, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                 .rotationEffect(.degrees(-90))
             Image(systemName: symbolName)
-                .font(.system(size: 16, weight: .semibold))
+                .font(.system(size: glyphSize, weight: .semibold))
                 .foregroundStyle(accent)
         }
-        .frame(width: 44, height: 44)
+        .frame(width: size, height: size)
         .animation(.snappy, value: fraction)
     }
 }
