@@ -108,10 +108,15 @@ Requires Xcode 27 or later.
 git clone git@github.com:aldev0090git/patch-ios.git
 cd patch-ios
 
-# Domain layer — no Xcode project needed
-cd Packages/PatchKit
-swift test
+# Run the app
+open Patch/Patch.xcodeproj
+
+# Or just the domain layer — no Xcode project needed
+cd Packages/PatchKit && swift test
 ```
+
+The app targets iOS 26.0 and the project is kept in Xcode format 77, so it
+opens in Xcode 26 as well as 27.
 
 ## Roadmap
 
@@ -121,9 +126,9 @@ swift test
 - [x] Onboarding goal templates
 - [x] Unit test suite — 52 tests
 - [x] CI — build, test and lint on every push
+- [x] iOS app target, Today view with quick-add logging
 - [ ] SwiftData persistence behind a repository protocol
 - [ ] Onboarding flow
-- [ ] Today view with quick-add logging
 - [ ] Design system package — tokens for light, dark and custom themes
 - [ ] Calendar and statistics screens
 - [ ] Local notification reminders

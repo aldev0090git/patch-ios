@@ -69,3 +69,13 @@ every-push CI without a reason.
 `.xcodeproj` is committed deliberately, so anyone can clone and hit Run with no
 extra tooling. That is a portfolio requirement — do not replace it with Tuist or
 XcodeGen.
+
+**Keep `objectVersion = 77` in project.pbxproj.** Local Xcode is 27, but GitHub's
+runner image is on Xcode 26.6, and Xcode 27's native format 110 is unreadable by
+it — CI fails with "future Xcode project file format". If Xcode silently
+upgrades the format after a GUI change, put it back. The same gap means app code
+must not depend on Xcode-27-only SDK features until the runners catch up.
+
+The app's deployment target is **iOS 26.0**, matching PatchKit's platform floor.
+Xcode's template defaults to the newest OS, which would exclude every 26.x
+simulator and almost every real device.
