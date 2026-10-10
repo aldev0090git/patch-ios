@@ -71,32 +71,55 @@ private struct GoalRow: View {
     let onLog: (Decimal) -> Void
     let onReset: () -> Void
 
+    @State private var isEnteringManually = false
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 14) {
-                ProgressRing(
+            header
+            actions
+        }
+        .padding(.vertical, 6)
+        .animation(.snappy, value: progress.total)
+        .sheet(isPresented: $isEnteringManually) {
+            ManualEntrySheet(goal: goal, remaining: progress.remaining) { amount in
+                withAnimation(.snappy) { onLog(amount) }
+            }
+        }
+    }
+
+    private var header: some View {
+        HStack(spacing: 14) {
+            ProgressRing(
                 fraction: progress.isFailed ? 1 : progress.fraction,
                 symbolName: goal.symbolName,
                 tint: progress.isFailed ? AnyShapeStyle(.orange) : AnyShapeStyle(.tint)
             )
 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(goal.title)
-                        .font(.headline)
-                    Text(subtitle)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                statusIcon
+            VStack(alignment: .leading, spacing: 2) {
+                Text(goal.title)
+                    .font(.headline)
+                Text(subtitle)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
 
-            actions
+            Spacer()
+
+            // Reset sits up here rather than in the button row, so that row
+            // stays exactly four equal slots at every state.
+            if loggedToday > 0 {
+                Button("Reset") {
+                    withAnimation(.snappy) { onReset() }
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                .tint(.secondary)
+                .accessibilityLabel("Reset today's progress for \(goal.title)")
+                .transition(.scale.combined(with: .opacity))
+            }
+
+            statusIcon
         }
-        .padding(.vertical, 6)
-        .animation(.snappy, value: progress.total)
     }
 
     /// Every settled state gets a mark. A row with no icon means "still in
@@ -118,44 +141,46 @@ private struct GoalRow: View {
 
     /// The action row, which differs by how the goal is logged.
     ///
-    /// A row of numbers is only meaningful when amounts accumulate. A once-a-day
-    /// goal wants one button, and a clean-day goal wants a way to admit a slip.
+    /// Buttons share the row equally so that every goal's controls line up
+    /// down the screen instead of each row wrapping to its own rhythm.
     @ViewBuilder
     private var actions: some View {
-        HStack(spacing: 8) {
-            switch goal.loggingStyle {
-            case .incremental:
+        switch goal.loggingStyle {
+        case .incremental:
+            HStack(spacing: 8) {
                 ForEach(QuickAddSuggestions.options(for: goal.measure)) { option in
-                    Button(MeasureFormatter.short(option.amount, kind: goal.measure.kind)) {
+                    actionButton(MeasureFormatter.short(option.amount, kind: goal.measure.kind)) {
                         withAnimation(.snappy) { onLog(option.amount) }
                     }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
                 }
 
-            case .single:
-                if loggedToday == 0 {
-                    Button("Done") {
-                        withAnimation(.snappy) { onLog(1) }
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.small)
-                }
-
+                actionButton("Manual") { isEnteringManually = true }
             }
 
-            if loggedToday > 0 {
-                Spacer(minLength: 0)
-                Button("Reset") {
-                    withAnimation(.snappy) { onReset() }
+        case .single:
+            // Collapses once done: the tick and Reset above already say so,
+            // and a lone disabled button would just be noise.
+            if loggedToday == 0 {
+                actionButton("Done") {
+                    withAnimation(.snappy) { onLog(1) }
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
-                .tint(.secondary)
-                .accessibilityLabel("Reset today's progress for \(goal.title)")
-                .transition(.scale.combined(with: .opacity))
             }
         }
+    }
+
+    /// The expanding frame goes on the *label*, not the button.
+    ///
+    /// Putting it on the button only makes the invisible slots equal: the
+    /// bordered background still hugs its text, so "5" renders as a tiny pill
+    /// beside a wide "Manual". Expanding the label makes the capsules
+    /// themselves match, which is what lines the rows up down the screen.
+    private func actionButton(_ title: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.bordered)
+        .controlSize(.small)
     }
 
     private var subtitle: String {

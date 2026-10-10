@@ -101,13 +101,15 @@ actually say, so logging never requires a picker:
 
 | Goal | Suggestions |
 |---|---|
-| Read 1 hour | 5 min · 15 min · 30 min · 1 h |
-| 100 push-ups | 10 · 25 · 50 · 100 |
-| 2 litres of water | 200 ml · 500 ml · 1 L · 2 L |
-| 10 000 steps | 1 000 · 2 000 · 5 000 · 10 000 |
-| Don't smoke | a single slip |
+| Read 20 minutes | 5 min · 10 min · 20 min |
+| 100 push-ups | 25 · 50 · 100 |
+| 2 litres of water | 500 ml · 1 L · 2 L |
+| 10 000 steps | 2 000 · 5 000 · 10 000 |
 
-Manual entry stays available; these are the fast path, not the only path.
+Three, plus **Manual** for anything else — four equal slots, so every goal's
+controls line up down the screen rather than each row finding its own rhythm.
+Manual opens a picker over the goal's own range, defaulted to the amount still
+needed, since that is overwhelmingly the value people want.
 
 ## Getting started
 

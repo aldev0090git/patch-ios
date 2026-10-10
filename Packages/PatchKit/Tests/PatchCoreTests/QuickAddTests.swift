@@ -10,34 +10,34 @@ struct QuickAddTests {
 
     @Test("An hour of reading is offered in sittings, not in minutes")
     func readingAnHour() {
-        // 5 min, 15 min, 30 min, 1 h — in seconds.
-        #expect(amounts(.minutes(60)) == [300, 900, 1800, 3600])
+        // 15 min, 30 min, 1 h — in seconds.
+        #expect(amounts(.minutes(60)) == [900, 1800, 3600])
     }
 
     @Test("A twenty-minute goal scales down to smaller bites")
     func readingTwentyMinutes() {
-        // 1 min, 5 min, 10 min, 20 min.
-        #expect(amounts(.minutes(20)) == [60, 300, 600, 1200])
+        // 5 min, 10 min, 20 min.
+        #expect(amounts(.minutes(20)) == [300, 600, 1200])
     }
 
     @Test("Push-ups are offered in sets")
     func pushUps() {
-        #expect(amounts(.times(100)) == [10, 25, 50, 100])
+        #expect(amounts(.times(100)) == [25, 50, 100])
     }
 
     @Test("Water is offered in glasses and bottles")
     func water() {
-        #expect(amounts(.millilitres(2000)) == [200, 500, 1000, 2000])
+        #expect(amounts(.millilitres(2000)) == [500, 1000, 2000])
     }
 
     @Test("Steps are offered in thousands")
     func steps() {
-        #expect(amounts(.steps(10_000)) == [1000, 2000, 5000, 10_000])
+        #expect(amounts(.steps(10_000)) == [2000, 5000, 10_000])
     }
 
     @Test("Money rounds to amounts people actually hand over")
     func money() {
-        #expect(amounts(.money(100, quickAdd: 50)) == [10, 25, 50, 100])
+        #expect(amounts(.money(100, quickAdd: 50)) == [25, 50, 100])
     }
 
     @Test("An abstinence goal offers only a single slip")
@@ -46,7 +46,7 @@ struct QuickAddTests {
         #expect(options.map(\.amount) == [1])
     }
 
-    @Test("Suggestions are always ascending, unique and within the limit")
+    @Test("Suggestions are always ascending, unique and at most three")
     func suggestionsAreWellFormed() {
         let measures: [Measure] = [
             .minutes(5), .minutes(90), .times(1), .times(7), .times(250),
@@ -55,7 +55,7 @@ struct QuickAddTests {
 
         for measure in measures {
             let values = amounts(measure)
-            #expect(values.count <= 4)
+            #expect(values.count <= 3)
             #expect(values == values.sorted())
             #expect(Set(values).count == values.count)
             #expect(values.allSatisfy { $0 > 0 })

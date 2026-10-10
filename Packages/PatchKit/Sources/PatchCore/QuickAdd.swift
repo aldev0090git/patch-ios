@@ -20,11 +20,13 @@ public struct QuickAddOption: Identifiable, Hashable, Sendable {
 public enum QuickAddSuggestions {
     /// Fractions of the daily target to offer, smallest first.
     ///
-    /// A tenth is the smallest useful bite: finer than that and a one-hour
-    /// reading goal starts suggesting "1 minute", which nobody taps. The last
-    /// fraction is the whole target, so finishing in one sitting is one tap.
+    /// Three, so the row can hold them at equal width alongside a manual
+    /// option and still read cleanly on a narrow phone. A quarter is the
+    /// smallest useful bite — finer than that and a one-hour reading goal
+    /// starts suggesting "1 minute", which nobody taps. The last fraction is
+    /// the whole target, so finishing in one sitting stays one tap.
     private static let fractions: [(numerator: Int, denominator: Int)] = [
-        (1, 10), (1, 4), (1, 2), (1, 1)
+        (1, 4), (1, 2), (1, 1)
     ]
 
     /// Round numbers people actually use, per kind, in canonical units.
@@ -47,7 +49,7 @@ public enum QuickAddSuggestions {
     ///
     /// A goal with a zero target is an abstinence goal: the only thing worth
     /// logging is a single slip.
-    public static func options(for measure: Measure, limit: Int = 4) -> [QuickAddOption] {
+    public static func options(for measure: Measure, limit: Int = 3) -> [QuickAddOption] {
         guard measure.dailyTarget > .zero else {
             return [QuickAddOption(amount: 1)]
         }
