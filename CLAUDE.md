@@ -70,11 +70,15 @@ every-push CI without a reason.
 extra tooling. That is a portfolio requirement — do not replace it with Tuist or
 XcodeGen.
 
-**Keep `objectVersion = 77` in project.pbxproj.** Local Xcode is 27, but GitHub's
-runner image is on Xcode 26.6, and Xcode 27's native format 110 is unreadable by
-it — CI fails with "future Xcode project file format". If Xcode silently
-upgrades the format after a GUI change, put it back. The same gap means app code
-must not depend on Xcode-27-only SDK features until the runners catch up.
+**Keep `objectVersion = 77` in project.pbxproj.** Not for CI any more — the app
+job runs on the `xcode-27` image and matches local Xcode exactly. It is so the
+repo opens in Xcode 16 and later. Format 110 would restrict it to Xcode 27,
+which defeats the purpose of committing the `.xcodeproj` for clone-and-Run.
+If Xcode offers to upgrade the project format, decline; CI enforces this.
+
+**Do not "select the newest Xcode" on a runner.** The `xcode-27` image ships
+betas alongside the release, and picking the highest version selects a beta,
+so builds can fail on beta bugs instead of on this code. Use the image default.
 
 The app's deployment target is **iOS 26.0**, matching PatchKit's platform floor.
 Xcode's template defaults to the newest OS, which would exclude every 26.x
