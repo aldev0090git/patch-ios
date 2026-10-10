@@ -36,7 +36,10 @@ jobs:
 
   app:
     name: Patch (iOS)
-    runs-on: macos-latest
+    # Xcode 27 image (public preview, arm64 only). Keeps CI on the same major
+    # Xcode as local development, so a failure here means a real problem rather
+    # than a version gap.
+    runs-on: xcode-27
     steps:
       - uses: actions/checkout@v4
 
