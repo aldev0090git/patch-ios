@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA0000000000000000000005 /* PatchStore in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000004 /* PatchStore */; };
 		AA0000000000000000000003 /* PatchCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000002 /* PatchCore */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			files = (
 				AA0000000000000000000003 /* PatchCore in Frameworks */,
+				AA0000000000000000000005 /* PatchStore in Frameworks */,
 			);
 		};
 		CED82F39307AD6F6005B6D44 /* Frameworks */ = {
@@ -110,6 +112,7 @@
 			name = Patch;
 			packageProductDependencies = (
 				AA0000000000000000000002 /* PatchCore */,
+				AA0000000000000000000004 /* PatchStore */,
 			);
 			productName = Patch;
 			productReference = CED82F2F307AD6F5005B6D44 /* Patch.app */;
@@ -595,6 +598,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AA0000000000000000000004 /* PatchStore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PatchStore;
+		};
 		AA0000000000000000000002 /* PatchCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PatchCore;

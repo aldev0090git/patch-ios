@@ -1,0 +1,161 @@
+import Foundation
+import PatchCore
+import SwiftData
+import Testing
+@testable import PatchStore
+
+/// One container for the whole suite, emptied between tests.
+///
+/// Creating a second `ModelContainer` in the same process traps with SIGTRAP —
+/// not on the second *concurrent* one, on the second one at all, serialized or
+/// not. Every test building its own container therefore killed the run with no
+/// usable diagnostic.
+@MainActor
+private enum SharedContainer {
+    static let value: ModelContainer? = {
+        let schema = Schema([StoredGoal.self, StoredEntry.self])
+        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+        return try? ModelContainer(for: schema, configurations: configuration)
+    }()
+}
+
+// Serialized because the tests share one container, so they must not interleave
+// while emptying it.
+@Suite("SwiftData store", .serialized)
+struct SwiftDataGoalStoreTests {
+    @MainActor
+    private func makeStore() throws -> SwiftDataGoalStore {
+        let container = try #require(SharedContainer.value)
+        let context = container.mainContext
+        try context.delete(model: StoredGoal.self)
+        try context.delete(model: StoredEntry.self)
+        try context.save()
+        return SwiftDataGoalStore(context: context)
+    }
+
+    @Test("A goal survives a round trip with every field intact")
+    @MainActor
+    func goalRoundTrip() throws {
+        let store = try makeStore()
+        let goal = Goal(
+            title: "Gym",
+            symbolName: "dumbbell",
+            measure: .times(3, quickAdd: 1),
+            direction: .atLeast,
+            schedule: .daysOfWeek([.monday, .wednesday, .friday]),
+            cumulativeTarget: 150,
+            createdAt: Date(timeIntervalSince1970: 1_767_225_600)
+        )
+
+        try store.save(goal)
+        let restored = try #require(try store.loadGoals().first)
+
+        #expect(restored.id == goal.id)
+        #expect(restored.title == "Gym")
+        #expect(restored.symbolName == "dumbbell")
+        #expect(restored.measure == goal.measure)
+        #expect(restored.direction == .atLeast)
+        #expect(restored.schedule == .daysOfWeek([.monday, .wednesday, .friday]))
+        #expect(restored.cumulativeTarget == 150)
+        #expect(restored.createdAt == goal.createdAt)
+        #expect(restored.archivedAt == nil)
+    }
+
+    @Test("A daily schedule round trips as daily")
+    @MainActor
+    func dailyScheduleRoundTrip() throws {
+        let store = try makeStore()
+        try store.save(Goal(title: "Read", measure: .minutes(20), schedule: .daily))
+
+        #expect(try store.loadGoals().first?.schedule == .daily)
+    }
+
+    @Test("Saving the same goal again updates it instead of duplicating")
+    @MainActor
+    func savingTwiceUpdates() throws {
+        let store = try makeStore()
+        var goal = Goal(title: "Read", measure: .minutes(20))
+        try store.save(goal)
+
+        goal.title = "Read a book"
+        goal.archivedAt = Date(timeIntervalSince1970: 1_767_225_600)
+        try store.save(goal)
+
+        let stored = try store.loadGoals()
+        #expect(stored.count == 1)
+        #expect(stored.first?.title == "Read a book")
+        #expect(stored.first?.isArchived == true)
+    }
+
+    @Test("Entries survive a round trip and keep their order")
+    @MainActor
+    func entryRoundTrip() throws {
+        let store = try makeStore()
+        let goalID = UUID()
+        let morning = Entry(goalID: goalID, amount: 600,
+                            loggedAt: Date(timeIntervalSince1970: 1_767_254_400), note: "chapter 1")
+        let evening = Entry(goalID: goalID, amount: 900,
+                            loggedAt: Date(timeIntervalSince1970: 1_767_297_600))
+
+        try store.log(evening)
+        try store.log(morning)
+
+        let stored = try store.loadEntries()
+        #expect(stored.map(\.id) == [morning.id, evening.id]) // sorted by time, not insertion
+        #expect(stored.first?.amount == 600)
+        #expect(stored.first?.note == "chapter 1")
+        #expect(stored.last?.note == nil)
+    }
+
+    @Test("Deleting removes only the entries named")
+    @MainActor
+    func deletingIsSelective() throws {
+        let store = try makeStore()
+        let goalID = UUID()
+        let keep = Entry(goalID: goalID, amount: 250)
+        let dropOne = Entry(goalID: goalID, amount: 500)
+        let dropTwo = Entry(goalID: goalID, amount: 750)
+        for entry in [keep, dropOne, dropTwo] { try store.log(entry) }
+
+        try store.deleteEntries(ids: [dropOne.id, dropTwo.id])
+
+        #expect(try store.loadEntries().map(\.id) == [keep.id])
+    }
+
+    @Test("Deleting nothing is a no-op rather than an error")
+    @MainActor
+    func deletingNothingIsHarmless() throws {
+        let store = try makeStore()
+        try store.log(Entry(goalID: UUID(), amount: 1))
+
+        try store.deleteEntries(ids: [])
+
+        #expect(try store.loadEntries().count == 1)
+    }
+
+    @Test("A decimal amount is not mangled into a float")
+    @MainActor
+    func decimalPrecisionSurvives() throws {
+        let store = try makeStore()
+        // Money is the reason amounts are Decimal; 0.1 + 0.2 must stay exact.
+        try store.log(Entry(goalID: UUID(), amount: Decimal(string: "1234.56") ?? 0))
+
+        #expect(try store.loadEntries().first?.amount == Decimal(string: "1234.56"))
+    }
+
+    @Test("An unrecognised stored value falls back instead of failing")
+    @MainActor
+    func unknownRawValuesFallBack() throws {
+        // A newer version syncing an unfamiliar measure kind must not stop an
+        // older one from opening the goal at all.
+        let stored = StoredGoal(Goal(title: "Mystery", measure: .times(5)))
+        stored.measureKindRaw = "quantum-flux"
+        stored.directionRaw = "sideways"
+
+        let goal = stored.domain
+
+        #expect(goal.measure.kind == .count)
+        #expect(goal.direction == .atLeast)
+        #expect(goal.title == "Mystery")
+    }
+}

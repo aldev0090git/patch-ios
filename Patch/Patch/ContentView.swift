@@ -2,22 +2,16 @@ import PatchCore
 import SwiftUI
 
 struct ContentView: View {
-    @State private var goals = SampleData.goals
-    @State private var entries: [Entry] = []
-
-    private let calculator = ProgressCalculator()
+    @State var model: TodayModel
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(todaysGoals) { goal in
-                    let loggedToday = loggedToday(for: goal)
+                ForEach(model.todaysGoals) { goal in
+                    let hasLogged = model.hasLoggedToday(goal)
 
-                    GoalCard(
-                        goal: goal,
-                        progress: calculator.progress(for: goal, entries: entries, on: .now)
-                    ) { amount in
-                        entries.append(Entry(goalID: goal.id, amount: amount))
+                    GoalCard(goal: goal, progress: model.progress(for: goal)) { amount in
+                        model.log(amount, for: goal)
                     }
                     .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
                     .listRowSeparator(.hidden)
@@ -27,9 +21,9 @@ struct ContentView: View {
                     // that throws away the day does not belong next to the
                     // buttons that build it up.
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        if loggedToday > 0 {
+                        if hasLogged {
                             Button("Reset", role: .destructive) {
-                                withAnimation(.snappy) { resetToday(for: goal) }
+                                withAnimation(.snappy) { model.resetToday(for: goal) }
                             }
                         }
                     }
@@ -44,36 +38,26 @@ struct ContentView: View {
             // loses, leaving the screen looking untitled.
             .navigationBarTitleDisplayMode(.inline)
             .safeAreaInset(edge: .top, spacing: 0) {
-                TodayProgressHeader(progress: todaysProgress)
+                TodayProgressHeader(progress: model.todaysProgress)
                     .padding(.horizontal, 20)
                     .padding(.bottom, 16)
                     .background(.bar)
             }
-        }
-    }
-
-    private var todaysGoals: [Goal] {
-        goals.filter { !$0.isArchived && $0.schedule.isScheduled(on: .now) }
-    }
-
-    private var todaysProgress: [DayProgress] {
-        todaysGoals.map { calculator.progress(for: $0, entries: entries, on: .now) }
-    }
-
-    private func loggedToday(for goal: Goal) -> Int {
-        entries.count { $0.goalID == goal.id && Calendar.current.isDateInToday($0.loggedAt) }
-    }
-
-    /// Resets everything logged today for this goal.
-    ///
-    /// Deletes rather than offsetting with a negative entry: a day you are
-    /// resetting was mislogged, and that is not history worth keeping.
-    /// Negative entries remain the right tool for correcting a past day that
-    /// was genuinely over-reported.
-    private func resetToday(for goal: Goal) {
-        let calendar = Calendar.current
-        entries.removeAll {
-            $0.goalID == goal.id && calendar.isDateInToday($0.loggedAt)
+            .task {
+                model.load()
+                model.seedIfEmpty()
+            }
+            .alert(
+                "Something went wrong",
+                isPresented: Binding(
+                    get: { model.failure != nil },
+                    set: { if !$0 { model.failure = nil } }
+                )
+            ) {
+                Button("OK", role: .cancel) { model.failure = nil }
+            } message: {
+                Text(model.failure ?? "")
+            }
         }
     }
 }
@@ -243,5 +227,12 @@ private struct ProgressRing: View {
 }
 
 #Preview {
-    ContentView()
+    // The in-memory store lives in PatchCore precisely so previews can use it
+    // without the app depending on a test bundle.
+    let goals = [
+        GoalTemplateCatalog.read.makeGoal(title: "Read"),
+        GoalTemplateCatalog.water.makeGoal(title: "Water"),
+        GoalTemplateCatalog.quitSmoking.makeGoal(title: "Don't smoke")
+    ]
+    return ContentView(model: TodayModel(store: InMemoryGoalStore(goals: goals)))
 }
