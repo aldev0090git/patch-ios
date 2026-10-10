@@ -34,6 +34,18 @@ jobs:
         working-directory: Packages/PatchKit
         run: swift test
 
+  app:
+    name: Patch (iOS)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build for simulator
+        run: |
+          xcodebuild -project Patch/Patch.xcodeproj -scheme Patch \
+            -destination 'generic/platform=iOS Simulator' \
+            -quiet build
+
   lint:
     name: SwiftLint
     runs-on: macos-latest

@@ -6,6 +6,10 @@
 	objectVersion = 110;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		AA0000000000000000000003 /* PatchCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000002 /* PatchCore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		CED82F3D307AD6F6005B6D44 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -51,6 +55,7 @@
 		CED82F2C307AD6F5005B6D44 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
+				AA0000000000000000000003 /* PatchCore in Frameworks */,
 			);
 		};
 		CED82F39307AD6F6005B6D44 /* Frameworks */ = {
@@ -103,6 +108,9 @@
 				CED82F31307AD6F5005B6D44 /* Patch */,
 			);
 			name = Patch;
+			packageProductDependencies = (
+				AA0000000000000000000002 /* PatchCore */,
+			);
 			productName = Patch;
 			productReference = CED82F2F307AD6F5005B6D44 /* Patch.app */;
 			productType = "com.apple.product-type.application";
@@ -181,6 +189,9 @@
 			);
 			mainGroup = CED82F26307AD6F5005B6D44;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				AA0000000000000000000001 /* XCLocalSwiftPackageReference "../Packages/PatchKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CED82F30307AD6F5005B6D44 /* Products */;
 			projectDirPath = "";
@@ -575,6 +586,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		AA0000000000000000000001 /* XCLocalSwiftPackageReference "../Packages/PatchKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Packages/PatchKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AA0000000000000000000002 /* PatchCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PatchCore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CED82F27307AD6F5005B6D44 /* Project object */;
 	validationLevel = 1;
