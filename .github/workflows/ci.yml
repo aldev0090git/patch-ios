@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A new push to the same branch cancels the previous run. macOS runners bill at
+# a 10x minute multiplier, so not paying for superseded runs matters.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core:
+    name: PatchCore
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache SwiftPM build
+        uses: actions/cache@v4
+        with:
+          path: Packages/PatchKit/.build
+          key: spm-${{ runner.os }}-${{ hashFiles('Packages/PatchKit/Package.swift') }}
+          restore-keys: spm-${{ runner.os }}-
+
+      - name: Build
+        working-directory: Packages/PatchKit
+        run: swift build
+
+      - name: Test
+        working-directory: Packages/PatchKit
+        run: swift test
+
+  lint:
+    name: SwiftLint
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install SwiftLint
+        run: brew install swiftlint
+      - name: Lint
+        run: swiftlint lint --strict --reporter github-actions-logging
