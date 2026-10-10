@@ -43,15 +43,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # The runner image lags behind the latest Xcode, so pick the newest one
-      # it actually has rather than whatever is selected by default.
-      - name: Select newest Xcode
-        run: |
-          ls /Applications | grep -i '^Xcode' || true
-          latest=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
-          echo "Using $latest"
-          sudo xcode-select -s "$latest/Contents/Developer"
-          xcodebuild -version
+      # Use the image's own default Xcode. Picking the "newest" installed one
+      # selects a beta on this image, which would fail builds on beta bugs
+      # rather than on anything in this repo.
+      - name: Show Xcode version
+        run: xcodebuild -version
 
       - name: Build for simulator
         run: |
