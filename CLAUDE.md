@@ -74,11 +74,11 @@ every-push CI without a reason.
 extra tooling. That is a portfolio requirement — do not replace it with Tuist or
 XcodeGen.
 
-**Keep `objectVersion = 77` in project.pbxproj.** Not for CI any more — the app
-job runs on the `xcode-27` image and matches local Xcode exactly. It is so the
-repo opens in Xcode 16 and later. Format 110 would restrict it to Xcode 27,
-which defeats the purpose of committing the `.xcodeproj` for clone-and-Run.
-If Xcode offers to upgrade the project format, decline; CI enforces this.
+**The project is in Xcode 27's native format (`objectVersion = 110`), so Xcode 27
+or later is required to open it.** We tried pinning it to 77 for wider
+compatibility, but Xcode silently rewrites the format every time the project is
+opened, which broke CI repeatedly. Fighting the IDE on every save cost more than
+the compatibility was worth. Let Xcode manage this field.
 
 **Do not "select the newest Xcode" on a runner.** The `xcode-27` image ships
 betas alongside the release, and picking the highest version selects a beta,

@@ -102,8 +102,6 @@ Manual entry stays available; these are the fast path, not the only path.
 
 ## Getting started
 
-Requires Xcode 27 or later.
-
 ```bash
 git clone git@github.com:aldev0090git/patch-ios.git
 cd patch-ios
@@ -115,8 +113,8 @@ open Patch/Patch.xcodeproj
 cd Packages/PatchKit && swift test
 ```
 
-The app targets iOS 26.0 and the project is kept in Xcode format 77, so it
-opens in Xcode 26 as well as 27.
+Requires **Xcode 27 or later** to open the project. The app itself targets
+**iOS 26.0**, so it runs on the previous OS release as well as the current one.
 
 ## Roadmap
 

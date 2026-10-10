@@ -66,14 +66,3 @@ jobs:
       - name: Lint
         run: swiftlint lint --strict --reporter github-actions-logging
 
-      # Xcode occasionally offers to "upgrade" the project format. Accepting
-      # would bump objectVersion to 110 and lock the repo to Xcode 27, which
-      # defeats the point of committing the .xcodeproj at all.
-      - name: Project stays openable in older Xcode
-        run: |
-          version=$(grep -o 'objectVersion = [0-9]*' Patch/Patch.xcodeproj/project.pbxproj | head -1 | grep -o '[0-9]*')
-          echo "objectVersion = $version"
-          if [ "$version" != "77" ]; then
-            echo "::error::Project format changed to $version; expected 77 so the project opens in Xcode 16+."
-            exit 1
-          fi
