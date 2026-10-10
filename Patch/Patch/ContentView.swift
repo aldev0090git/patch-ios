@@ -9,10 +9,10 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section {
+            ScrollView {
+                LazyVStack(spacing: 12) {
                     ForEach(todaysGoals) { goal in
-                        GoalRow(
+                        GoalCard(
                             goal: goal,
                             progress: calculator.progress(for: goal, entries: entries, on: .now),
                             loggedToday: loggedToday(for: goal),
@@ -23,7 +23,10 @@ struct ContentView: View {
                         )
                     }
                 }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 14)
             }
+            .background(Color(uiColor: .systemGroupedBackground))
             .navigationTitle("Today")
             // Inline, because the progress header below is the hero of this
             // screen. A large title competes with it for the same space and
@@ -64,7 +67,13 @@ struct ContentView: View {
     }
 }
 
-private struct GoalRow: View {
+/// One goal, as a card whose background fills with its own progress.
+///
+/// The fill is a tint over the normal card colour rather than a solid block of
+/// saturated colour. Text keeps its standard colours, so it stays legible in
+/// both appearances and under Increase Contrast — which a white-on-magenta
+/// card cannot promise once someone raises their text size.
+private struct GoalCard: View {
     let goal: Goal
     let progress: DayProgress
     let loggedToday: Int
@@ -73,15 +82,45 @@ private struct GoalRow: View {
 
     @State private var isEnteringManually = false
 
+    /// Four equal columns, so controls line up across every card no matter how
+    /// many a goal needs.
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 4)
+
+    private var tint: Color { goal.tint.color }
+
+    private var fillColor: Color {
+        if progress.isAchieved { return .green }
+        if progress.isFailed { return .orange }
+        return tint
+    }
+
+    /// A failed day fills completely: a part-filled card would read as partly
+    /// successful.
+    private var fillFraction: Double {
+        progress.isFailed ? 1 : progress.fraction
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 12) {
             header
             actions
         }
-        .padding(.vertical, 6)
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            ZStack(alignment: .leading) {
+                Color(uiColor: .secondarySystemGroupedBackground)
+                GeometryReader { proxy in
+                    fillColor
+                        .opacity(progress.isAchieved || progress.isFailed ? 0.3 : 0.22)
+                        .frame(width: proxy.size.width * fillFraction)
+                }
+            }
+        }
+        .clipShape(.rect(cornerRadius: 22, style: .continuous))
         .animation(.snappy, value: progress.total)
         .sheet(isPresented: $isEnteringManually) {
-            ManualEntrySheet(goal: goal, remaining: progress.remaining) { amount in
+            ManualEntrySheet(goal: goal) { amount in
                 withAnimation(.snappy) { onLog(amount) }
             }
         }
@@ -89,11 +128,13 @@ private struct GoalRow: View {
 
     private var header: some View {
         HStack(spacing: 14) {
-            ProgressRing(
-                fraction: progress.isFailed ? 1 : progress.fraction,
-                symbolName: goal.symbolName,
-                tint: progress.isFailed ? AnyShapeStyle(.orange) : AnyShapeStyle(.tint)
-            )
+            ZStack {
+                Circle().fill(tint.opacity(0.2))
+                Image(systemName: goal.symbolName)
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(tint)
+            }
+            .frame(width: 44, height: 44)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(goal.title)
@@ -103,17 +144,17 @@ private struct GoalRow: View {
                     .foregroundStyle(.secondary)
             }
 
-            Spacer()
+            Spacer(minLength: 8)
 
-            // Reset sits up here rather than in the button row, so that row
-            // stays exactly four equal slots at every state.
             if loggedToday > 0 {
                 Button("Reset") {
                     withAnimation(.snappy) { onReset() }
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
-                .tint(.secondary)
+                // Red: it throws away everything logged today, and nothing else
+                // on the card is destructive.
+                .tint(.red)
                 .accessibilityLabel("Reset today's progress for \(goal.title)")
                 .transition(.scale.combined(with: .opacity))
             }
@@ -128,41 +169,38 @@ private struct GoalRow: View {
     private var statusIcon: some View {
         if progress.isAchieved {
             Image(systemName: "checkmark.circle.fill")
-                .foregroundStyle(.green)
-                .font(.title3)
+                .font(.system(size: 30))
+                .foregroundStyle(.white, .green)
                 .transition(.scale.combined(with: .opacity))
         } else if progress.isFailed {
             Image(systemName: "exclamationmark.circle.fill")
-                .foregroundStyle(.orange)
-                .font(.title3)
+                .font(.system(size: 30))
+                .foregroundStyle(.white, .orange)
                 .transition(.scale.combined(with: .opacity))
         }
     }
 
-    /// The action row, which differs by how the goal is logged.
-    ///
-    /// Buttons share the row equally so that every goal's controls line up
-    /// down the screen instead of each row wrapping to its own rhythm.
+    /// The action row. A grid rather than a stack so a lone Done button is the
+    /// same width as a "500 ml" button and sits in the same first column.
     @ViewBuilder
     private var actions: some View {
-        switch goal.loggingStyle {
-        case .incremental:
-            HStack(spacing: 8) {
+        LazyVGrid(columns: columns, spacing: 8) {
+            switch goal.loggingStyle {
+            case .incremental:
                 ForEach(QuickAddSuggestions.options(for: goal.measure)) { option in
                     actionButton(MeasureFormatter.short(option.amount, kind: goal.measure.kind)) {
                         withAnimation(.snappy) { onLog(option.amount) }
                     }
                 }
-
                 actionButton("Manual") { isEnteringManually = true }
-            }
 
-        case .single:
-            // Collapses once done: the tick and Reset above already say so,
-            // and a lone disabled button would just be noise.
-            if loggedToday == 0 {
-                actionButton("Done") {
-                    withAnimation(.snappy) { onLog(1) }
+            case .single:
+                // Collapses once done: the tick and Reset above already say so,
+                // and a lone disabled button would just be noise.
+                if loggedToday == 0 {
+                    actionButton("Done") {
+                        withAnimation(.snappy) { onLog(1) }
+                    }
                 }
             }
         }
@@ -172,15 +210,17 @@ private struct GoalRow: View {
     ///
     /// Putting it on the button only makes the invisible slots equal: the
     /// bordered background still hugs its text, so "5" renders as a tiny pill
-    /// beside a wide "Manual". Expanding the label makes the capsules
-    /// themselves match, which is what lines the rows up down the screen.
+    /// beside a wide "Manual".
     private func actionButton(_ title: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(title)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(.bordered)
         .controlSize(.small)
+        .tint(tint)
     }
 
     private var subtitle: String {
@@ -194,28 +234,6 @@ private struct GoalRow: View {
         let done = MeasureFormatter.short(progress.total, kind: kind)
         let target = MeasureFormatter.short(progress.target, kind: kind)
         return "\(done) of \(target)"
-    }
-}
-
-private struct ProgressRing: View {
-    let fraction: Double
-    let symbolName: String
-    var tint: AnyShapeStyle = AnyShapeStyle(.tint)
-
-    var body: some View {
-        ZStack {
-            Circle()
-                .stroke(.quaternary, lineWidth: 4)
-            Circle()
-                .trim(from: 0, to: fraction)
-                .stroke(tint, style: StrokeStyle(lineWidth: 4, lineCap: .round))
-                .rotationEffect(.degrees(-90))
-            Image(systemName: symbolName)
-                .font(.system(size: 15))
-                .foregroundStyle(tint)
-        }
-        .frame(width: 42, height: 42)
-        .animation(.snappy, value: fraction)
     }
 }
 

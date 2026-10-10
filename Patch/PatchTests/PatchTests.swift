@@ -31,6 +31,17 @@ struct MeasureFormatterTests {
         #expect(MeasureFormatter.short(1500, kind: .volume) == "1.5 L")
     }
 
+    @Test("Nearby litre amounts stay distinguishable")
+    func litresKeepEnoughPrecision() {
+        // Regressed once: a picker stepping in 50 ml showed 1850, 1900 and
+        // 1950 all as "1.9 L", making three wheel rows identical.
+        let amounts: [Decimal] = [1850, 1900, 1950, 2000]
+        let rendered = amounts.map { MeasureFormatter.short($0, kind: .volume) }
+
+        #expect(rendered == ["1.85 L", "1.9 L", "1.95 L", "2 L"])
+        #expect(Set(rendered).count == rendered.count)
+    }
+
     @Test("Distance switches to kilometres above a kilometre")
     func distance() {
         #expect(MeasureFormatter.short(500, kind: .distance) == "500 m")

@@ -3,23 +3,20 @@ import SwiftUI
 
 /// Manual amount entry, for when none of the three suggestions fits.
 ///
-/// Opens on the amount still needed to finish the day rather than on the
-/// smallest option, since that is overwhelmingly the value people want.
+/// Opens on the smallest amount. Defaulting to the amount still needed sounds
+/// helpful but lands the wheel at the very bottom of a long list, which reads
+/// as though the picker is stuck and gives you nowhere to scroll down to.
 struct ManualEntrySheet: View {
     let goal: Goal
-    let remaining: Decimal
     let onAdd: (Decimal) -> Void
 
     @Environment(\.dismiss) private var dismiss
     @State private var selection: Decimal
 
-    init(goal: Goal, remaining: Decimal, onAdd: @escaping (Decimal) -> Void) {
+    init(goal: Goal, onAdd: @escaping (Decimal) -> Void) {
         self.goal = goal
-        self.remaining = remaining
         self.onAdd = onAdd
-        let options = ManualAmounts.options(for: goal.measure)
-        let preferred = remaining > .zero ? remaining : goal.measure.dailyTarget
-        _selection = State(initialValue: Self.nearest(to: preferred, in: options))
+        _selection = State(initialValue: ManualAmounts.options(for: goal.measure).first ?? 1)
     }
 
     private var options: [Decimal] { ManualAmounts.options(for: goal.measure) }
@@ -37,6 +34,7 @@ struct ManualEntrySheet: View {
                 .labelsHidden()
             }
             .navigationTitle(goal.title)
+            .tint(goal.tint.color)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -52,13 +50,5 @@ struct ManualEntrySheet: View {
             }
         }
         .presentationDetents([.height(300)])
-    }
-
-    /// The closest offered amount, so the picker never opens on a value it
-    /// cannot show.
-    private static func nearest(to value: Decimal, in options: [Decimal]) -> Decimal {
-        options.min { lhs, rhs in
-            (lhs - value).magnitude < (rhs - value).magnitude
-        } ?? value
     }
 }

@@ -9,7 +9,7 @@ enum SampleData {
         GoalTemplateCatalog.pushUps.makeGoal(title: "Push-ups"),
         GoalTemplateCatalog.water.makeGoal(title: "Water"),
         GoalTemplateCatalog.quitSmoking.makeGoal(title: "Don't smoke"),
-        Goal(title: "Take vitamins", symbolName: "pills", measure: .times(1)),
+        Goal(title: "Take vitamins", symbolName: "pills", tint: .mint, measure: .times(1)),
         GoalTemplateCatalog.gym.makeGoal(title: "Gym")
     ]
 }

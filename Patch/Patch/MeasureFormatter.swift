@@ -49,9 +49,19 @@ nonisolated enum MeasureFormatter {
         return NSDecimalNumber(decimal: rounded).stringValue
     }
 
+    /// Up to two decimals, with trailing zeros dropped.
+    ///
+    /// One decimal is not enough: a water picker stepping in 50 ml rendered
+    /// 1850, 1900 and 1950 all as "1.9 L", so three different rows of the
+    /// wheel were indistinguishable.
     private static func trimmed(_ value: Double) -> String {
-        value == value.rounded()
-            ? String(Int(value))
-            : String(format: "%.1f", value)
+        let rounded = (value * 100).rounded() / 100
+        if rounded == rounded.rounded() {
+            return String(Int(rounded))
+        }
+        var text = String(format: "%.2f", rounded)
+        while text.hasSuffix("0") { text.removeLast() }
+        if text.hasSuffix(".") { text.removeLast() }
+        return text
     }
 }
