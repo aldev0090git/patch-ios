@@ -154,3 +154,51 @@ struct AtMostTests {
         #expect(progress.budgetUsed == nil)
     }
 }
+
+@Suite("Failed days")
+struct FailedDayTests {
+    let calculator = ProgressCalculator(calendar: fixedCalendar())
+
+    @Test("Going over a limit fails the day outright")
+    func overLimitIsFailed() {
+        let goal = Goal(title: "Don't smoke", measure: .clean,
+                        direction: .atMost, createdAt: day(2026, 1, 5))
+        let slip = [Entry(goalID: goal.id, amount: 1, loggedAt: day(2026, 1, 5))]
+
+        let progress = calculator.progress(for: goal, entries: slip, on: day(2026, 1, 5))
+
+        #expect(progress.isFailed)
+        #expect(!progress.isAchieved)
+    }
+
+    @Test("A clean day has not failed")
+    func cleanDayIsNotFailed() {
+        let goal = Goal(title: "Don't smoke", measure: .clean,
+                        direction: .atMost, createdAt: day(2026, 1, 5))
+
+        let progress = calculator.progress(for: goal, entries: [], on: day(2026, 1, 5))
+
+        #expect(!progress.isFailed)
+    }
+
+    @Test("An unfinished goal is in progress, not failed")
+    func unfinishedIsNotFailed() {
+        // Half a reading goal at lunchtime is not a failure.
+        let goal = Goal(title: "Read", measure: .minutes(20), createdAt: day(2026, 1, 5))
+        let entries = [Entry(goalID: goal.id, amount: 600, loggedAt: day(2026, 1, 5))]
+
+        let progress = calculator.progress(for: goal, entries: entries, on: day(2026, 1, 5))
+
+        #expect(!progress.isFailed)
+        #expect(!progress.isAchieved)
+    }
+
+    @Test("An untouched goal is in progress, not failed")
+    func emptyDayIsNotFailed() {
+        let goal = Goal(title: "Read", measure: .minutes(20), createdAt: day(2026, 1, 5))
+
+        let progress = calculator.progress(for: goal, entries: [], on: day(2026, 1, 5))
+
+        #expect(!progress.isFailed)
+    }
+}

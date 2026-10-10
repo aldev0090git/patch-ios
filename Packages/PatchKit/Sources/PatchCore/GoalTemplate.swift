@@ -92,12 +92,18 @@ public enum GoalTemplateCatalog {
         cumulativeTarget: 10_000
     )
 
+    /// Confirmed once a day rather than tracked as a running count of slips.
+    ///
+    /// Modelled as "reach 1 confirmation" rather than "stay at zero
+    /// cigarettes". Staying at zero would mean the day is a success from
+    /// midnight and the only available action is admitting a lapse, which
+    /// gives the user a button that undoes their own goal. Affirming the day
+    /// reads better and is honest: the tick means you confirmed it.
     public static let quitSmoking = GoalTemplate(
         id: "quit_smoking",
         titleKey: "template.quitSmoking",
         symbolName: "nosign",
-        measure: .clean,
-        direction: .atMost
+        measure: .times(1)
     )
 
     public static let gym = GoalTemplate(

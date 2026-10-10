@@ -240,14 +240,17 @@ struct GoalTemplateTests {
         #expect(gym.schedule.isScheduled(on: day(2026, 1, 7), calendar: calendar))  // Wednesday
     }
 
-    @Test("The quit-smoking template succeeds on an empty day")
-    func quitSmokingTemplateIsCleanByDefault() {
+    @Test("The quit-smoking template has to be confirmed, not assumed")
+    func quitSmokingTemplateNeedsConfirming() {
         let goal = GoalTemplateCatalog.quitSmoking.makeGoal(title: "Don't smoke", createdAt: day(2026, 1, 1))
-        let progress = ProgressCalculator(calendar: calendar)
-            .progress(for: goal, entries: [], on: day(2026, 1, 2))
+        let calculator = ProgressCalculator(calendar: calendar)
 
-        #expect(goal.direction == .atMost)
-        #expect(progress.isAchieved)
+        let untouched = calculator.progress(for: goal, entries: [], on: day(2026, 1, 2))
+        #expect(!untouched.isAchieved)
+        #expect(!untouched.isFailed) // unconfirmed is in progress, not a failure
+
+        let confirmed = [Entry(goalID: goal.id, amount: 1, loggedAt: day(2026, 1, 2))]
+        #expect(calculator.progress(for: goal, entries: confirmed, on: day(2026, 1, 2)).isAchieved)
     }
 
     @Test("A template carries its cumulative target through to the goal")

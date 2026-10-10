@@ -19,7 +19,7 @@ struct ContentView: View {
                             onLog: { amount in
                                 entries.append(Entry(goalID: goal.id, amount: amount))
                             },
-                            onClear: { clearToday(for: goal) }
+                            onReset: { resetToday(for: goal) }
                         )
                     }
                 }
@@ -50,13 +50,13 @@ struct ContentView: View {
         entries.count { $0.goalID == goal.id && Calendar.current.isDateInToday($0.loggedAt) }
     }
 
-    /// Clears everything logged today for this goal.
+    /// Resets everything logged today for this goal.
     ///
     /// Deletes rather than offsetting with a negative entry: a day you are
     /// resetting was mislogged, and that is not history worth keeping.
     /// Negative entries remain the right tool for correcting a past day that
     /// was genuinely over-reported.
-    private func clearToday(for goal: Goal) {
+    private func resetToday(for goal: Goal) {
         let calendar = Calendar.current
         entries.removeAll {
             $0.goalID == goal.id && calendar.isDateInToday($0.loggedAt)
@@ -69,12 +69,16 @@ private struct GoalRow: View {
     let progress: DayProgress
     let loggedToday: Int
     let onLog: (Decimal) -> Void
-    let onClear: () -> Void
+    let onReset: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 14) {
-                ProgressRing(fraction: progress.fraction, symbolName: goal.symbolName)
+                ProgressRing(
+                fraction: progress.isFailed ? 1 : progress.fraction,
+                symbolName: goal.symbolName,
+                tint: progress.isFailed ? AnyShapeStyle(.orange) : AnyShapeStyle(.tint)
+            )
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(goal.title)
@@ -86,18 +90,30 @@ private struct GoalRow: View {
 
                 Spacer()
 
-                if progress.isAchieved {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
-                        .font(.title3)
-                        .transition(.scale.combined(with: .opacity))
-                }
+                statusIcon
             }
 
             actions
         }
         .padding(.vertical, 6)
         .animation(.snappy, value: progress.total)
+    }
+
+    /// Every settled state gets a mark. A row with no icon means "still in
+    /// progress", so a failed day without one reads as an empty, broken row.
+    @ViewBuilder
+    private var statusIcon: some View {
+        if progress.isAchieved {
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(.green)
+                .font(.title3)
+                .transition(.scale.combined(with: .opacity))
+        } else if progress.isFailed {
+            Image(systemName: "exclamationmark.circle.fill")
+                .foregroundStyle(.orange)
+                .font(.title3)
+                .transition(.scale.combined(with: .opacity))
+        }
     }
 
     /// The action row, which differs by how the goal is logged.
@@ -126,30 +142,17 @@ private struct GoalRow: View {
                     .controlSize(.small)
                 }
 
-            case .abstinence:
-                if loggedToday == 0 {
-                    // Deliberately not labelled "Done": on a goal like "Don't
-                    // smoke" the day is already a success, so a Done button
-                    // would have to mean "I smoked", which reads as the exact
-                    // opposite of what it does.
-                    Button("I slipped") {
-                        withAnimation(.snappy) { onLog(1) }
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                    .tint(.orange)
-                }
             }
 
             if loggedToday > 0 {
                 Spacer(minLength: 0)
-                Button("Clear") {
-                    withAnimation(.snappy) { onClear() }
+                Button("Reset") {
+                    withAnimation(.snappy) { onReset() }
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
                 .tint(.secondary)
-                .accessibilityLabel("Clear today's progress for \(goal.title)")
+                .accessibilityLabel("Reset today's progress for \(goal.title)")
                 .transition(.scale.combined(with: .opacity))
             }
         }
@@ -157,9 +160,6 @@ private struct GoalRow: View {
 
     private var subtitle: String {
         let kind = goal.measure.kind
-        if goal.loggingStyle == .abstinence {
-            return progress.isAchieved ? "Clean today" : "Slipped today"
-        }
         if goal.loggingStyle == .single {
             return progress.isAchieved ? "Done today" : "Not yet"
         }
@@ -175,6 +175,7 @@ private struct GoalRow: View {
 private struct ProgressRing: View {
     let fraction: Double
     let symbolName: String
+    var tint: AnyShapeStyle = AnyShapeStyle(.tint)
 
     var body: some View {
         ZStack {
@@ -182,11 +183,11 @@ private struct ProgressRing: View {
                 .stroke(.quaternary, lineWidth: 4)
             Circle()
                 .trim(from: 0, to: fraction)
-                .stroke(.tint, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                .stroke(tint, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                 .rotationEffect(.degrees(-90))
             Image(systemName: symbolName)
                 .font(.system(size: 15))
-                .foregroundStyle(.tint)
+                .foregroundStyle(tint)
         }
         .frame(width: 42, height: 42)
         .animation(.snappy, value: fraction)

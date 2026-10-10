@@ -16,10 +16,11 @@ struct LoggingStyleTests {
         #expect(goal.loggingStyle == .single)
     }
 
-    @Test("A clean-day goal only ever records a slip")
-    func quitSmokingIsAbstinence() {
+    @Test("Staying smoke-free is confirmed once a day, like any other single goal")
+    func quitSmokingIsSingle() {
         let goal = GoalTemplateCatalog.quitSmoking.makeGoal(title: "Don't smoke")
-        #expect(goal.loggingStyle == .abstinence)
+        #expect(goal.loggingStyle == .single)
+        #expect(goal.direction == .atLeast)
     }
 
     @Test("An allowance you can spend down is still incremental")

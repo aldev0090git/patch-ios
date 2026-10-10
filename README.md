@@ -22,7 +22,7 @@ Every goal is *an amount accumulated toward a daily target, in a direction*:
 | Read 20 minutes | `duration` | `atLeast` | 10 min + 10 min |
 | 100 push-ups | `count` | `atLeast` | 20 + 30 + 50 |
 | 2 litres of water | `volume` | `atLeast` | 8 × 250 ml |
-| Don't smoke | `count` | `atMost` 0 | nothing — an empty day is a win |
+| Don't smoke | `count` | `atLeast` 1 | one confirmation a day |
 | Save 100 UAH | `currency` | `atLeast` | one or more deposits |
 | 10 000 steps | `count` | `atLeast` | filled in from HealthKit |
 
@@ -31,9 +31,12 @@ or branching the UI.
 
 Two consequences fall out of this that are worth calling out:
 
-**Abstinence is the absence of data.** "Don't smoke" is `atMost 0`, so a day with
-no entries already succeeds. You only log when you slip — less work for the user,
-and more honest than asking them to tick a box every evening.
+**Patch records what you did, never what you avoided.** "Don't smoke" was first
+modelled as `atMost 0`, so a day with no entries already succeeded and the only
+available action was admitting a slip — a button that undoes the user's own
+goal, sitting on a row already marked complete. It now works like any other
+once-a-day goal: you confirm it. The tick means you actually said so, rather
+than meaning the clock has not caught you yet.
 
 **Amounts are always stored in a canonical unit** — seconds, millilitres, metres.
 Display units are a presentation concern. Totals, comparisons and (later) sync
@@ -85,7 +88,13 @@ Both are deliberate, documented and tested:
   was created, days still in the future, and an unfinished today. Without this,
   every new goal opens on a wall of red for a month it was never set during.
 
-### Logging should take one tap
+### Logging should take one tap, and fit the goal
+
+A goal's shape decides how it is logged, so the domain exposes a `LoggingStyle`
+rather than leaving the view to guess: goals that accumulate get a row of
+amounts, goals that happen once a day get a single **Done** button. Either way
+**Reset** clears the day.
+
 
 Suggested amounts scale with the target and snap to round numbers people
 actually say, so logging never requires a picker:

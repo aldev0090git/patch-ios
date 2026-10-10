@@ -64,13 +64,22 @@ private struct SegmentedBar: View {
                     .overlay(alignment: .leading) {
                         GeometryReader { proxy in
                             Capsule()
-                                .fill(day.isAchieved ? AnyShapeStyle(.green) : AnyShapeStyle(.tint))
-                                .frame(width: proxy.size.width * day.fraction)
+                                .fill(fill(for: day))
+                                // A failed day fills completely in orange: an
+                                // empty segment would be indistinguishable from
+                                // one simply not started yet.
+                                .frame(width: proxy.size.width * (day.isFailed ? 1 : day.fraction))
                         }
                     }
                     .clipShape(.capsule)
             }
         }
         .animation(.snappy, value: progress.map(\.fraction))
+    }
+
+    private func fill(for day: DayProgress) -> AnyShapeStyle {
+        if day.isAchieved { return AnyShapeStyle(.green) }
+        if day.isFailed { return AnyShapeStyle(.orange) }
+        return AnyShapeStyle(.tint)
     }
 }

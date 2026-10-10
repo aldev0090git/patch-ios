@@ -35,6 +35,19 @@ public struct DayProgress: Hashable, Sendable {
         }
     }
 
+    /// A day that has definitely gone wrong, as distinct from one merely
+    /// unfinished.
+    ///
+    /// Only an ``Direction/atMost`` goal can fail while the day is still
+    /// running: once you are over the limit nothing recovers it. An
+    /// ``Direction/atLeast`` goal that is not yet done is still in progress,
+    /// and showing it as a failure at lunchtime would be both wrong and
+    /// discouraging.
+    public var isFailed: Bool {
+        guard isScheduled, direction == .atMost else { return false }
+        return total > target
+    }
+
     /// 0...1 completion, for rings and bars.
     ///
     /// For ``Direction/atMost`` this is deliberately binary: a day spent inside

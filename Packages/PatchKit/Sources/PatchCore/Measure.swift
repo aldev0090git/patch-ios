@@ -79,11 +79,12 @@ extension Measure {
         Measure(kind: .currency, dailyTarget: target, quickAdd: quickAdd)
     }
 
-    /// A day you simply want to keep clean: "don't smoke".
+    /// A zero allowance, for use with ``Direction/atMost``.
     ///
-    /// Paired with ``Direction/atMost`` this makes the *absence* of entries the
-    /// success condition — you only log when you slip, which is both less work
-    /// and more honest than ticking a box every evening.
+    /// Valid, and the domain handles it, but no template ships with one: a goal
+    /// that succeeds from midnight gives the user nothing to do except record a
+    /// failure. Prefer modelling such goals as a daily confirmation, the way
+    /// ``GoalTemplateCatalog/quitSmoking`` does.
     public static var clean: Measure {
         Measure(kind: .count, dailyTarget: .zero, quickAdd: 1)
     }

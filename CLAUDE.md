@@ -11,6 +11,16 @@ all that one model. Do not special-case goal types — if something cannot be
 expressed as a measure plus a direction, that is a design discussion, not a
 reason to branch.
 
+**Patch records what you did, never what you avoided.** Every goal is something
+to complete and mark. Do not reintroduce "log a slip"-style interactions: a
+button that fails the user's own goal, on a row already showing a tick, confused
+every person who saw it. Goals that would naturally be "stay at zero" are
+modelled as a daily confirmation instead — see `GoalTemplateCatalog.quitSmoking`.
+
+`LoggingStyle` decides the controls a goal gets: `.incremental` for amounts that
+add up, `.single` for once-a-day. It lives in the domain because it follows from
+the goal's shape, not from a view's preference.
+
 ## Hard rules
 
 - **`PatchCore` imports `Foundation` and nothing else.** No SwiftUI, no
