@@ -84,6 +84,27 @@ final class TodayModel {
         }
     }
 
+    /// Creates the goal, or updates the stored one with the same id.
+    func save(_ goal: Goal) {
+        do {
+            try store.save(goal)
+            goals = try store.loadGoals()
+        } catch {
+            failure = String(localized: "Couldn't save that. \(error.localizedDescription)")
+        }
+    }
+
+    /// Archives rather than deletes.
+    ///
+    /// The goal stops appearing in Today but its history survives, so last
+    /// month's statistics do not quietly change. Hard deletion would also
+    /// fight CloudKit once sync is on.
+    func archive(_ goal: Goal) {
+        var archived = goal
+        archived.archivedAt = .now
+        save(archived)
+    }
+
     /// Puts a starter set of goals in an empty store.
     ///
     /// Temporary: onboarding will replace this with goals the user actually

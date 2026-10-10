@@ -37,7 +37,7 @@ struct QuickAddTests {
 
     @Test("Money rounds to amounts people actually hand over")
     func money() {
-        #expect(amounts(.money(100, quickAdd: 50)) == [25, 50, 100])
+        #expect(amounts(.money(100)) == [25, 50, 100])
     }
 
     @Test("An abstinence goal offers only a single slip")
@@ -50,7 +50,7 @@ struct QuickAddTests {
     func suggestionsAreWellFormed() {
         let measures: [Measure] = [
             .minutes(5), .minutes(90), .times(1), .times(7), .times(250),
-            .millilitres(750), .steps(6000), .money(37, quickAdd: 10)
+            .millilitres(750), .steps(6000), .money(37)
         ]
 
         for measure in measures {

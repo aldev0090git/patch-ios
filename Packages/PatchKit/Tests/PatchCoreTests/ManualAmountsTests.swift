@@ -59,7 +59,7 @@ struct ManualAmountsTests {
     func listsAreWellFormed() {
         let measures: [Measure] = [
             .minutes(5), .minutes(45), .times(3), .times(250),
-            .millilitres(750), .steps(6000), .money(37, quickAdd: 10)
+            .millilitres(750), .steps(6000), .money(37)
         ]
 
         for measure in measures {

@@ -141,6 +141,7 @@ Requires **Xcode 27 or later** to open the project. The app itself targets
 - [x] iOS app target, Today view with quick-add logging
 - [x] SwiftData persistence behind a store protocol
 - [x] Localisation — English (base), Ukrainian, Russian
+- [x] Create, edit and archive goals
 - [ ] Onboarding flow
 - [ ] Design system package — tokens for light, dark and custom themes
 - [ ] Calendar and statistics screens

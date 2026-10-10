@@ -36,13 +36,10 @@ public struct Measure: Hashable, Sendable, Codable {
     public var kind: MeasureKind
     /// Target for one scheduled day, in `kind`'s canonical unit.
     public var dailyTarget: Decimal
-    /// Amount added by one tap of the quick-add control, in canonical units.
-    public var quickAdd: Decimal
 
-    public init(kind: MeasureKind, dailyTarget: Decimal, quickAdd: Decimal) {
+    public init(kind: MeasureKind, dailyTarget: Decimal) {
         self.kind = kind
         self.dailyTarget = max(.zero, dailyTarget)
-        self.quickAdd = max(.zero, quickAdd)
     }
 }
 
@@ -52,31 +49,29 @@ public struct Measure: Hashable, Sendable, Codable {
 // leaking into feature code.
 
 extension Measure {
-    /// "Read for 20 minutes", logged in 5-minute taps.
-    public static func minutes(_ target: Int, quickAdd: Int = 5) -> Measure {
-        Measure(kind: .duration,
-                dailyTarget: Decimal(target * 60),
-                quickAdd: Decimal(quickAdd * 60))
+    /// "Read for 20 minutes."
+    public static func minutes(_ target: Int) -> Measure {
+        Measure(kind: .duration, dailyTarget: Decimal(target * 60))
     }
 
-    /// "100 push-ups", logged in tens.
-    public static func times(_ target: Int, quickAdd: Int = 1) -> Measure {
-        Measure(kind: .count, dailyTarget: Decimal(target), quickAdd: Decimal(quickAdd))
+    /// "100 push-ups."
+    public static func times(_ target: Int) -> Measure {
+        Measure(kind: .count, dailyTarget: Decimal(target))
     }
 
-    /// "2 litres of water", logged a 250 ml glass at a time.
-    public static func millilitres(_ target: Int, quickAdd: Int = 250) -> Measure {
-        Measure(kind: .volume, dailyTarget: Decimal(target), quickAdd: Decimal(quickAdd))
+    /// "2 litres of water."
+    public static func millilitres(_ target: Int) -> Measure {
+        Measure(kind: .volume, dailyTarget: Decimal(target))
     }
 
     /// "Walk 10 000 steps" — a count, but usually filled in from HealthKit.
     public static func steps(_ target: Int) -> Measure {
-        Measure(kind: .count, dailyTarget: Decimal(target), quickAdd: Decimal(500))
+        Measure(kind: .count, dailyTarget: Decimal(target))
     }
 
     /// "Put aside 100 UAH today."
-    public static func money(_ target: Decimal, quickAdd: Decimal) -> Measure {
-        Measure(kind: .currency, dailyTarget: target, quickAdd: quickAdd)
+    public static func money(_ target: Decimal) -> Measure {
+        Measure(kind: .currency, dailyTarget: target)
     }
 
     /// A zero allowance, for use with ``Direction/atMost``.
@@ -86,6 +81,6 @@ extension Measure {
     /// failure. Prefer modelling such goals as a daily confirmation, the way
     /// ``GoalTemplateCatalog/quitSmoking`` does.
     public static var clean: Measure {
-        Measure(kind: .count, dailyTarget: .zero, quickAdd: 1)
+        Measure(kind: .count, dailyTarget: .zero)
     }
 }

@@ -121,7 +121,7 @@ struct CumulativeTests {
 
     @Test("A savings goal totals everything put aside so far")
     func cumulativeTotalSpansDays() {
-        let goal = Goal(title: "Save", measure: .money(100, quickAdd: 50),
+        let goal = Goal(title: "Save", measure: .money(100),
                         cumulativeTarget: 1000, createdAt: day(2026, 1, 1))
         let deposits = [1, 2, 3].map {
             Entry(goalID: goal.id, amount: 100, loggedAt: day(2026, 1, $0))
@@ -134,7 +134,7 @@ struct CumulativeTests {
 
     @Test("Days after the cutoff are excluded from the total")
     func cumulativeTotalRespectsTheCutoff() {
-        let goal = Goal(title: "Save", measure: .money(100, quickAdd: 50), createdAt: day(2026, 1, 1))
+        let goal = Goal(title: "Save", measure: .money(100), createdAt: day(2026, 1, 1))
         let deposits = [1, 2, 3].map {
             Entry(goalID: goal.id, amount: 100, loggedAt: day(2026, 1, $0))
         }

@@ -67,7 +67,7 @@ public enum GoalTemplateCatalog {
         id: "push_ups",
         titleKey: "template.pushUps",
         symbolName: "figure.strengthtraining.functional",
-        measure: .times(20, quickAdd: 5)
+        measure: .times(20)
     )
 
     public static let water = GoalTemplate(
@@ -88,7 +88,7 @@ public enum GoalTemplateCatalog {
         id: "save_money",
         titleKey: "template.saveMoney",
         symbolName: "banknote",
-        measure: .money(100, quickAdd: 50),
+        measure: .money(100),
         cumulativeTarget: 10_000
     )
 

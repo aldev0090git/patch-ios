@@ -3,6 +3,28 @@ import SwiftUI
 
 struct ContentView: View {
     @State var model: TodayModel
+    @State private var editing: Editing?
+
+    /// What the editor sheet is currently doing. One piece of state rather
+    /// than a bool plus an optional goal, which can disagree with each other.
+    private enum Editing: Identifiable {
+        case new
+        case existing(Goal)
+
+        var id: String {
+            switch self {
+            case .new: "new"
+            case .existing(let goal): goal.id.uuidString
+            }
+        }
+
+        var goal: Goal? {
+            switch self {
+            case .new: nil
+            case .existing(let goal): goal
+            }
+        }
+    }
 
     var body: some View {
         NavigationStack {
@@ -21,10 +43,28 @@ struct ContentView: View {
                     // that throws away the day does not belong next to the
                     // buttons that build it up.
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        Button("Archive", role: .destructive) {
+                            withAnimation(.snappy) { model.archive(goal) }
+                        }
                         if hasLogged {
-                            Button("Reset", role: .destructive) {
+                            Button("Reset") {
                                 withAnimation(.snappy) { model.resetToday(for: goal) }
                             }
+                            .tint(.orange)
+                        }
+                    }
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        Button("Edit") { editing = .existing(goal) }
+                            .tint(.accentColor)
+                    }
+                    // The same two actions by long press, because a swipe is
+                    // not discoverable on its own.
+                    .contextMenu {
+                        Button("Edit", systemImage: "pencil") {
+                            editing = .existing(goal)
+                        }
+                        Button("Archive", systemImage: "archivebox", role: .destructive) {
+                            withAnimation(.snappy) { model.archive(goal) }
                         }
                     }
                 }
@@ -42,6 +82,17 @@ struct ContentView: View {
                     .padding(.horizontal, 20)
                     .padding(.bottom, 16)
                     .background(.bar)
+            }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Add goal", systemImage: "plus") { editing = .new }
+                        .labelStyle(.iconOnly)
+                }
+            }
+            .sheet(item: $editing) { editing in
+                GoalEditor(goal: editing.goal) { goal in
+                    withAnimation(.snappy) { model.save(goal) }
+                }
             }
             .task {
                 model.load()

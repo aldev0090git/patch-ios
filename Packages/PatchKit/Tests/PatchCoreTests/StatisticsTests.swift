@@ -87,7 +87,7 @@ struct StatisticsTests {
 
     @Test("The period total sums everything logged inside it")
     func periodTotal() {
-        let goal = Goal(title: "Save", measure: .money(100, quickAdd: 50), createdAt: day(2026, 1, 1))
+        let goal = Goal(title: "Save", measure: .money(100), createdAt: day(2026, 1, 1))
         let deposits = [1, 2, 3].map {
             Entry(goalID: goal.id, amount: 150, loggedAt: day(2026, 1, $0))
         }

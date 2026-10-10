@@ -40,7 +40,7 @@ struct SwiftDataGoalStoreTests {
         let goal = Goal(
             title: "Gym",
             symbolName: "dumbbell",
-            measure: .times(3, quickAdd: 1),
+            measure: .times(3),
             direction: .atLeast,
             schedule: .daysOfWeek([.monday, .wednesday, .friday]),
             cumulativeTarget: 150,

@@ -40,6 +40,11 @@ the goal's shape, not from a view's preference.
     the original record survives and the day's total stays auditable.
 - **Soft-delete via `archivedAt`.** Hard deletion will fight CloudKit later.
 
+**Do not leave unused properties on a persisted model.** `GoalTint` and
+`Measure.quickAdd` were both written, stored and never read; both were removed
+rather than left in place. A field nobody uses still becomes a column, and once
+CloudKit is on, removing a column is a migration rather than a refactor.
+
 ## Models must stay CloudKit-compatible
 
 Sync is not switched on yet (it needs the paid Apple Developer Program) but the

@@ -15,7 +15,6 @@ public final class StoredGoal {
     public var symbolName: String = "target"
     public var measureKindRaw: String = MeasureKind.count.rawValue
     public var dailyTarget: Decimal = Decimal.zero
-    public var quickAdd: Decimal = Decimal(1)
     public var directionRaw: String = Direction.atLeast.rawValue
     public var scheduleIsDaily: Bool = true
     public var scheduleWeekdays: [Int] = []
@@ -33,7 +32,6 @@ public final class StoredGoal {
         symbolName = goal.symbolName
         measureKindRaw = goal.measure.kind.rawValue
         dailyTarget = goal.measure.dailyTarget
-        quickAdd = goal.measure.quickAdd
         directionRaw = goal.direction.rawValue
         switch goal.schedule {
         case .daily:
@@ -60,8 +58,7 @@ public final class StoredGoal {
             symbolName: symbolName,
             measure: Measure(
                 kind: MeasureKind(rawValue: measureKindRaw) ?? .count,
-                dailyTarget: dailyTarget,
-                quickAdd: quickAdd
+                dailyTarget: dailyTarget
             ),
             direction: Direction(rawValue: directionRaw) ?? .atLeast,
             schedule: scheduleIsDaily
