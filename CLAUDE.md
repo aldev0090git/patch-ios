@@ -51,6 +51,24 @@ schema is already designed for it. When SwiftData models arrive:
 
 Breaking these is cheap today and a migration later.
 
+## Localisation
+
+Three languages: English (source), Ukrainian, Russian. All user-facing strings
+live in `Patch/Patch/Localizable.xcstrings`.
+
+- **`Text("literal")` localises. `Text(someString)` does not.** This is the easy
+  mistake here and it fails silently: passing a literal through a `String`
+  parameter shipped "Manual" and "Done" in English while the rest of the screen
+  translated. Helpers take `Text`, so each caller has to say which it means.
+- Already-formatted amounts go through **`Text(verbatim:)`** so they are never
+  looked up as a key.
+- Outside a view, use **`String(localized:)`** — a bare `String` return value
+  handed to `Text` will not be translated.
+- **Never hand-assemble units.** `MeasureFormatter` uses Foundation's
+  measurement and duration formatting, which already knows "хв", "мин", plural
+  forms, and that 1.5 L is "1,5 л" in both other languages.
+- Goal templates carry a `titleKey`, never an English word.
+
 ## Testing
 
 - **Swift Testing**, not XCTest. `@Suite` / `@Test` / `#expect`.

@@ -54,7 +54,7 @@ final class TodayModel {
             goals = try store.loadGoals()
             entries = try store.loadEntries()
         } catch {
-            failure = "Couldn't load your goals. \(error.localizedDescription)"
+            failure = String(localized: "Couldn't load your goals. \(error.localizedDescription)")
         }
     }
 
@@ -64,7 +64,7 @@ final class TodayModel {
             try store.log(entry)
             entries.append(entry)
         } catch {
-            failure = "Couldn't save that. \(error.localizedDescription)"
+            failure = String(localized: "Couldn't save that. \(error.localizedDescription)")
         }
     }
 
@@ -80,33 +80,36 @@ final class TodayModel {
             let ids = Set(doomed.map(\.id))
             entries.removeAll { ids.contains($0.id) }
         } catch {
-            failure = "Couldn't reset that. \(error.localizedDescription)"
+            failure = String(localized: "Couldn't reset that. \(error.localizedDescription)")
         }
     }
 
     /// Puts a starter set of goals in an empty store.
     ///
-    /// Temporary. Onboarding will replace this with goals the user actually
-    /// chooses, and the titles will come from the String Catalog rather than
-    /// being written in English here.
+    /// Temporary: onboarding will replace this with goals the user actually
+    /// chooses.
     func seedIfEmpty() {
         guard goals.isEmpty else { return }
 
-        let starters: [(GoalTemplate, String)] = [
-            (GoalTemplateCatalog.read, "Read"),
-            (GoalTemplateCatalog.pushUps, "Push-ups"),
-            (GoalTemplateCatalog.water, "Water"),
-            (GoalTemplateCatalog.quitSmoking, "Don't smoke"),
-            (GoalTemplateCatalog.gym, "Gym")
+        let starters = [
+            GoalTemplateCatalog.read,
+            GoalTemplateCatalog.pushUps,
+            GoalTemplateCatalog.water,
+            GoalTemplateCatalog.quitSmoking,
+            GoalTemplateCatalog.gym
         ]
 
         do {
-            for (template, title) in starters {
+            for template in starters {
+                // The template carries a key, not a word: these titles are the
+                // first thing a user ever sees and must arrive in their own
+                // language.
+                let title = String(localized: String.LocalizationValue(template.titleKey))
                 try store.save(template.makeGoal(title: title))
             }
             goals = try store.loadGoals()
         } catch {
-            failure = "Couldn't set up your first goals. \(error.localizedDescription)"
+            failure = String(localized: "Couldn't set up your first goals. \(error.localizedDescription)")
         }
     }
 }

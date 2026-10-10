@@ -5,38 +5,45 @@ import Testing
 
 @Suite("Measure formatting")
 struct MeasureFormatterTests {
+    private let english = Locale(identifier: "en_US")
+
+    private func short(_ amount: Decimal, _ kind: MeasureKind) -> String {
+        MeasureFormatter.short(amount, kind: kind, locale: english)
+    }
+
     @Test("Minutes under an hour read as minutes")
     func minutes() {
-        #expect(MeasureFormatter.short(1200, kind: .duration) == "20 min")
-        #expect(MeasureFormatter.short(300, kind: .duration) == "5 min")
+        #expect(short(1200, .duration) == "20 min")
+        #expect(short(300, .duration) == "5 min")
+        #expect(short(0, .duration) == "0 min")
     }
 
     @Test("A whole number of hours drops the minutes")
     func wholeHours() {
-        #expect(MeasureFormatter.short(3600, kind: .duration) == "1 h")
-        #expect(MeasureFormatter.short(7200, kind: .duration) == "2 h")
+        #expect(short(3600, .duration) == "1 hr")
+        #expect(short(7200, .duration) == "2 hr")
     }
 
     @Test("Hours and minutes together keep both units")
     func hoursAndMinutes() {
-        // Regressed once: this rendered as "1 h 1", with the unit missing.
-        #expect(MeasureFormatter.short(3660, kind: .duration) == "1 h 1 min")
-        #expect(MeasureFormatter.short(5400, kind: .duration) == "1 h 30 min")
+        // Regressed once when this was hand-assembled: 3660 rendered as "1 h 1",
+        // with the unit missing entirely.
+        #expect(short(3660, .duration) == "1 hr, 1 min")
+        #expect(short(5400, .duration) == "1 hr, 30 min")
     }
 
     @Test("Volume switches to litres above a litre")
     func volume() {
-        #expect(MeasureFormatter.short(250, kind: .volume) == "250 ml")
-        #expect(MeasureFormatter.short(2000, kind: .volume) == "2 L")
-        #expect(MeasureFormatter.short(1500, kind: .volume) == "1.5 L")
+        #expect(short(250, .volume) == "250 mL")
+        #expect(short(2000, .volume) == "2 L")
+        #expect(short(1500, .volume) == "1.5 L")
     }
 
     @Test("Nearby litre amounts stay distinguishable")
     func litresKeepEnoughPrecision() {
         // Regressed once: a picker stepping in 50 ml showed 1850, 1900 and
         // 1950 all as "1.9 L", making three wheel rows identical.
-        let amounts: [Decimal] = [1850, 1900, 1950, 2000]
-        let rendered = amounts.map { MeasureFormatter.short($0, kind: .volume) }
+        let rendered = [Decimal(1850), 1900, 1950, 2000].map { short($0, .volume) }
 
         #expect(rendered == ["1.85 L", "1.9 L", "1.95 L", "2 L"])
         #expect(Set(rendered).count == rendered.count)
@@ -44,13 +51,36 @@ struct MeasureFormatterTests {
 
     @Test("Distance switches to kilometres above a kilometre")
     func distance() {
-        #expect(MeasureFormatter.short(500, kind: .distance) == "500 m")
-        #expect(MeasureFormatter.short(5000, kind: .distance) == "5 km")
+        #expect(short(500, .distance) == "500 m")
+        #expect(short(5000, .distance) == "5 km")
     }
 
-    @Test("Counts and money render as plain whole numbers")
+    @Test("Counts and money render as plain numbers")
     func plainNumbers() {
-        #expect(MeasureFormatter.short(20, kind: .count) == "20")
-        #expect(MeasureFormatter.short(100, kind: .currency) == "100")
+        #expect(short(20, .count) == "20")
+        #expect(short(100, .currency) == "100")
+    }
+}
+
+@Suite("Measure formatting in other languages")
+struct MeasureFormatterLocalisationTests {
+    private let ukrainian = Locale(identifier: "uk_UA")
+    private let russian = Locale(identifier: "ru_RU")
+
+    @Test("Units are translated, not just the surrounding interface")
+    func unitsAreTranslated() {
+        #expect(MeasureFormatter.short(1200, kind: .duration, locale: ukrainian) == "20 хв")
+        #expect(MeasureFormatter.short(1200, kind: .duration, locale: russian) == "20 мин")
+        #expect(MeasureFormatter.short(3600, kind: .duration, locale: ukrainian) == "1 год")
+        #expect(MeasureFormatter.short(250, kind: .volume, locale: ukrainian) == "250 мл")
+        #expect(MeasureFormatter.short(5000, kind: .distance, locale: ukrainian) == "5 км")
+    }
+
+    @Test("Decimal separators follow the language")
+    func decimalSeparatorsFollowTheLanguage() {
+        // A hand-rolled formatter would have written "1.5 л" here, which is
+        // wrong in both languages.
+        #expect(MeasureFormatter.short(1500, kind: .volume, locale: ukrainian) == "1,5 л")
+        #expect(MeasureFormatter.short(1500, kind: .volume, locale: russian) == "1,5 л")
     }
 }

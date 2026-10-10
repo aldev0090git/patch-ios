@@ -45,8 +45,8 @@ never have to care how a number was entered.
 ## Architecture
 
 ```
-Packages/PatchKit/          Pure Swift. No SwiftUI, no SwiftData, no UIKit.
-  Sources/PatchCore/
+Packages/PatchKit/
+  Sources/PatchCore/        Pure Swift. No SwiftUI, no SwiftData, no UIKit.
     Measure.swift           What a goal asks of a day
     Schedule.swift          Which days it asks on
     Goal.swift              The goal itself
@@ -57,9 +57,12 @@ Packages/PatchKit/          Pure Swift. No SwiftUI, no SwiftData, no UIKit.
     QuickAdd.swift          Suggested one-tap logging amounts
     Statistics.swift        Done/missed over day, week, month, year, custom
     GoalTemplate.swift      Ready-made goals for onboarding
-  Tests/PatchCoreTests/     52 tests, run in ~2ms, no simulator needed
+    GoalStore.swift         The persistence contract, plus an in-memory store
+  Sources/PatchStore/       The only place that imports SwiftData
+  Tests/                    84 tests, ~20ms, no simulator needed
 
-App/                        SwiftUI app target (in progress)
+Patch/                      SwiftUI app target
+  Patch/Localizable.xcstrings   English, Ukrainian, Russian
 ```
 
 The domain layer imports nothing but `Foundation`. That is the point: all the
@@ -136,15 +139,32 @@ Requires **Xcode 27 or later** to open the project. The app itself targets
 - [x] Unit test suite — 52 tests
 - [x] CI — build, test and lint on every push
 - [x] iOS app target, Today view with quick-add logging
-- [ ] SwiftData persistence behind a repository protocol
+- [x] SwiftData persistence behind a store protocol
+- [x] Localisation — English (base), Ukrainian, Russian
 - [ ] Onboarding flow
 - [ ] Design system package — tokens for light, dark and custom themes
 - [ ] Calendar and statistics screens
 - [ ] Local notification reminders
-- [ ] Localisation — English (base), Ukrainian, Russian
 - [ ] Home screen widget *(requires Apple Developer Program)*
 - [ ] iCloud sync via SwiftData + CloudKit *(requires Apple Developer Program)*
 - [ ] HealthKit step import *(requires Apple Developer Program)*
+
+## Localisation
+
+English, Ukrainian and Russian, with English as the source language.
+
+Units are formatted by Foundation rather than assembled by hand. Writing
+`"\(value) min"` would need "хв" in Ukrainian and "мин" in Russian, and would
+still get plural forms and decimal separators wrong in both — 1.5 L is "1,5 л"
+in both languages, with a comma. `MeasureFormatter` takes an injectable
+`Locale` so tests pin a language rather than depending on the machine running
+them.
+
+Goal templates carry a *key*, not a word, so onboarding — the first thing
+anyone sees — arrives in their own language.
+
+> The Ukrainian and Russian strings were written without a native reviewer and
+> are worth a second pair of eyes.
 
 ## Tooling
 

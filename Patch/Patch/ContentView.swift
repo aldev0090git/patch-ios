@@ -158,14 +158,19 @@ private struct GoalCard: View {
                 switch goal.loggingStyle {
                 case .incremental:
                     ForEach(QuickAddSuggestions.options(for: goal.measure)) { option in
-                        actionButton(MeasureFormatter.short(option.amount, kind: goal.measure.kind)) {
+                        // Verbatim: MeasureFormatter has already produced this
+                        // in the user's language, so it must not be looked up
+                        // as a key.
+                        actionButton(
+                            Text(verbatim: MeasureFormatter.short(option.amount, kind: goal.measure.kind))
+                        ) {
                             withAnimation(.snappy) { onLog(option.amount) }
                         }
                     }
-                    actionButton("Manual") { isEnteringManually = true }
+                    actionButton(Text("Manual")) { isEnteringManually = true }
 
                 case .single:
-                    actionButton("Done") {
+                    actionButton(Text("Done")) {
                         withAnimation(.snappy) { onLog(1) }
                     }
                 }
@@ -174,14 +179,21 @@ private struct GoalCard: View {
         }
     }
 
-    /// The expanding frame goes on the *label*, not the button.
+    /// Takes a `Text` rather than a `String` on purpose.
     ///
-    /// Putting it on the button only makes the invisible slots equal: the
-    /// bordered background still hugs its text, so "5" renders as a tiny pill
-    /// beside a wide "Manual".
-    private func actionButton(_ title: String, action: @escaping () -> Void) -> some View {
+    /// A `String` parameter silently loses localisation: `Text("Manual")` is a
+    /// localised key, but `Text(someString)` is not, so passing the literal
+    /// through a `String` shipped "Manual" and "Done" in English to every
+    /// language while the rest of the screen translated correctly. Asking for
+    /// a `Text` forces each caller to say which it means.
+    ///
+    /// The expanding frame goes on the *label*, not the button. Putting it on
+    /// the button only makes the invisible slots equal: the bordered background
+    /// still hugs its text, so "5" renders as a tiny pill beside a wide
+    /// "Manual".
+    private func actionButton(_ label: Text, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            Text(title)
+            label
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
                 .frame(maxWidth: .infinity)
@@ -190,17 +202,24 @@ private struct GoalCard: View {
         .controlSize(.small)
     }
 
+    /// Built with `String(localized:)` rather than returned as a plain string:
+    /// `Text(someString)` does not localise, so a literal here would ship in
+    /// English to every language.
     private var subtitle: String {
         let kind = goal.measure.kind
         if goal.loggingStyle == .single {
-            return progress.isAchieved ? "Done today" : "Not yet"
+            return progress.isAchieved
+                ? String(localized: "Done today")
+                : String(localized: "Not yet")
         }
         if goal.direction == .atMost {
-            return progress.isAchieved ? "Within limit" : "Over the limit"
+            return progress.isAchieved
+                ? String(localized: "Within limit")
+                : String(localized: "Over the limit")
         }
         let done = MeasureFormatter.short(progress.total, kind: kind)
         let target = MeasureFormatter.short(progress.target, kind: kind)
-        return "\(done) of \(target)"
+        return String(localized: "\(done) of \(target)")
     }
 }
 
