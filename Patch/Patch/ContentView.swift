@@ -19,7 +19,7 @@ struct ContentView: View {
                             onLog: { amount in
                                 entries.append(Entry(goalID: goal.id, amount: amount))
                             },
-                            onUndo: { undoLast(for: goal) }
+                            onClear: { clearToday(for: goal) }
                         )
                     }
                 }
@@ -50,17 +50,17 @@ struct ContentView: View {
         entries.count { $0.goalID == goal.id && Calendar.current.isDateInToday($0.loggedAt) }
     }
 
-    /// Removes the most recent entry logged today for this goal.
+    /// Clears everything logged today for this goal.
     ///
-    /// A mistap is not history worth keeping, so it is deleted outright rather
-    /// than offset by a negative entry. Negative entries remain the right tool
-    /// for correcting a day you genuinely over-reported.
-    private func undoLast(for goal: Goal) {
+    /// Deletes rather than offsetting with a negative entry: a day you are
+    /// resetting was mislogged, and that is not history worth keeping.
+    /// Negative entries remain the right tool for correcting a past day that
+    /// was genuinely over-reported.
+    private func clearToday(for goal: Goal) {
         let calendar = Calendar.current
-        guard let index = entries.lastIndex(where: {
+        entries.removeAll {
             $0.goalID == goal.id && calendar.isDateInToday($0.loggedAt)
-        }) else { return }
-        entries.remove(at: index)
+        }
     }
 }
 
@@ -69,7 +69,7 @@ private struct GoalRow: View {
     let progress: DayProgress
     let loggedToday: Int
     let onLog: (Decimal) -> Void
-    let onUndo: () -> Void
+    let onClear: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -94,7 +94,21 @@ private struct GoalRow: View {
                 }
             }
 
-            HStack(spacing: 8) {
+            actions
+        }
+        .padding(.vertical, 6)
+        .animation(.snappy, value: progress.total)
+    }
+
+    /// The action row, which differs by how the goal is logged.
+    ///
+    /// A row of numbers is only meaningful when amounts accumulate. A once-a-day
+    /// goal wants one button, and a clean-day goal wants a way to admit a slip.
+    @ViewBuilder
+    private var actions: some View {
+        HStack(spacing: 8) {
+            switch goal.loggingStyle {
+            case .incremental:
                 ForEach(QuickAddSuggestions.options(for: goal.measure)) { option in
                     Button(MeasureFormatter.short(option.amount, kind: goal.measure.kind)) {
                         withAnimation(.snappy) { onLog(option.amount) }
@@ -103,30 +117,54 @@ private struct GoalRow: View {
                     .controlSize(.small)
                 }
 
-                if loggedToday > 0 {
-                    Spacer(minLength: 0)
-                    Button {
-                        withAnimation(.snappy) { onUndo() }
-                    } label: {
-                        Label("Undo", systemImage: "arrow.uturn.backward")
-                            .labelStyle(.iconOnly)
+            case .single:
+                if loggedToday == 0 {
+                    Button("Done") {
+                        withAnimation(.snappy) { onLog(1) }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.small)
+                }
+
+            case .abstinence:
+                if loggedToday == 0 {
+                    // Deliberately not labelled "Done": on a goal like "Don't
+                    // smoke" the day is already a success, so a Done button
+                    // would have to mean "I smoked", which reads as the exact
+                    // opposite of what it does.
+                    Button("I slipped") {
+                        withAnimation(.snappy) { onLog(1) }
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
-                    .tint(.secondary)
-                    .accessibilityLabel("Undo last entry for \(goal.title)")
-                    .transition(.scale.combined(with: .opacity))
+                    .tint(.orange)
                 }
             }
+
+            if loggedToday > 0 {
+                Spacer(minLength: 0)
+                Button("Clear") {
+                    withAnimation(.snappy) { onClear() }
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                .tint(.secondary)
+                .accessibilityLabel("Clear today's progress for \(goal.title)")
+                .transition(.scale.combined(with: .opacity))
+            }
         }
-        .padding(.vertical, 6)
-        .animation(.snappy, value: progress.total)
     }
 
     private var subtitle: String {
         let kind = goal.measure.kind
+        if goal.loggingStyle == .abstinence {
+            return progress.isAchieved ? "Clean today" : "Slipped today"
+        }
+        if goal.loggingStyle == .single {
+            return progress.isAchieved ? "Done today" : "Not yet"
+        }
         if goal.direction == .atMost {
-            return progress.isAchieved ? "Clean today" : "Over the limit"
+            return progress.isAchieved ? "Within limit" : "Over the limit"
         }
         let done = MeasureFormatter.short(progress.total, kind: kind)
         let target = MeasureFormatter.short(progress.target, kind: kind)
