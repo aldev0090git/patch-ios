@@ -51,7 +51,10 @@ Packages/PatchKit/          Pure Swift. No SwiftUI, no SwiftData, no UIKit.
     DayProgress.swift       How one goal stands on one day
     ProgressCalculator.swift
     StreakCalculator.swift
-  Tests/PatchCoreTests/     23 tests, run in ~2ms, no simulator needed
+    QuickAdd.swift          Suggested one-tap logging amounts
+    Statistics.swift        Done/missed over day, week, month, year, custom
+    GoalTemplate.swift      Ready-made goals for onboarding
+  Tests/PatchCoreTests/     52 tests, run in ~2ms, no simulator needed
 
 App/                        SwiftUI app target (in progress)
 ```
@@ -78,6 +81,24 @@ Both are deliberate, documented and tested:
 - **Today is forgiving.** If today is scheduled but not yet done, the streak is
   measured from yesterday rather than displayed as zero. Resetting someone's
   streak at 00:01 punishes them for the clock, not their behaviour.
+- **"Missed" means genuinely missed.** Statistics exclude days before the goal
+  was created, days still in the future, and an unfinished today. Without this,
+  every new goal opens on a wall of red for a month it was never set during.
+
+### Logging should take one tap
+
+Suggested amounts scale with the target and snap to round numbers people
+actually say, so logging never requires a picker:
+
+| Goal | Suggestions |
+|---|---|
+| Read 1 hour | 5 min · 15 min · 30 min · 1 h |
+| 100 push-ups | 10 · 25 · 50 · 100 |
+| 2 litres of water | 200 ml · 500 ml · 1 L · 2 L |
+| 10 000 steps | 1 000 · 2 000 · 5 000 · 10 000 |
+| Don't smoke | a single slip |
+
+Manual entry stays available; these are the fast path, not the only path.
 
 ## Getting started
 
@@ -95,12 +116,16 @@ swift test
 ## Roadmap
 
 - [x] Domain model — measures, schedules, progress, streaks
-- [x] Unit test suite
+- [x] Quick-add suggestion engine
+- [x] Statistics — done/missed over day, week, month, year, custom ranges
+- [x] Onboarding goal templates
+- [x] Unit test suite — 52 tests
 - [x] CI — build, test and lint on every push
 - [ ] SwiftData persistence behind a repository protocol
+- [ ] Onboarding flow
 - [ ] Today view with quick-add logging
 - [ ] Design system package — tokens for light, dark and custom themes
-- [ ] Calendar and statistics (month, year, custom ranges)
+- [ ] Calendar and statistics screens
 - [ ] Local notification reminders
 - [ ] Localisation — English (base), Ukrainian, Russian
 - [ ] Home screen widget *(requires Apple Developer Program)*
