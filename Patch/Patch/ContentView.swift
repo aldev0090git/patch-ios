@@ -9,23 +9,34 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVStack(spacing: 12) {
-                    ForEach(todaysGoals) { goal in
-                        GoalCard(
-                            goal: goal,
-                            progress: calculator.progress(for: goal, entries: entries, on: .now),
-                            loggedToday: loggedToday(for: goal),
-                            onLog: { amount in
-                                entries.append(Entry(goalID: goal.id, amount: amount))
-                            },
-                            onReset: { resetToday(for: goal) }
-                        )
+            List {
+                ForEach(todaysGoals) { goal in
+                    let loggedToday = loggedToday(for: goal)
+
+                    GoalCard(
+                        goal: goal,
+                        progress: calculator.progress(for: goal, entries: entries, on: .now)
+                    ) { amount in
+                        entries.append(Entry(goalID: goal.id, amount: amount))
+                    }
+                    .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                    // Reset is hidden behind a swipe rather than sitting on the
+                    // card. It is destructive and rarely wanted, and a button
+                    // that throws away the day does not belong next to the
+                    // buttons that build it up.
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        if loggedToday > 0 {
+                            Button("Reset", role: .destructive) {
+                                withAnimation(.snappy) { resetToday(for: goal) }
+                            }
+                        }
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 14)
             }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
             .background(Color(uiColor: .systemGroupedBackground))
             .navigationTitle("Today")
             // Inline, because the progress header below is the hero of this
@@ -67,23 +78,17 @@ struct ContentView: View {
     }
 }
 
-/// One goal, as a card whose background fills with its own progress.
+/// One goal, as a card.
 ///
-/// Every card uses the same accent colour rather than one per goal. Five
-/// different colours made the list read as five unrelated things and left the
-/// eye nowhere to rest; one colour lets *state* carry the meaning instead —
-/// blue is in progress, green is done, orange is a day gone wrong.
-///
-/// The fill is a tint over the normal card colour rather than a solid block of
-/// saturated colour. Text keeps its standard colours, so it stays legible in
-/// both appearances and under Increase Contrast — which a white-on-magenta
-/// card cannot promise once someone raises their text size.
+/// Two separate signals, deliberately not duplicating each other: the ring
+/// carries *how far along today is*, and the card's background carries *what
+/// state the day is in* — plain while it is running, green once it is done.
+/// Filling the background by fraction instead made a part-finished card look
+/// split in two rather than partly filled.
 private struct GoalCard: View {
     let goal: Goal
     let progress: DayProgress
-    let loggedToday: Int
     let onLog: (Decimal) -> Void
-    let onReset: () -> Void
 
     @State private var isEnteringManually = false
 
@@ -91,19 +96,10 @@ private struct GoalCard: View {
     /// many a goal needs.
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 4)
 
-    /// One accent for every goal, so colour means state rather than identity.
-    private var tint: Color { .blue }
-
-    private var fillColor: Color {
+    private var accent: Color {
         if progress.isAchieved { return .green }
         if progress.isFailed { return .orange }
-        return tint
-    }
-
-    /// A failed day fills completely: a part-filled card would read as partly
-    /// successful.
-    private var fillFraction: Double {
-        progress.isFailed ? 1 : progress.fraction
+        return .blue
     }
 
     var body: some View {
@@ -114,12 +110,10 @@ private struct GoalCard: View {
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
-            ZStack(alignment: .leading) {
+            ZStack {
                 Color(uiColor: .secondarySystemGroupedBackground)
-                GeometryReader { proxy in
-                    fillColor
-                        .opacity(progress.isAchieved || progress.isFailed ? 0.3 : 0.22)
-                        .frame(width: proxy.size.width * fillFraction)
+                if progress.isAchieved || progress.isFailed {
+                    accent.opacity(0.22)
                 }
             }
         }
@@ -134,13 +128,11 @@ private struct GoalCard: View {
 
     private var header: some View {
         HStack(spacing: 14) {
-            ZStack {
-                Circle().fill(tint.opacity(0.2))
-                Image(systemName: goal.symbolName)
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(tint)
-            }
-            .frame(width: 44, height: 44)
+            ProgressRing(
+                fraction: progress.isFailed ? 1 : progress.fraction,
+                symbolName: goal.symbolName,
+                accent: accent
+            )
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(goal.title)
@@ -152,25 +144,12 @@ private struct GoalCard: View {
 
             Spacer(minLength: 8)
 
-            if loggedToday > 0 {
-                Button("Reset") {
-                    withAnimation(.snappy) { onReset() }
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
-                // Red: it throws away everything logged today, and nothing else
-                // on the card is destructive.
-                .tint(.red)
-                .accessibilityLabel("Reset today's progress for \(goal.title)")
-                .transition(.scale.combined(with: .opacity))
-            }
-
             statusIcon
         }
     }
 
-    /// Every settled state gets a mark. A row with no icon means "still in
-    /// progress", so a failed day without one reads as an empty, broken row.
+    /// Every settled state gets a mark. A card with no icon means "still in
+    /// progress", so a failed day without one reads as empty and broken.
     @ViewBuilder
     private var statusIcon: some View {
         if progress.isAchieved {
@@ -186,29 +165,28 @@ private struct GoalCard: View {
         }
     }
 
-    /// The action row. A grid rather than a stack so a lone Done button is the
-    /// same width as a "500 ml" button and sits in the same first column.
+    /// The action row, hidden once the goal is done — there is nothing left to
+    /// add, and the tick says so more clearly than four idle buttons.
     @ViewBuilder
     private var actions: some View {
-        LazyVGrid(columns: columns, spacing: 8) {
-            switch goal.loggingStyle {
-            case .incremental:
-                ForEach(QuickAddSuggestions.options(for: goal.measure)) { option in
-                    actionButton(MeasureFormatter.short(option.amount, kind: goal.measure.kind)) {
-                        withAnimation(.snappy) { onLog(option.amount) }
+        if !progress.isAchieved {
+            LazyVGrid(columns: columns, spacing: 8) {
+                switch goal.loggingStyle {
+                case .incremental:
+                    ForEach(QuickAddSuggestions.options(for: goal.measure)) { option in
+                        actionButton(MeasureFormatter.short(option.amount, kind: goal.measure.kind)) {
+                            withAnimation(.snappy) { onLog(option.amount) }
+                        }
                     }
-                }
-                actionButton("Manual") { isEnteringManually = true }
+                    actionButton("Manual") { isEnteringManually = true }
 
-            case .single:
-                // Collapses once done: the tick and Reset above already say so,
-                // and a lone disabled button would just be noise.
-                if loggedToday == 0 {
+                case .single:
                     actionButton("Done") {
                         withAnimation(.snappy) { onLog(1) }
                     }
                 }
             }
+            .transition(.opacity.combined(with: .move(edge: .top)))
         }
     }
 
@@ -226,7 +204,6 @@ private struct GoalCard: View {
         }
         .buttonStyle(.bordered)
         .controlSize(.small)
-        .tint(tint)
     }
 
     private var subtitle: String {
@@ -240,6 +217,28 @@ private struct GoalCard: View {
         let done = MeasureFormatter.short(progress.total, kind: kind)
         let target = MeasureFormatter.short(progress.target, kind: kind)
         return "\(done) of \(target)"
+    }
+}
+
+private struct ProgressRing: View {
+    let fraction: Double
+    let symbolName: String
+    let accent: Color
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(.quaternary, lineWidth: 4)
+            Circle()
+                .trim(from: 0, to: fraction)
+                .stroke(accent, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+            Image(systemName: symbolName)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(accent)
+        }
+        .frame(width: 44, height: 44)
+        .animation(.snappy, value: fraction)
     }
 }
 
