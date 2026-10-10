@@ -36,36 +36,3 @@ struct LoggingStyleTests {
         #expect(goal.loggingStyle == .incremental)
     }
 }
-
-@Suite("Goal tints")
-struct GoalTintTests {
-    @Test("Every template carries a colour through to its goal")
-    func templatesCarryTheirTint() {
-        for template in GoalTemplateCatalog.all {
-            let goal = template.makeGoal(title: "Test")
-            #expect(goal.tint == template.tint)
-        }
-    }
-
-    @Test("Templates do not all share one colour")
-    func templatesAreVisuallyDistinct() {
-        let tints = Set(GoalTemplateCatalog.all.map(\.tint))
-        #expect(tints.count >= 5)
-    }
-
-    @Test("A tint survives a round trip through Codable")
-    func tintIsCodable() throws {
-        let goal = Goal(title: "Read", symbolName: "book", tint: .indigo, measure: .minutes(20))
-        let data = try JSONEncoder().encode(goal)
-        let restored = try JSONDecoder().decode(Goal.self, from: data)
-
-        #expect(restored.tint == .indigo)
-    }
-}
-
-extension GoalTintTests {
-    @Test("No template claims red, which is reserved for destructive actions")
-    func redIsReservedForDestructiveActions() {
-        #expect(GoalTemplateCatalog.all.allSatisfy { $0.tint != .red })
-    }
-}

@@ -69,6 +69,11 @@ struct ContentView: View {
 
 /// One goal, as a card whose background fills with its own progress.
 ///
+/// Every card uses the same accent colour rather than one per goal. Five
+/// different colours made the list read as five unrelated things and left the
+/// eye nowhere to rest; one colour lets *state* carry the meaning instead —
+/// blue is in progress, green is done, orange is a day gone wrong.
+///
 /// The fill is a tint over the normal card colour rather than a solid block of
 /// saturated colour. Text keeps its standard colours, so it stays legible in
 /// both appearances and under Increase Contrast — which a white-on-magenta
@@ -86,7 +91,8 @@ private struct GoalCard: View {
     /// many a goal needs.
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 4)
 
-    private var tint: Color { goal.tint.color }
+    /// One accent for every goal, so colour means state rather than identity.
+    private var tint: Color { .blue }
 
     private var fillColor: Color {
         if progress.isAchieved { return .green }

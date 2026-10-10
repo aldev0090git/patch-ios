@@ -10,7 +10,6 @@ public struct GoalTemplate: Identifiable, Hashable, Sendable {
     /// Key resolved against the app's String Catalog by the presentation layer.
     public let titleKey: String
     public let symbolName: String
-    public let tint: GoalTint
     public let measure: Measure
     public let direction: Direction
     public let schedule: Schedule
@@ -20,7 +19,6 @@ public struct GoalTemplate: Identifiable, Hashable, Sendable {
         id: String,
         titleKey: String,
         symbolName: String,
-        tint: GoalTint = .blue,
         measure: Measure,
         direction: Direction = .atLeast,
         schedule: Schedule = .daily,
@@ -29,7 +27,6 @@ public struct GoalTemplate: Identifiable, Hashable, Sendable {
         self.id = id
         self.titleKey = titleKey
         self.symbolName = symbolName
-        self.tint = tint
         self.measure = measure
         self.direction = direction
         self.schedule = schedule
@@ -44,7 +41,6 @@ public struct GoalTemplate: Identifiable, Hashable, Sendable {
         Goal(
             title: title,
             symbolName: symbolName,
-            tint: tint,
             measure: measure,
             direction: direction,
             schedule: schedule,
@@ -64,7 +60,6 @@ public enum GoalTemplateCatalog {
         id: "read",
         titleKey: "template.read",
         symbolName: "book",
-        tint: .indigo,
         measure: .minutes(20)
     )
 
@@ -72,7 +67,6 @@ public enum GoalTemplateCatalog {
         id: "push_ups",
         titleKey: "template.pushUps",
         symbolName: "figure.strengthtraining.functional",
-        tint: .orange,
         measure: .times(20, quickAdd: 5)
     )
 
@@ -80,7 +74,6 @@ public enum GoalTemplateCatalog {
         id: "water",
         titleKey: "template.water",
         symbolName: "drop",
-        tint: .teal,
         measure: .millilitres(2000)
     )
 
@@ -88,7 +81,6 @@ public enum GoalTemplateCatalog {
         id: "steps",
         titleKey: "template.steps",
         symbolName: "figure.walk",
-        tint: .green,
         measure: .steps(10_000)
     )
 
@@ -96,7 +88,6 @@ public enum GoalTemplateCatalog {
         id: "save_money",
         titleKey: "template.saveMoney",
         symbolName: "banknote",
-        tint: .mint,
         measure: .money(100, quickAdd: 50),
         cumulativeTarget: 10_000
     )
@@ -112,7 +103,6 @@ public enum GoalTemplateCatalog {
         id: "quit_smoking",
         titleKey: "template.quitSmoking",
         symbolName: "nosign",
-        tint: .blue,
         measure: .times(1)
     )
 
@@ -120,7 +110,6 @@ public enum GoalTemplateCatalog {
         id: "gym",
         titleKey: "template.gym",
         symbolName: "dumbbell",
-        tint: .pink,
         measure: .times(1),
         schedule: .daysOfWeek([.monday, .wednesday, .friday])
     )
@@ -129,7 +118,6 @@ public enum GoalTemplateCatalog {
         id: "run",
         titleKey: "template.run",
         symbolName: "figure.run",
-        tint: .purple,
         measure: .times(1),
         schedule: .daysOfWeek([.tuesday, .thursday])
     )
@@ -138,7 +126,6 @@ public enum GoalTemplateCatalog {
         id: "meditate",
         titleKey: "template.meditate",
         symbolName: "brain.head.profile",
-        tint: .indigo,
         measure: .minutes(10)
     )
 

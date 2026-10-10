@@ -34,7 +34,6 @@ struct ManualEntrySheet: View {
                 .labelsHidden()
             }
             .navigationTitle(goal.title)
-            .tint(goal.tint.color)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

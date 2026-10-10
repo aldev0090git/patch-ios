@@ -20,8 +20,6 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
     public var title: String
     /// SF Symbol name, so the app stays visually native for free.
     public var symbolName: String
-    /// Colour the goal is shown in. See ``GoalTint``.
-    public var tint: GoalTint
     public var measure: Measure
     public var direction: Direction
     public var schedule: Schedule
@@ -37,7 +35,6 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
         id: UUID = UUID(),
         title: String,
         symbolName: String = "target",
-        tint: GoalTint = .blue,
         measure: Measure,
         direction: Direction = .atLeast,
         schedule: Schedule = .daily,
@@ -48,7 +45,6 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
         self.id = id
         self.title = title
         self.symbolName = symbolName
-        self.tint = tint
         self.measure = measure
         self.direction = direction
         self.schedule = schedule
