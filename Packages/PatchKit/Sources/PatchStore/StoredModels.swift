@@ -27,6 +27,7 @@ public final class StoredGoal {
     /// would not understand.
     public var scheduleMonthDays: [Int] = []
     public var cumulativeTarget: Decimal?
+    public var cumulativeDeadline: Date?
     public var createdAt: Date = Date()
     /// Split into two optional scalars rather than one embedded value:
     /// CloudKit wants plain, defaulted or optional properties.
@@ -65,6 +66,7 @@ public final class StoredGoal {
             scheduleMonthDays = days.sorted()
         }
         cumulativeTarget = goal.cumulativeTarget
+        cumulativeDeadline = goal.cumulativeDeadline
         createdAt = goal.createdAt
         targetHistoryData = goal.targetHistory.isEmpty
             ? nil
@@ -115,6 +117,7 @@ public final class StoredGoal {
             direction: Direction(rawValue: directionRaw) ?? .atLeast,
             schedule: schedule,
             cumulativeTarget: cumulativeTarget,
+            cumulativeDeadline: cumulativeDeadline,
             createdAt: createdAt,
             targetHistory: targetHistory,
             reminder: reminder,

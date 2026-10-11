@@ -1,6 +1,23 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%@ a day to make it": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ на день, щоб устигнути"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ в день, чтобы успеть"
+          }
+        }
+      }
+    },
     "%@ every day": {
       "extractionState": "manual",
       "localizations": {
@@ -110,6 +127,71 @@
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld дня подряд"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld days left": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld день лишився"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld дні лишилося"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld днів лишилося"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld днів лишилося"
+                }
+              }
+            }
+          }
+        },
+        "ru": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "остался %lld день"
+                }
+              },
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "осталось %lld дня"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "осталось %lld дней"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "осталось %lld дней"
                 }
               }
             }
@@ -317,6 +399,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "В архив"
+          }
+        }
+      }
+    },
+    "By a date": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "До дати"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "К дате"
           }
         }
       }
@@ -572,6 +671,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Произвольный"
+          }
+        }
+      }
+    },
+    "Date": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дата"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дата"
           }
         }
       }
@@ -1086,6 +1202,40 @@
         }
       }
     },
+    "Overall goal": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Загальна ціль"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Общая цель"
+          }
+        }
+      }
+    },
+    "Past its date": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Термін минув"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Срок прошёл"
+          }
+        }
+      }
+    },
     "Patch": {
       "extractionState": "manual",
       "localizations": {
@@ -1184,6 +1334,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Достичь цели"
+          }
+        }
+      }
+    },
+    "Reached": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Досягнуто"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Достигнуто"
           }
         }
       }
@@ -1562,6 +1729,23 @@
         }
       }
     },
+    "Total": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сума"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сумма"
+          }
+        }
+      }
+    },
     "Track %lld": {
       "extractionState": "manual",
       "localizations": {
@@ -1643,6 +1827,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "В пределах лимита"
+          }
+        }
+      }
+    },
+    "Work toward a total": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Накопичувати до суми"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Копить до суммы"
           }
         }
       }

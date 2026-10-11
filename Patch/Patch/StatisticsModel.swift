@@ -17,6 +17,9 @@ struct Totals: Hashable {
 struct GoalStatistics: Identifiable, Hashable {
     let goal: Goal
     let statistics: PeriodStatistics
+    /// Present only for a goal working toward a total. Deliberately not
+    /// windowed: "save 100 000" means since the beginning, not since Monday.
+    let overall: CumulativeProgress?
 
     var id: Goal.ID { goal.id }
 }
@@ -33,6 +36,7 @@ final class StatisticsModel {
     private let store: GoalStore
     private let calendar: Calendar
     private let calculator: StatisticsCalculator
+    private let progress: ProgressCalculator
 
     private(set) var goals: [Goal] = []
     private(set) var entries: [Entry] = []
@@ -44,6 +48,7 @@ final class StatisticsModel {
         self.store = store
         self.calendar = calendar
         self.calculator = StatisticsCalculator(calendar: calendar)
+        self.progress = ProgressCalculator(calendar: calendar)
     }
 
     func load() {
@@ -69,7 +74,13 @@ final class StatisticsModel {
     /// failures. A goal the window never scheduled at all is dropped.
     var rows: [GoalStatistics] {
         activeGoals
-            .map { GoalStatistics(goal: $0, statistics: statistics(for: $0)) }
+            .map {
+                GoalStatistics(
+                    goal: $0,
+                    statistics: statistics(for: $0),
+                    overall: progress.cumulativeProgress(for: $0, entries: entries)
+                )
+            }
             .filter { $0.statistics.scheduledDays > 0 || $0.statistics.hasPendingToday }
             .sorted { lhs, rhs in
                 let lhsSettled = lhs.statistics.scheduledDays > 0

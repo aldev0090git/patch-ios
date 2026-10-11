@@ -118,6 +118,23 @@ struct SwiftDataGoalStoreTests {
         #expect(try store.loadGoals().first?.schedule == .daysOfMonth([1, 15]))
     }
 
+    @Test("A long-run target and its deadline survive a round trip")
+    @MainActor
+    func cumulativeRoundTrip() throws {
+        let store = try makeStore()
+        let deadline = Date(timeIntervalSince1970: 1_800_000_000)
+        try store.save(Goal(
+            title: "Save",
+            measure: .money(5000),
+            cumulativeTarget: 100_000,
+            cumulativeDeadline: deadline
+        ))
+
+        let restored = try #require(try store.loadGoals().first)
+        #expect(restored.cumulativeTarget == 100_000)
+        #expect(restored.cumulativeDeadline == deadline)
+    }
+
     @Test("A reminder survives a round trip")
     @MainActor
     func reminderRoundTrip() throws {

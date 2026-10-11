@@ -221,6 +221,10 @@ private struct GoalStatisticsCard: View {
 
             SplitBar(completed: statistics.completedDays, missed: statistics.missedDays)
 
+            if let overall = row.overall {
+                OverallProgress(progress: overall, measure: row.goal.measure)
+            }
+
             if statistics.currentStreak > 0 || statistics.total > 0 {
                 HStack(spacing: 14) {
                     if statistics.currentStreak > 0 {
@@ -276,6 +280,59 @@ private struct GoalStatisticsCard: View {
         let done = String(localized: "\(statistics.completedDays) done")
         let missed = String(localized: "\(statistics.missedDays) missed")
         return "\(done) · \(missed)"
+    }
+}
+
+/// How a long-run target is going: "12 000 ₴ of 100 000 ₴", a bar, and what
+/// it would take to still make the date.
+private struct OverallProgress: View {
+    let progress: CumulativeProgress
+    let measure: Measure
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(verbatim: amounts)
+                    .font(.caption.weight(.medium))
+                Spacer(minLength: 8)
+                if let note {
+                    Text(verbatim: note)
+                        .font(.caption)
+                        .foregroundStyle(progress.isOverdue ? .orange : .secondary)
+                }
+            }
+
+            GeometryReader { proxy in
+                Capsule()
+                    .fill(progress.isReached ? Color.green : Color.accentColor)
+                    .frame(width: proxy.size.width * progress.fraction)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(height: 6)
+            .background(Color(uiColor: .tertiarySystemFill), in: .capsule)
+        }
+        .padding(.top, 2)
+        .accessibilityElement(children: .combine)
+    }
+
+    private var amounts: String {
+        let done = MeasureFormatter.short(progress.total, measure: measure)
+        let target = MeasureFormatter.short(progress.target, measure: measure)
+        return String(localized: "\(done) of \(target)")
+    }
+
+    /// One line, and only when it tells the reader something they could act
+    /// on. A reached target says so; an overdue one says so; otherwise the
+    /// useful number is the pace needed, not the raw days left.
+    private var note: String? {
+        if progress.isReached { return String(localized: "Reached") }
+        if progress.isOverdue { return String(localized: "Past its date") }
+        guard let days = progress.daysRemaining else { return nil }
+        guard let pace = progress.requiredPerRemainingDay else {
+            return String(localized: "\(days) days left")
+        }
+        let amount = MeasureFormatter.short(pace, measure: measure)
+        return String(localized: "\(amount) a day to make it")
     }
 }
 

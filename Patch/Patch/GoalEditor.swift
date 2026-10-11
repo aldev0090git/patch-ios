@@ -13,6 +13,10 @@ struct GoalEditor: View {
     private let onSave: (Goal) -> Void
 
     @State private var title: String
+    @State private var hasOverall: Bool
+    @State private var overallTarget: Decimal
+    @State private var hasDeadline: Bool
+    @State private var deadline: Date
     @State private var repeatMode: RepeatMode
     @State private var monthDays: Set<Int>
 
@@ -58,6 +62,18 @@ struct GoalEditor: View {
         _direction = State(initialValue: goal?.direction ?? .atLeast)
         // The phone's own currency unless the goal already names one, so the
         // common case needs no decision at all.
+        _hasOverall = State(initialValue: goal?.cumulativeTarget != nil)
+        _overallTarget = State(
+            initialValue: goal?.cumulativeTarget.map {
+                MeasureInput.fromCanonical($0, kind: measure.kind)
+            } ?? 0
+        )
+        _hasDeadline = State(initialValue: goal?.cumulativeDeadline != nil)
+        _deadline = State(
+            initialValue: goal?.cumulativeDeadline
+                ?? Calendar.current.date(byAdding: .month, value: 6, to: .now)
+                ?? .now
+        )
         _currencyCode = State(
             initialValue: goal?.measure.currencyCode ?? CurrencyOptions.deviceDefault
         )
@@ -119,6 +135,27 @@ struct GoalEditor: View {
                     Picker("Aim to", selection: $direction) {
                         Text("Reach the target").tag(Direction.atLeast)
                         Text("Stay under it").tag(Direction.atMost)
+                    }
+                }
+
+                Section("Overall goal") {
+                    Toggle("Work toward a total", isOn: $hasOverall)
+                    if hasOverall {
+                        HStack {
+                            TextField("Total", value: $overallTarget, format: .number)
+                                .keyboardType(.decimalPad)
+                            Text(verbatim: unitTrailing)
+                                .foregroundStyle(.secondary)
+                        }
+                        Toggle("By a date", isOn: $hasDeadline)
+                        if hasDeadline {
+                            DatePicker(
+                                "Date",
+                                selection: $deadline,
+                                in: Date.now...,
+                                displayedComponents: .date
+                            )
+                        }
                     }
                 }
 
@@ -220,6 +257,13 @@ struct GoalEditor: View {
             : String(localized: "Only on the days you picked below.")
     }
 
+    /// Nil unless there is a real number behind it — an overall goal of zero
+    /// is a toggle someone switched on and then left alone.
+    private var chosenOverallTarget: Decimal? {
+        guard hasOverall, overallTarget > 0 else { return nil }
+        return MeasureInput.toCanonical(overallTarget, kind: kind)
+    }
+
     private var chosenSchedule: Schedule {
         switch repeatMode {
         case .daily: .daily
@@ -284,7 +328,8 @@ struct GoalEditor: View {
             ),
             direction: direction,
             schedule: chosenSchedule,
-            cumulativeTarget: existing?.cumulativeTarget,
+            cumulativeTarget: chosenOverallTarget,
+            cumulativeDeadline: chosenOverallTarget == nil || !hasDeadline ? nil : deadline,
             // Keeping the original creation date matters: statistics and streaks
             // both refuse to look back before it, so resetting it on every edit
             // would quietly erase the goal's history.

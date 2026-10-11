@@ -231,6 +231,53 @@ struct StatisticsModelTests {
     }
 
     @MainActor
+    @Test("A goal with a long-run target reports progress toward it")
+    func overallProgressIsReported() {
+        let saving = Goal(
+            title: "Save",
+            measure: .money(100),
+            cumulativeTarget: 1000,
+            createdAt: calendar.date(byAdding: .day, value: -30, to: .now) ?? .now
+        )
+        let logged = (1...3).compactMap { back -> Entry? in
+            guard let date = calendar.date(byAdding: .day, value: -back, to: .now) else { return nil }
+            return Entry(goalID: saving.id, amount: 100, loggedAt: date)
+        }
+        let model = model(goals: [saving], entries: logged)
+
+        let overall = model.rows.first?.overall
+        #expect(overall?.total == 300)
+        #expect(overall?.target == 1000)
+        #expect(overall?.isReached == false)
+    }
+
+    @MainActor
+    @Test("A goal without a long-run target reports none")
+    func noOverallWhenNotAsked() {
+        let read = goal()
+        let model = model(goals: [read], entries: [entry(read, daysAgo: 1)])
+
+        #expect(model.rows.first?.overall == nil)
+    }
+
+    @MainActor
+    @Test("The long-run total is not clipped to the window on screen")
+    func overallIgnoresTheWindow() {
+        // "Save 100 000" means since the beginning, not since Monday.
+        let saving = Goal(
+            title: "Save",
+            measure: .money(100),
+            cumulativeTarget: 1000,
+            createdAt: calendar.date(byAdding: .day, value: -120, to: .now) ?? .now
+        )
+        let old = calendar.date(byAdding: .day, value: -100, to: .now) ?? .now
+        let model = model(goals: [saving], entries: [Entry(goalID: saving.id, amount: 400, loggedAt: old)])
+        model.selection = PeriodSelection(kind: .week, anchor: .now)
+
+        #expect(model.rows.first?.overall?.total == 400)
+    }
+
+    @MainActor
     @Test("Completion rate is done over settled days, never over the calendar")
     func completionRateIgnoresUnsettledDays() {
         let read = goal()

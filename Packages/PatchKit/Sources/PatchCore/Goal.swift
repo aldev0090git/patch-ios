@@ -36,6 +36,10 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
     /// Optional long-run target: "save 20 000 UAH", "read 100 hours".
     /// Separate from the daily target — a goal can have either, both or neither.
     public var cumulativeTarget: Decimal?
+    /// When the long-run target is meant to be reached by. Optional on its own:
+    /// "save 20 000" is a goal with or without a date, and inventing a deadline
+    /// nobody set would turn a saving habit into a countdown.
+    public var cumulativeDeadline: Date?
     public var createdAt: Date
     /// Past daily targets, oldest first. Empty while the target has never
     /// changed — see ``dailyTarget(on:calendar:)``.
@@ -56,6 +60,7 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
         direction: Direction = .atLeast,
         schedule: Schedule = .daily,
         cumulativeTarget: Decimal? = nil,
+        cumulativeDeadline: Date? = nil,
         createdAt: Date = .now,
         targetHistory: [TargetChange] = [],
         reminder: Reminder? = nil,
@@ -69,6 +74,7 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
         self.direction = direction
         self.schedule = schedule
         self.cumulativeTarget = cumulativeTarget
+        self.cumulativeDeadline = cumulativeDeadline
         self.createdAt = createdAt
         self.targetHistory = targetHistory
         self.reminder = reminder
