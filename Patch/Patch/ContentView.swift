@@ -73,6 +73,14 @@ struct ContentView: View {
                         Button("Edit", systemImage: "pencil") {
                             editing = .existing(goal)
                         }
+                        // Also here, not only behind the swipe. A gesture
+                        // nobody finds may as well not exist, and this is the
+                        // only way to undo a mistaken tap.
+                        if hasLogged {
+                            Button("Reset", systemImage: "arrow.uturn.backward") {
+                                model.resetToday(for: goal)
+                            }
+                        }
                         Button("Archive", systemImage: "archivebox", role: .destructive) {
                             withAnimation(.snappy) { model.archive(goal) }
                             Task { await scheduler.sync(goals: model.goals) }

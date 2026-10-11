@@ -20,9 +20,15 @@ final class OnboardingUITests: XCTestCase {
         sleep(1)
         attach(app.screenshot(), named: "2-picker")
 
+        primary.tap()          // Continue
+        sleep(1)
+        XCTAssertTrue(app.staticTexts["Як це працює"].waitForExistence(timeout: 5),
+                      "The how-it-works page did not appear")
+        attach(app.screenshot(), named: "3-how-it-works")
+
         primary.tap()          // Track the preselected goals
         sleep(2)
-        attach(app.screenshot(), named: "3-today")
+        attach(app.screenshot(), named: "4-today")
 
         // The three suggested goals, and the tab bar behind them.
         XCTAssertTrue(app.tabBars.buttons.element(boundBy: 0).waitForExistence(timeout: 10),

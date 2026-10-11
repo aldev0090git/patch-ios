@@ -18,6 +18,10 @@ struct OnboardingView: View {
             TabView(selection: $page) {
                 welcome.tag(0)
                 picker.tag(1)
+                // Last, so the gestures are the freshest thing in mind when
+                // the app opens. A swipe nobody knows about may as well not
+                // exist, and Reset lives behind one.
+                howItWorks.tag(2)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
 
@@ -101,15 +105,57 @@ struct OnboardingView: View {
         .padding(.top, 24)
     }
 
+    // MARK: - Page three
+
+    private var howItWorks: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("How it works")
+                    .font(.title2.bold())
+                Text("Three things worth knowing before you start.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 20)
+
+            VStack(spacing: 14) {
+                TipRow(
+                    symbol: "hand.tap",
+                    title: Text("Tap an amount to log it"),
+                    detail: Text("Or use Manual for anything else. The ring fills as the day goes.")
+                )
+                TipRow(
+                    symbol: "arrow.left",
+                    title: Text("Swipe a goal left to reset or archive it"),
+                    detail: Text(
+                        "Reset clears today's entries for that goal. Archiving hides it but keeps its history."
+                    )
+                )
+                TipRow(
+                    symbol: "arrow.right",
+                    title: Text("Swipe right to edit"),
+                    detail: Text(
+                        "Change the target, days or reminder at any time. Past days keep the target they had."
+                    )
+                )
+            }
+            .padding(.horizontal, 16)
+
+            Spacer(minLength: 0)
+        }
+        .padding(.top, 24)
+    }
+
     // MARK: - Footer
 
     private var footer: some View {
         VStack(spacing: 12) {
-            PageDots(count: 2, current: page)
+            PageDots(count: 3, current: page)
 
             Button {
-                if page == 0 {
-                    withAnimation(.snappy) { page = 1 }
+                if page < 2 {
+                    withAnimation(.snappy) { page += 1 }
                 } else if model.finish() {
                     onFinish()
                 }
@@ -141,6 +187,8 @@ struct OnboardingView: View {
     private var primaryLabel: some View {
         if page == 0 {
             Text("Get started")
+        } else if page == 1 {
+            Text("Continue")
         } else if model.selectionCount == 0 {
             Text("Start with none")
         } else {
@@ -210,5 +258,35 @@ private struct TemplateRow: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
+    }
+}
+
+/// One thing worth knowing, on the last onboarding page.
+private struct TipRow: View {
+    let symbol: String
+    let title: Text
+    let detail: Text
+
+    @ScaledMetric(relativeTo: .headline) private var iconSize: CGFloat = 34
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 14) {
+            Image(systemName: symbol)
+                .font(.system(size: iconSize * 0.45, weight: .semibold))
+                .foregroundStyle(Color.accentColor)
+                .frame(width: iconSize, height: iconSize)
+                .background(Color(uiColor: .tertiarySystemFill), in: .circle)
+
+            VStack(alignment: .leading, spacing: 3) {
+                title.font(.subheadline.weight(.semibold))
+                detail
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer(minLength: 0)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

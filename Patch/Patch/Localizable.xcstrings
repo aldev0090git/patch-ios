@@ -488,6 +488,23 @@
         }
       }
     },
+    "Change the target, days or reminder at any time. Past days keep the target they had.": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Змінюйте ціль, дні чи нагадування будь-коли. Минулі дні зберігають свою попередню ціль."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Меняйте цель, дни или напоминание когда угодно. Прошедшие дни сохраняют свою прежнюю цель."
+          }
+        }
+      }
+    },
     "Close": {
       "extractionState": "manual",
       "localizations": {
@@ -501,6 +518,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Закрыть"
+          }
+        }
+      }
+    },
+    "Continue": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Далі"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Далее"
           }
         }
       }
@@ -896,6 +930,23 @@
         }
       }
     },
+    "How it works": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Як це працює"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Как это работает"
+          }
+        }
+      }
+    },
     "Icon": {
       "extractionState": "manual",
       "localizations": {
@@ -1185,6 +1236,23 @@
         }
       }
     },
+    "Or use Manual for anything else. The ring fills as the day goes.": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Або скористайтеся «Вручну» для будь-якого іншого. Кільце заповнюється протягом дня."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Или используйте «Вручную» для любого другого. Кольцо заполняется в течение дня."
+          }
+        }
+      }
+    },
     "Over the limit": {
       "extractionState": "manual",
       "localizations": {
@@ -1423,6 +1491,23 @@
         }
       }
     },
+    "Reset clears today's entries for that goal. Archiving hides it but keeps its history.": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "«Скинути» прибирає сьогоднішні записи цієї цілі. Архівування приховує ціль, але зберігає історію."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "«Сбросить» убирает сегодняшние записи этой цели. Архивирование скрывает цель, но сохраняет историю."
+          }
+        }
+      }
+    },
     "Reset today's progress for %@": {
       "extractionState": "manual",
       "localizations": {
@@ -1610,6 +1695,57 @@
         }
       }
     },
+    "Swipe a goal left to reset or archive it": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проведіть по цілі ліворуч, щоб скинути або архівувати"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проведите по цели влево, чтобы сбросить или архивировать"
+          }
+        }
+      }
+    },
+    "Swipe right to edit": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проведіть праворуч, щоб редагувати"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Проведите вправо, чтобы редактировать"
+          }
+        }
+      }
+    },
+    "Tap an amount to log it": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Торкніться значення, щоб записати його"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нажмите на значение, чтобы записать его"
+          }
+        }
+      }
+    },
     "Target": {
       "extractionState": "manual",
       "localizations": {
@@ -1674,6 +1810,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Этот год"
+          }
+        }
+      }
+    },
+    "Three things worth knowing before you start.": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Три речі, які варто знати перед початком."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Три вещи, которые стоит знать перед началом."
           }
         }
       }
