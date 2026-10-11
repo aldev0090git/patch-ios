@@ -2,12 +2,13 @@
 # every rule it trips over is worse than no lint config at all.
 
 included:
-  - App
+  - Patch
   - Packages
 
 excluded:
   - "**/.build"
   - "**/DerivedData"
+  - "**/*.xcodeproj"
 
 opt_in_rules:
   - empty_count
