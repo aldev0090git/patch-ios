@@ -58,3 +58,27 @@ struct TemplateTitleTests {
         #expect(goal.titleKey == nil)
     }
 }
+
+@Suite("Reminders")
+struct ReminderTests {
+    @Test("A reminder is a time of day, not an instant")
+    func componentsCarryOnlyTheTime() {
+        let reminder = Reminder(hour: 8, minute: 30)
+        #expect(reminder.components.hour == 8)
+        #expect(reminder.components.minute == 30)
+        #expect(reminder.components.day == nil)
+        #expect(reminder.components.year == nil)
+    }
+
+    @Test("An impossible time is clamped rather than refused")
+    func outOfRangeIsClamped() {
+        // A corrupt row must not cost the user the whole goal.
+        #expect(Reminder(hour: 99, minute: 99) == Reminder(hour: 23, minute: 59))
+        #expect(Reminder(hour: -4, minute: -1) == Reminder(hour: 0, minute: 0))
+    }
+
+    @Test("A goal has no reminder unless one is set")
+    func remindersAreOptional() {
+        #expect(Goal(title: "Read", measure: .minutes(20)).reminder == nil)
+    }
+}

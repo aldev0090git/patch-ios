@@ -13,6 +13,9 @@ struct GoalEditor: View {
     private let onSave: (Goal) -> Void
 
     @State private var title: String
+    @State private var remindsMe: Bool
+    @State private var notificationsDenied = false
+    @State private var reminderTime: Date
     @State private var symbolName: String
     @State private var kind: MeasureKind
     @State private var target: Decimal
@@ -44,6 +47,10 @@ struct GoalEditor: View {
             initialValue: MeasureInput.fromCanonical(measure.dailyTarget, kind: measure.kind)
         )
         _direction = State(initialValue: goal?.direction ?? .atLeast)
+        _remindsMe = State(initialValue: goal?.reminder != nil)
+        // Defaults to a time someone is likely awake and not yet asleep, rather
+        // than to whenever the editor happened to be opened.
+        _reminderTime = State(initialValue: Self.time(from: goal?.reminder) ?? Self.defaultTime)
 
         switch goal?.schedule ?? .daily {
         case .daily:
@@ -87,6 +94,34 @@ struct GoalEditor: View {
                     }
                 }
 
+                Section("Reminder") {
+                    Toggle("Remind me", isOn: $remindsMe)
+                    if remindsMe, notificationsDenied {
+                        // iOS only ever shows its prompt once, so asking again
+                        // does nothing. Say where the switch actually is.
+                        Label {
+                            Text("Notifications are off for Patch. Turn them on in Settings.")
+                        } icon: {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundStyle(.orange)
+                        }
+                        .font(.caption)
+                    }
+                    if remindsMe {
+                        DatePicker(
+                            "Time",
+                            selection: $reminderTime,
+                            displayedComponents: .hourAndMinute
+                        )
+                        // Says what will actually happen: the reminder follows
+                        // the goal's own days, so a Mon/Wed goal is silent on
+                        // Sunday and the user should not have to guess that.
+                        Text(reminderExplanation)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
                 Section("Repeat") {
                     Picker("Days", selection: $repeatsDaily) {
                         Text("Every day").tag(true)
@@ -98,6 +133,10 @@ struct GoalEditor: View {
                         weekdayPicker
                     }
                 }
+            }
+            .onChange(of: remindsMe) { _, isOn in
+                guard isOn else { notificationsDenied = false; return }
+                Task { notificationsDenied = await !NotificationScheduler().requestAuthorization() }
             }
             .navigationTitle(existing == nil ? Text("New Goal") : Text("Edit Goal"))
             .navigationBarTitleDisplayMode(.inline)
@@ -115,6 +154,30 @@ struct GoalEditor: View {
                 }
             }
         }
+    }
+
+    private static let defaultTime: Date = {
+        Calendar.current.date(from: DateComponents(hour: 20, minute: 0)) ?? .now
+    }()
+
+    private static func time(from reminder: Reminder?) -> Date? {
+        guard let reminder else { return nil }
+        return Calendar.current.date(
+            from: DateComponents(hour: reminder.hour, minute: reminder.minute)
+        )
+    }
+
+    private var reminderExplanation: String {
+        repeatsDaily
+            ? String(localized: "Every day at this time.")
+            : String(localized: "Only on the days you picked below.")
+    }
+
+    private var chosenReminder: Reminder? {
+        guard remindsMe else { return nil }
+        let parts = Calendar.current.dateComponents([.hour, .minute], from: reminderTime)
+        guard let hour = parts.hour, let minute = parts.minute else { return nil }
+        return Reminder(hour: hour, minute: minute)
     }
 
     private var symbolPicker: some View {
@@ -199,6 +262,7 @@ struct GoalEditor: View {
             // both refuse to look back before it, so resetting it on every edit
             // would quietly erase the goal's history.
             createdAt: existing?.createdAt ?? .now,
+            reminder: chosenReminder,
             archivedAt: existing?.archivedAt
         )
     }

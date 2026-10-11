@@ -22,6 +22,10 @@ public final class StoredGoal {
     public var scheduleWeekdays: [Int] = []
     public var cumulativeTarget: Decimal?
     public var createdAt: Date = Date()
+    /// Split into two optional scalars rather than one embedded value:
+    /// CloudKit wants plain, defaulted or optional properties.
+    public var reminderHour: Int?
+    public var reminderMinute: Int?
     public var archivedAt: Date?
 
     public init(_ goal: Goal) {
@@ -46,6 +50,8 @@ public final class StoredGoal {
         }
         cumulativeTarget = goal.cumulativeTarget
         createdAt = goal.createdAt
+        reminderHour = goal.reminder?.hour
+        reminderMinute = goal.reminder?.minute
         archivedAt = goal.archivedAt
     }
 
@@ -54,6 +60,12 @@ public final class StoredGoal {
     /// A newer version of the app syncing an unfamiliar measure kind must not
     /// crash an older one reading it. Showing the goal with a sensible default
     /// beats refusing to open the app.
+    /// Both halves or neither — a half-written row is not a reminder.
+    private var reminder: Reminder? {
+        guard let reminderHour, let reminderMinute else { return nil }
+        return Reminder(hour: reminderHour, minute: reminderMinute)
+    }
+
     public var domain: Goal {
         Goal(
             id: id,
@@ -70,6 +82,7 @@ public final class StoredGoal {
                 : .daysOfWeek(Set(scheduleWeekdays.compactMap(Weekday.init(rawValue:)))),
             cumulativeTarget: cumulativeTarget,
             createdAt: createdAt,
+            reminder: reminder,
             archivedAt: archivedAt
         )
     }

@@ -695,6 +695,23 @@
         }
       }
     },
+    "Every day at this time.": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Щодня о цій порі."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Каждый день в это время."
+          }
+        }
+      }
+    },
     "Get started": {
       "extractionState": "manual",
       "localizations": {
@@ -933,6 +950,23 @@
         }
       }
     },
+    "Notifications are off for Patch. Turn them on in Settings.": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сповіщення для Patch вимкнено. Увімкніть їх у Налаштуваннях."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Уведомления для Patch отключены. Включите их в Настройках."
+          }
+        }
+      }
+    },
     "OK": {
       "extractionState": "manual",
       "localizations": {
@@ -963,6 +997,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Как только вы последите за целью день-другой, здесь появятся её показатели."
+          }
+        }
+      }
+    },
+    "Only on the days you picked below.": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Лише у дні, які ви обрали нижче."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Только в дни, которые вы выбрали ниже."
           }
         }
       }
@@ -1082,6 +1133,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Достичь цели"
+          }
+        }
+      }
+    },
+    "Remind me": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нагадувати"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Напоминать"
+          }
+        }
+      }
+    },
+    "Reminder": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нагадування"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Напоминание"
           }
         }
       }
@@ -1286,6 +1371,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ещё идёт сегодня"
+          }
+        }
+      }
+    },
+    "Still to do today.": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ще треба зробити сьогодні."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ещё нужно сделать сегодня."
           }
         }
       }

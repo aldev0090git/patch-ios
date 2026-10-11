@@ -4,6 +4,7 @@ import SwiftUI
 struct ContentView: View {
     @State var model: TodayModel
     @State private var editing: Editing?
+    @State private var scheduler = NotificationScheduler()
 
     /// What the editor sheet is currently doing. One piece of state rather
     /// than a bool plus an optional goal, which can disagree with each other.
@@ -49,6 +50,10 @@ struct ContentView: View {
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button("Archive", role: .destructive) {
                             withAnimation(.snappy) { model.archive(goal) }
+                            // An archived goal must stop reminding you about
+                            // itself; nothing gets notifications switched off
+                            // faster.
+                            Task { await scheduler.sync(goals: model.goals) }
                         }
                         if hasLogged {
                             // No delay and no animation wrapper: the card is
@@ -70,6 +75,7 @@ struct ContentView: View {
                         }
                         Button("Archive", systemImage: "archivebox", role: .destructive) {
                             withAnimation(.snappy) { model.archive(goal) }
+                            Task { await scheduler.sync(goals: model.goals) }
                         }
                     }
                 }
@@ -97,9 +103,15 @@ struct ContentView: View {
             .sheet(item: $editing) { editing in
                 GoalEditor(goal: editing.goal) { goal in
                     withAnimation(.snappy) { model.save(goal) }
+                    Task { await scheduler.sync(goals: model.goals) }
                 }
             }
-            .task { model.load() }
+            .task {
+                model.load()
+                // Also on every appear: a goal can reach the store from
+                // onboarding or a future sync without this screen being told.
+                await scheduler.sync(goals: model.goals)
+            }
             .alert(
                 "Something went wrong",
                 isPresented: Binding(
