@@ -59,19 +59,33 @@ struct StatisticsView: View {
 
         return VStack(alignment: .leading, spacing: 14) {
             HStack(alignment: .firstTextBaseline) {
-                Text(model.completionRate, format: .percent.precision(.fractionLength(0)))
-                    .font(.system(size: 44, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color.accentColor)
-                    .contentTransition(.numericText())
+                // Same rule as the rows below: with nothing settled there is
+                // no rate, and a big blue 0% reads as a verdict.
+                Group {
+                    if model.hasNothingToReport {
+                        Text(verbatim: "—").foregroundStyle(.secondary)
+                    } else {
+                        Text(model.completionRate, format: .percent.precision(.fractionLength(0)))
+                            .foregroundStyle(Color.accentColor)
+                            .contentTransition(.numericText())
+                    }
+                }
+                .font(.system(size: 44, weight: .bold, design: .rounded))
 
                 Spacer()
 
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text("\(totals.completed) done")
-                        .font(.headline)
-                    Text("\(totals.missed) missed")
+                if model.hasNothingToReport {
+                    Text("Still going today")
                         .font(.subheadline)
-                        .foregroundStyle(totals.missed > 0 ? .orange : .secondary)
+                        .foregroundStyle(.secondary)
+                } else {
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text("\(totals.completed) done")
+                            .font(.headline)
+                        Text("\(totals.missed) missed")
+                            .font(.subheadline)
+                            .foregroundStyle(totals.missed > 0 ? .orange : .secondary)
+                    }
                 }
             }
 
