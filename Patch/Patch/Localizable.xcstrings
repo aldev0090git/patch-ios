@@ -542,6 +542,23 @@
         }
       }
     },
+    "Done for today": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На сьогодні виконано"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На сегодня выполнено"
+          }
+        }
+      }
+    },
     "Done today": {
       "extractionState": "manual",
       "localizations": {

@@ -13,6 +13,7 @@ final class TodayModel {
     private let store: GoalStore
     private let calendar: Calendar
     private let calculator: ProgressCalculator
+    private let streaks: StreakCalculator
 
     private(set) var goals: [Goal] = []
     private(set) var entries: [Entry] = []
@@ -25,6 +26,7 @@ final class TodayModel {
         self.store = store
         self.calendar = calendar
         self.calculator = ProgressCalculator(calendar: calendar)
+        self.streaks = StreakCalculator(calendar: calendar)
     }
 
     // MARK: - Reading
@@ -41,6 +43,15 @@ final class TodayModel {
 
     func progress(for goal: Goal) -> DayProgress {
         calculator.progress(for: goal, entries: entries, on: .now)
+    }
+
+    /// How many days in a row this goal has been met.
+    ///
+    /// Unscheduled days are skipped rather than breaking the run, and an
+    /// unfinished today measures from yesterday — both rules live in
+    /// `StreakCalculator` and are tested there.
+    func streak(for goal: Goal) -> Int {
+        streaks.currentStreak(for: goal, entries: entries)
     }
 
     func hasLoggedToday(_ goal: Goal) -> Bool {

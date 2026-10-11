@@ -32,7 +32,11 @@ struct ContentView: View {
                 ForEach(model.todaysGoals) { goal in
                     let hasLogged = model.hasLoggedToday(goal)
 
-                    GoalCard(goal: goal, progress: model.progress(for: goal)) { amount in
+                    GoalCard(
+                        goal: goal,
+                        progress: model.progress(for: goal),
+                        streak: model.streak(for: goal)
+                    ) { amount in
                         model.log(amount, for: goal)
                     }
                     .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
@@ -47,10 +51,11 @@ struct ContentView: View {
                             withAnimation(.snappy) { model.archive(goal) }
                         }
                         if hasLogged {
-                            Button("Reset") {
-                                withAnimation(.snappy) { model.resetToday(for: goal) }
-                            }
-                            .tint(.orange)
+                            // No delay and no animation wrapper: the card is
+                            // the same height either way, so there is nothing
+                            // for the closing swipe row to collide with.
+                            Button("Reset") { model.resetToday(for: goal) }
+                                .tint(.orange)
                         }
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
@@ -111,6 +116,25 @@ struct ContentView: View {
             }
         }
     }
+
+    /// Resets a goal once its swipe row has finished closing.
+    ///
+    /// Resetting brings the action buttons back, which makes the card taller.
+    /// Doing that while the row is still sliding shut puts the card outside the
+    /// row's current bounds, and a `List` does not clip its rows — so the card
+    /// drew across the one above it and sat slightly off to the left.
+    ///
+    /// Waiting the length of the swipe animation separates the two into
+    /// beats: the row closes, then the card visibly unwinds. That reads better
+    /// than both at once even when it does not glitch.
+    private func reset(_ goal: Goal) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(280))
+            var instant = Transaction()
+            instant.disablesAnimations = true
+            withTransaction(instant) { model.resetToday(for: goal) }
+        }
+    }
 }
 
 /// One goal, as a card.
@@ -123,6 +147,7 @@ struct ContentView: View {
 private struct GoalCard: View {
     let goal: Goal
     let progress: DayProgress
+    let streak: Int
     let onLog: (Decimal) -> Void
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -156,7 +181,7 @@ private struct GoalCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             header
-            actions
+            footer
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -167,9 +192,13 @@ private struct GoalCard: View {
                     accent.opacity(0.22)
                 }
             }
+            // Scoped to the background. Animating the whole card instead meant
+            // its frame animated too, and while a swipe row was closing the two
+            // fought: the card slid out of its own row and resized mid-flight.
+            .animation(.easeOut(duration: 0.35), value: progress.isAchieved)
+            .animation(.easeOut(duration: 0.35), value: progress.isFailed)
         }
         .clipShape(.rect(cornerRadius: 22, style: .continuous))
-        .animation(.snappy, value: progress.total)
         .sheet(isPresented: $isEnteringManually) {
             ManualEntrySheet(goal: goal) { amount in
                 withAnimation(.snappy) { onLog(amount) }
@@ -192,11 +221,17 @@ private struct GoalCard: View {
                 Text(subtitle)
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                    // "Done today" and "Not yet" are different sentences, not
+                    // one value changing. Cross-dissolving them draws both at
+                    // once and neither is readable.
+                    .animation(nil, value: subtitle)
             }
 
             Spacer(minLength: 8)
 
             statusIcon
+                .animation(.snappy, value: progress.isAchieved)
+                .animation(.snappy, value: progress.isFailed)
         }
     }
 
@@ -217,11 +252,52 @@ private struct GoalCard: View {
         }
     }
 
-    /// The action row, hidden once the goal is done — there is nothing left to
-    /// add, and the tick says so more clearly than four idle buttons.
+    /// The bottom half of the card: buttons while there is work left, the
+    /// streak once there is not.
+    ///
+    /// Both are always laid out, one of them invisible, so the card is exactly
+    /// as tall when done as when not. That is not a styling choice — a card
+    /// that changes height makes its `List` row animate its own height
+    /// underneath SwiftUI, and because `List` does not clip rows the card drew
+    /// across its neighbour every time a goal was reset. A constant height
+    /// makes that impossible rather than merely unlikely, and it turns the
+    /// change into a cross-fade in place with nothing moving.
+    private var footer: some View {
+        ZStack {
+            actions
+                .opacity(progress.isAchieved ? 0 : 1)
+                .allowsHitTesting(!progress.isAchieved)
+                .accessibilityHidden(progress.isAchieved)
+
+            doneFooter
+                .opacity(progress.isAchieved ? 1 : 0)
+                .accessibilityHidden(!progress.isAchieved)
+        }
+        .animation(.easeInOut(duration: 0.3), value: progress.isAchieved)
+    }
+
+    /// What a finished goal says for itself. The streak is the reward for
+    /// having done it; without one there is nothing to boast about yet.
     @ViewBuilder
+    private var doneFooter: some View {
+        if streak > 1 {
+            Label {
+                Text("\(streak) day streak")
+            } icon: {
+                Image(systemName: "flame.fill").foregroundStyle(.orange)
+            }
+            .font(.subheadline.weight(.medium))
+            .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+            Text("Done for today")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
     private var actions: some View {
-        if !progress.isAchieved {
+        Group {
             LazyVGrid(columns: columns, spacing: 8) {
                 switch goal.loggingStyle {
                 case .incremental:
@@ -243,7 +319,6 @@ private struct GoalCard: View {
                     }
                 }
             }
-            .transition(.opacity.combined(with: .move(edge: .top)))
         }
     }
 
@@ -315,7 +390,12 @@ private struct ProgressRing: View {
                 .foregroundStyle(accent)
         }
         .frame(width: size, height: size)
-        .animation(.snappy, value: fraction)
+        // Must not overshoot. Any bounce sends the trim past its target, and
+        // past zero means SwiftUI clamps the negative part and then settles
+        // back up through a small positive — a stub of arc on a ring that is
+        // supposed to be empty. `easeOut` sweeps without overshooting.
+        .animation(.easeOut(duration: 0.4), value: fraction)
+        .animation(.easeOut(duration: 0.3), value: accent)
     }
 }
 
