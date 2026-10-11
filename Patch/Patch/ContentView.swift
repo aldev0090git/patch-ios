@@ -315,7 +315,7 @@ private struct GoalCard: View {
                         // in the user's language, so it must not be looked up
                         // as a key.
                         actionButton(
-                            Text(verbatim: MeasureFormatter.short(option.amount, kind: goal.measure.kind))
+                            Text(verbatim: MeasureFormatter.short(option.amount, measure: goal.measure))
                         ) {
                             withAnimation(.snappy) { onLog(option.amount) }
                         }
@@ -369,8 +369,8 @@ private struct GoalCard: View {
                 ? String(localized: "Within limit")
                 : String(localized: "Over the limit")
         }
-        let done = MeasureFormatter.short(progress.total, kind: kind)
-        let target = MeasureFormatter.short(progress.target, kind: kind)
+        let done = MeasureFormatter.short(progress.total, measure: goal.measure)
+        let target = MeasureFormatter.short(progress.target, measure: goal.measure)
         return String(localized: "\(done) of \(target)")
     }
 }

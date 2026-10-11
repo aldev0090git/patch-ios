@@ -16,23 +16,53 @@ import PatchCore
 /// target defaults to `MainActor` isolation, which would otherwise make these
 /// callable only from the main actor and stop tests from using them at all.
 nonisolated enum MeasureFormatter {
-    /// - Parameter locale: injectable so tests can pin a language and not
-    ///   depend on whatever the machine running them is set to.
+    /// Preferred over the `kind:` form wherever a ``Measure`` is in hand: it
+    /// carries the currency with it, so a money amount cannot lose its symbol
+    /// by a caller forgetting to pass one.
+    static func short(
+        _ amount: Decimal,
+        measure: Measure,
+        locale: Locale = .autoupdatingCurrent
+    ) -> String {
+        short(amount, kind: measure.kind, currencyCode: measure.currencyCode, locale: locale)
+    }
+
+    /// - Parameters:
+    ///   - currencyCode: only used by ``MeasureKind/currency``; nil falls back
+    ///     to the reader's own currency.
+    ///   - locale: injectable so tests can pin a language and not depend on
+    ///     whatever the machine running them is set to.
     static func short(
         _ amount: Decimal,
         kind: MeasureKind,
+        currencyCode: String? = nil,
         locale: Locale = .autoupdatingCurrent
     ) -> String {
         switch kind {
         case .duration:
             duration(seconds: double(amount), locale: locale)
-        case .count, .currency:
+        case .count:
             number(amount, locale: locale)
+        case .currency:
+            money(amount, code: currencyCode, locale: locale)
         case .volume:
             volume(millilitres: double(amount), locale: locale)
         case .distance:
             distance(metres: double(amount), locale: locale)
         }
+    }
+
+    /// Formatted with its own symbol, because "100" says nothing about
+    /// whether it is dollars, euros or hryvnia. Falls back to the reader's own
+    /// currency for a goal created before the question was asked.
+    private static func money(_ amount: Decimal, code: String?, locale: Locale) -> String {
+        let resolved = code ?? locale.currency?.identifier ?? "USD"
+        return amount.formatted(
+            .currency(code: resolved)
+                // Whole units: a savings goal is "2 000 ₴", never "2 000,00 ₴".
+                .precision(.fractionLength(0))
+                .locale(locale)
+        )
     }
 
     private static func duration(seconds: Double, locale: Locale) -> String {

@@ -258,8 +258,8 @@ private struct SelectedDayCard: View {
         let kind = row.goal.measure.kind
         // A once-a-day goal has no interesting number — the tick is the answer.
         guard row.goal.loggingStyle != .single else { return "" }
-        let done = MeasureFormatter.short(row.progress.total, kind: kind)
-        let target = MeasureFormatter.short(row.progress.target, kind: kind)
+        let done = MeasureFormatter.short(row.progress.total, measure: row.goal.measure)
+        let target = MeasureFormatter.short(row.progress.target, measure: row.goal.measure)
         return String(localized: "\(done) of \(target)")
     }
 }

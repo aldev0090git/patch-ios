@@ -55,10 +55,16 @@ struct MeasureFormatterTests {
         #expect(short(5000, .distance) == "5 km")
     }
 
-    @Test("Counts and money render as plain numbers")
+    @Test("A count is a plain number")
     func plainNumbers() {
         #expect(short(20, .count) == "20")
-        #expect(short(100, .currency) == "100")
+    }
+
+    @Test("Money is not a plain number — it carries its currency")
+    func moneyIsNotPlain() {
+        // This used to assert "100". A savings goal that does not say which
+        // currency it is in is not a savings goal.
+        #expect(short(100, .currency) != "100")
     }
 }
 

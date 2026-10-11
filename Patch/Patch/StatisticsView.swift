@@ -234,7 +234,7 @@ private struct GoalStatisticsCard: View {
                         Label {
                             Text(verbatim: MeasureFormatter.short(
                                 statistics.total,
-                                kind: row.goal.measure.kind
+                                measure: row.goal.measure
                             ))
                         } icon: {
                             Image(systemName: "sum")

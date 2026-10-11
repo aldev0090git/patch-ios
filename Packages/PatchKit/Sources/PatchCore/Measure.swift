@@ -36,10 +36,21 @@ public struct Measure: Hashable, Sendable, Codable {
     public var kind: MeasureKind
     /// Target for one scheduled day, in `kind`'s canonical unit.
     public var dailyTarget: Decimal
+    /// ISO 4217 code, for ``MeasureKind/currency`` only.
+    ///
+    /// Money is the one kind whose canonical unit is not universal: 100 is a
+    /// different amount in dollars, euros and hryvnia, and a goal to save
+    /// money is meaningless without saying which. `nil` means "whatever this
+    /// phone uses", which is right for a goal created before the question was
+    /// ever asked.
+    public var currencyCode: String?
 
-    public init(kind: MeasureKind, dailyTarget: Decimal) {
+    public init(kind: MeasureKind, dailyTarget: Decimal, currencyCode: String? = nil) {
         self.kind = kind
         self.dailyTarget = max(.zero, dailyTarget)
+        // Carried only where it means something, so two goals cannot differ by
+        // a field one of them does not use.
+        self.currencyCode = kind == .currency ? currencyCode : nil
     }
 }
 
@@ -70,8 +81,8 @@ extension Measure {
     }
 
     /// "Put aside 100 UAH today."
-    public static func money(_ target: Decimal) -> Measure {
-        Measure(kind: .currency, dailyTarget: target)
+    public static func money(_ target: Decimal, currencyCode: String? = nil) -> Measure {
+        Measure(kind: .currency, dailyTarget: target, currencyCode: currencyCode)
     }
 
     /// A zero allowance, for use with ``Direction/atMost``.

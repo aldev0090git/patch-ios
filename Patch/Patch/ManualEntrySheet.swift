@@ -26,7 +26,7 @@ struct ManualEntrySheet: View {
             VStack(spacing: 0) {
                 Picker("Amount", selection: $selection) {
                     ForEach(options, id: \.self) { amount in
-                        Text(verbatim: MeasureFormatter.short(amount, kind: goal.measure.kind))
+                        Text(verbatim: MeasureFormatter.short(amount, measure: goal.measure))
                             .tag(amount)
                     }
                 }

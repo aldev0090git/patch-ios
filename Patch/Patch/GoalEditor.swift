@@ -13,6 +13,7 @@ struct GoalEditor: View {
     private let onSave: (Goal) -> Void
 
     @State private var title: String
+    @State private var currencyCode: String
     @State private var remindsMe: Bool
     @State private var notificationsDenied = false
     @State private var reminderTime: Date
@@ -47,6 +48,11 @@ struct GoalEditor: View {
             initialValue: MeasureInput.fromCanonical(measure.dailyTarget, kind: measure.kind)
         )
         _direction = State(initialValue: goal?.direction ?? .atLeast)
+        // The phone's own currency unless the goal already names one, so the
+        // common case needs no decision at all.
+        _currencyCode = State(
+            initialValue: goal?.measure.currencyCode ?? CurrencyOptions.deviceDefault
+        )
         _remindsMe = State(initialValue: goal?.reminder != nil)
         // Defaults to a time someone is likely awake and not yet asleep, rather
         // than to whenever the editor happened to be opened.
@@ -84,8 +90,16 @@ struct GoalEditor: View {
                     HStack {
                         TextField("Amount", value: $target, format: .number)
                             .keyboardType(.decimalPad)
-                        Text(MeasureInput.unitLabel(for: kind))
+                        Text(verbatim: unitTrailing)
                             .foregroundStyle(.secondary)
+                    }
+
+                    if kind == .currency {
+                        Picker("Currency", selection: $currencyCode) {
+                            ForEach(CurrencyOptions.all, id: \.self) { code in
+                                Text(verbatim: CurrencyOptions.label(for: code)).tag(code)
+                            }
+                        }
                     }
 
                     Picker("Aim to", selection: $direction) {
@@ -154,6 +168,14 @@ struct GoalEditor: View {
                 }
             }
         }
+    }
+
+    /// The currency symbol replaces the generic unit label for money, so the
+    /// field reads "120 €" rather than "120 money".
+    private var unitTrailing: String {
+        kind == .currency
+            ? CurrencyOptions.symbol(for: currencyCode)
+            : MeasureInput.unitLabel(for: kind)
     }
 
     private static let defaultTime: Date = {
@@ -252,7 +274,11 @@ struct GoalEditor: View {
             title: name.title,
             titleKey: name.key,
             symbolName: symbolName,
-            measure: Measure(kind: kind, dailyTarget: existing?.measure.dailyTarget ?? newTarget),
+            measure: Measure(
+                kind: kind,
+                dailyTarget: existing?.measure.dailyTarget ?? newTarget,
+                currencyCode: currencyCode
+            ),
             direction: direction,
             schedule: repeatsDaily ? .daily : .daysOfWeek(weekdays),
             cumulativeTarget: existing?.cumulativeTarget,
@@ -271,11 +297,19 @@ struct GoalEditor: View {
         // changes the unit, which makes the old numbers meaningless anyway.
         guard existing != nil, kind == existing?.measure.kind else {
             var fresh = built
-            fresh.measure = Measure(kind: kind, dailyTarget: newTarget)
+            fresh.measure = Measure(kind: kind, dailyTarget: newTarget, currencyCode: currencyCode)
             fresh.targetHistory = []
             return fresh
         }
-        return built.withTarget(newTarget)
+        var updated = built.withTarget(newTarget)
+        // Kept separately from the target: switching currency is a correction,
+        // not a change of how much you are asking of yourself.
+        updated.measure = Measure(
+            kind: kind,
+            dailyTarget: updated.measure.dailyTarget,
+            currencyCode: currencyCode
+        )
+        return updated
     }
 }
 

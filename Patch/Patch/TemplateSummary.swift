@@ -13,7 +13,7 @@ nonisolated enum TemplateSummary {
     ) -> String {
         let amount = MeasureFormatter.short(
             template.measure.dailyTarget,
-            kind: template.measure.kind,
+            measure: template.measure,
             locale: locale
         )
         // A once-a-day goal has no interesting amount — "1 every day" reads
