@@ -125,6 +125,17 @@ live in `Patch/Patch/Localizable.xcstrings`.
   `nonisolated`. The app target defaults to MainActor isolation, so a plain
   `struct` is MainActor-isolated and unusable from a test.
 
+## Changing a goal must not rewrite its past
+
+A day is judged against `goal.dailyTarget(on:)`, never `measure.dailyTarget`.
+Raising "read 20 minutes" to an hour once turned every finished day behind it
+into a failure. `measure.dailyTarget` is only ever the *current* target — for
+quick-add suggestions, the manual picker and the editor. Anything that looks
+at a past day goes through the history.
+
+Changing the measure *kind* deliberately clears that history: 1200 seconds and
+1200 push-ups are not comparable numbers.
+
 ## A goal card has exactly one height
 
 Both halves of `GoalCard` are always laid out, one of them transparent, so a
