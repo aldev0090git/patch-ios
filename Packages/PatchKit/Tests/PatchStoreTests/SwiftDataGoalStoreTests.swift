@@ -61,6 +61,26 @@ struct SwiftDataGoalStoreTests {
         #expect(restored.archivedAt == nil)
     }
 
+    @Test("A template goal keeps its title key, so it stays translatable")
+    @MainActor
+    func titleKeyRoundTrip() throws {
+        let store = try makeStore()
+        try store.save(GoalTemplateCatalog.water.makeGoal(title: "Water"))
+
+        let restored = try #require(try store.loadGoals().first)
+        #expect(restored.titleKey == "template.water")
+        #expect(restored.title == "Water")
+    }
+
+    @Test("A goal with no title key round trips without growing one")
+    @MainActor
+    func absentTitleKeyStaysAbsent() throws {
+        let store = try makeStore()
+        try store.save(Goal(title: "Walk the dog", measure: .times(1)))
+
+        #expect(try store.loadGoals().first?.titleKey == nil)
+    }
+
     @Test("A daily schedule round trips as daily")
     @MainActor
     func dailyScheduleRoundTrip() throws {

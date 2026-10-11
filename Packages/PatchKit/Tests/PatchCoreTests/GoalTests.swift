@@ -36,3 +36,25 @@ struct LoggingStyleTests {
         #expect(goal.loggingStyle == .incremental)
     }
 }
+
+@Suite("Template titles")
+struct TemplateTitleTests {
+    @Test("A goal built from a template carries the template's key")
+    func templateGoalKeepsKey() {
+        let goal = GoalTemplateCatalog.read.makeGoal(title: "Read")
+        #expect(goal.titleKey == "template.read")
+        #expect(goal.title == "Read")
+    }
+
+    @Test("Every template's key is distinct, so two goals can't resolve alike")
+    func templateKeysAreUnique() {
+        let keys = GoalTemplateCatalog.all.map(\.titleKey)
+        #expect(Set(keys).count == keys.count)
+    }
+
+    @Test("A goal the user names carries no key")
+    func userGoalHasNoKey() {
+        let goal = Goal(title: "Walk the dog", measure: .times(1))
+        #expect(goal.titleKey == nil)
+    }
+}

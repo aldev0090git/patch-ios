@@ -17,7 +17,17 @@ public enum Direction: String, Codable, Sendable, CaseIterable, Hashable {
 /// ``MeasureKind``, not changing this type or migrating the store.
 public struct Goal: Identifiable, Hashable, Sendable, Codable {
     public let id: UUID
+    /// What to show when ``titleKey`` is nil, and the fallback if a key ever
+    /// goes missing from the catalog.
     public var title: String
+    /// Set only while a goal still carries the name its template gave it.
+    ///
+    /// Seeded and onboarding goals are named by the app, not the user, so they
+    /// should follow the phone's language rather than freezing into whichever
+    /// language happened to run first. Renaming clears this: a title someone
+    /// typed is theirs, and translating it out from under them would be wrong.
+    /// The domain stores the key and has no opinion about resolving it.
+    public var titleKey: String?
     /// SF Symbol name, so the app stays visually native for free.
     public var symbolName: String
     public var measure: Measure
@@ -34,6 +44,7 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
     public init(
         id: UUID = UUID(),
         title: String,
+        titleKey: String? = nil,
         symbolName: String = "target",
         measure: Measure,
         direction: Direction = .atLeast,
@@ -44,6 +55,7 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
     ) {
         self.id = id
         self.title = title
+        self.titleKey = titleKey
         self.symbolName = symbolName
         self.measure = measure
         self.direction = direction

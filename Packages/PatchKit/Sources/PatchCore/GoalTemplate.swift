@@ -36,10 +36,13 @@ public struct GoalTemplate: Identifiable, Hashable, Sendable {
     /// Builds a real goal from this template.
     ///
     /// `title` is passed in already localised — the domain layer has no opinion
-    /// about which language the user reads.
+    /// about which language the user reads. The key travels with the goal so
+    /// the presentation layer can re-resolve it when the phone's language
+    /// changes; the resolved string stays as the fallback.
     public func makeGoal(title: String, createdAt: Date = .now) -> Goal {
         Goal(
             title: title,
+            titleKey: titleKey,
             symbolName: symbolName,
             measure: measure,
             direction: direction,

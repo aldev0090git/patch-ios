@@ -12,6 +12,8 @@ import SwiftData
 public final class StoredGoal {
     public var id: UUID = UUID()
     public var title: String = ""
+    /// Nil once the user renames the goal — see `Goal.titleKey`.
+    public var titleKey: String?
     public var symbolName: String = "target"
     public var measureKindRaw: String = MeasureKind.count.rawValue
     public var dailyTarget: Decimal = Decimal.zero
@@ -29,6 +31,7 @@ public final class StoredGoal {
 
     public func apply(_ goal: Goal) {
         title = goal.title
+        titleKey = goal.titleKey
         symbolName = goal.symbolName
         measureKindRaw = goal.measure.kind.rawValue
         dailyTarget = goal.measure.dailyTarget
@@ -55,6 +58,7 @@ public final class StoredGoal {
         Goal(
             id: id,
             title: title,
+            titleKey: titleKey,
             symbolName: symbolName,
             measure: Measure(
                 kind: MeasureKind(rawValue: measureKindRaw) ?? .count,

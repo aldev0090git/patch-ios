@@ -187,7 +187,7 @@ private struct GoalCard: View {
             )
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(goal.title)
+                Text(verbatim: goal.localizedTitle)
                     .font(.headline)
                 Text(subtitle)
                     .font(.caption)

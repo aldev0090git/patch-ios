@@ -35,7 +35,9 @@ struct GoalEditor: View {
         self.onSave = onSave
 
         let measure = goal?.measure ?? .minutes(20)
-        _title = State(initialValue: goal?.title ?? "")
+        // Shows the resolved name, so a seeded goal is editable in the
+        // language the user is actually reading.
+        _title = State(initialValue: goal?.localizedTitle ?? "")
         _symbolName = State(initialValue: goal?.symbolName ?? "book")
         _kind = State(initialValue: measure.kind)
         _target = State(
@@ -180,9 +182,11 @@ struct GoalEditor: View {
     }
 
     private func makeGoal() -> Goal {
-        Goal(
+        let name = Goal.titleToSave(typed: title, editing: existing)
+        return Goal(
             id: existing?.id ?? UUID(),
-            title: title.trimmingCharacters(in: .whitespacesAndNewlines),
+            title: name.title,
+            titleKey: name.key,
             symbolName: symbolName,
             measure: Measure(
                 kind: kind,
