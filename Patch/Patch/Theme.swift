@@ -1,0 +1,118 @@
+import SwiftUI
+
+/// The keys the look-and-feel settings are stored under.
+///
+/// Spelled once, because `@AppStorage` in a view and `UserDefaults` in
+/// ``Haptics`` have to agree and the compiler cannot check a string literal.
+nonisolated enum SettingsKey {
+    static let appearance = "appearance"
+    static let accent = "accentTheme"
+    static let haptics = "hapticsEnabled"
+}
+
+/// Light, dark, or whatever the phone is doing.
+///
+/// Stored by `rawValue`, so the cases are a persisted format: rename one and
+/// every install that chose it silently falls back to `system`.
+nonisolated enum Appearance: String, CaseIterable, Identifiable, Hashable {
+    case system
+    case light
+    case dark
+
+    var id: String { rawValue }
+
+    /// `nil` means "don't force anything", which is what `system` is.
+    var colorScheme: ColorScheme? {
+        switch self {
+        case .system: nil
+        case .light: .light
+        case .dark: .dark
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .system: String(localized: "System")
+        case .light: String(localized: "Light")
+        case .dark: String(localized: "Dark")
+        }
+    }
+
+}
+
+/// The colour the app leans on: the ring while a goal is running, the tick in
+/// a list, the selected day in the calendar.
+///
+/// **No green, and nothing near it.** Green already means *a day that is
+/// done* and orange means *a day that was missed* — see ``Color/goalDone``.
+/// An accent that lands on either would make "in progress" and "finished"
+/// the same colour on the same card, which is the one distinction the Today
+/// screen exists to draw. The six here are all comfortably clear of both.
+nonisolated enum AccentTheme: String, CaseIterable, Identifiable, Hashable {
+    case blue
+    case indigo
+    case violet
+    case teal
+    case rose
+    case graphite
+
+    var id: String { rawValue }
+
+    var color: Color {
+        switch self {
+        case .blue: .blue
+        case .indigo: .indigo
+        case .violet: .purple
+        case .teal: .teal
+        case .rose: Color(red: 0.90, green: 0.33, blue: 0.47)
+        // Not `.gray`, which is the same mid tone in both appearances and
+        // sinks into a grouped background. `.primary` inverts with the
+        // scheme — near-black on white, near-white on black — which makes
+        // this the one genuinely monochrome option rather than a grey one.
+        case .graphite: .primary
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .blue: String(localized: "Blue")
+        case .indigo: String(localized: "Indigo")
+        case .violet: String(localized: "Violet")
+        case .teal: String(localized: "Teal")
+        case .rose: String(localized: "Rose")
+        case .graphite: String(localized: "Graphite")
+        }
+    }
+
+    /// Falls back rather than failing: an unknown stored value means a build
+    /// that offered a colour this one does not, and the right answer to that
+    /// is the default, not a crash.
+    static func stored(_ rawValue: String) -> AccentTheme {
+        AccentTheme(rawValue: rawValue) ?? .blue
+    }
+}
+
+extension Color {
+    /// A scheduled day that was met. Deliberately **not** part of the theme.
+    ///
+    /// Done and missed are states, not decoration. Letting them follow the
+    /// accent would mean the same card reads green-for-finished under one
+    /// theme and green-for-in-progress under another, and someone who learnt
+    /// the screen once would have to learn it again.
+    static let goalDone = Color.green
+
+    /// A scheduled day that was not met. Not red: a missed day is worth
+    /// noticing, not an error, and the app does not tell people off.
+    static let goalMissed = Color.orange
+}
+
+extension EnvironmentValues {
+    /// The accent as a *value*, for the places that need a `Color` rather
+    /// than a style — a fill, an opacity, a stroke.
+    ///
+    /// `Color.accentColor` cannot do this job: it reads the asset catalog and
+    /// ignores `.tint(_:)` entirely, so every one of those call sites stayed
+    /// blue while the rest of the app changed colour. `.tint` still handles
+    /// controls; this covers the rest.
+    @Entry var themeAccent: Color = .blue
+}

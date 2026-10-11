@@ -7,6 +7,7 @@ import SwiftUI
 /// every iOS user already knows how to fill in a form — a custom layout here
 /// would be novelty at the cost of familiarity.
 struct GoalEditor: View {
+    @Environment(\.themeAccent) private var themeAccent
     @Environment(\.dismiss) private var dismiss
 
     private let existing: Goal?
@@ -168,7 +169,7 @@ struct GoalEditor: View {
                             Text("Notifications are off for Patch. Turn them on in Settings.")
                         } icon: {
                             Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(.orange)
+                                .foregroundStyle(Color.goalMissed)
                         }
                         .font(.caption)
                     }
@@ -289,10 +290,10 @@ struct GoalEditor: View {
                         .font(.system(size: 20))
                         .frame(width: 44, height: 44)
                         .background(
-                            symbol == symbolName ? Color.accentColor.opacity(0.2) : Color.clear,
+                            symbol == symbolName ? themeAccent.opacity(0.2) : Color.clear,
                             in: .circle
                         )
-                        .foregroundStyle(symbol == symbolName ? Color.accentColor : .secondary)
+                        .foregroundStyle(symbol == symbolName ? themeAccent : .secondary)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(Text(verbatim: symbol))

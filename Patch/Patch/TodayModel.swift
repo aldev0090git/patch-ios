@@ -54,6 +54,16 @@ final class TodayModel {
         streaks.currentStreak(for: goal, entries: entries)
     }
 
+    /// Every goal scheduled for today is done.
+    ///
+    /// Empty is **not** complete: a day with nothing to do has not been
+    /// finished, it just has no work in it, and telling someone they have
+    /// cleared a day they never started is a lie they will notice.
+    var isDayComplete: Bool {
+        let today = todaysProgress
+        return !today.isEmpty && today.allSatisfy(\.isAchieved)
+    }
+
     func hasLoggedToday(_ goal: Goal) -> Bool {
         entries.contains { $0.goalID == goal.id && calendar.isDateInToday($0.loggedAt) }
     }
@@ -115,9 +125,4 @@ final class TodayModel {
         archived.archivedAt = .now
         save(archived)
     }
-
-    /// Puts a starter set of goals in an empty store.
-    ///
-    /// Temporary: onboarding will replace this with goals the user actually
-    /// chooses.
 }

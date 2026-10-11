@@ -140,6 +140,51 @@ struct TodayModelTests {
     }
 
     @MainActor
+    @Test("A day with nothing scheduled is not a day you finished")
+    func emptyDayIsNotComplete() {
+        let model = TodayModel(store: InMemoryGoalStore())
+        model.load()
+
+        // Nothing to do is not the same as everything done. Congratulating
+        // someone for a day they never started is a lie they will notice.
+        #expect(!model.isDayComplete)
+    }
+
+    @MainActor
+    @Test("The day is complete only once the last scheduled goal is met")
+    func dayCompletesOnTheLastGoal() {
+        let water = Goal(title: "Water", measure: .millilitres(1000))
+        let read = Goal(title: "Read", measure: .minutes(10))
+        let model = TodayModel(store: InMemoryGoalStore(goals: [water, read]))
+        model.load()
+
+        model.log(1000, for: water)
+        #expect(!model.isDayComplete)
+
+        model.log(600, for: read)
+        #expect(model.isDayComplete)
+
+        // And it comes undone again, so the celebration can happen twice if
+        // the user undoes and redoes the last goal.
+        model.resetToday(for: read)
+        #expect(!model.isDayComplete)
+    }
+
+    @MainActor
+    @Test("An archived goal cannot hold the day open")
+    func archivedGoalsDoNotCount() {
+        let water = Goal(title: "Water", measure: .millilitres(1000))
+        let abandoned = Goal(title: "Gym", measure: .times(1))
+        let model = TodayModel(store: InMemoryGoalStore(goals: [water, abandoned]))
+        model.load()
+        model.log(1000, for: water)
+
+        #expect(!model.isDayComplete)
+        model.archive(abandoned)
+        #expect(model.isDayComplete)
+    }
+
+    @MainActor
     @Test("Today only shows goals scheduled for today")
     func todayRespectsTheSchedule() {
         let calendar = utcCalendar()

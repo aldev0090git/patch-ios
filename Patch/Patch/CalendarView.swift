@@ -2,6 +2,7 @@ import PatchCore
 import SwiftUI
 
 struct CalendarScreen: View {
+    @Environment(\.themeAccent) private var themeAccent
     @State var model: CalendarModel
 
     var body: some View {
@@ -47,7 +48,7 @@ struct CalendarScreen: View {
     /// out rather than left to be guessed.
     private var legend: some View {
         HStack(spacing: 18) {
-            ForEach(LegendItem.all) { item in
+            ForEach(LegendItem.all(accent: themeAccent)) { item in
                 HStack(spacing: 6) {
                     Circle()
                         .fill(item.color)
@@ -67,12 +68,15 @@ private struct LegendItem: Identifiable {
     let title: String
     let color: Color
 
-    static var all: [LegendItem] {
+    /// Takes the accent rather than reading it: this is a plain value type,
+    /// and only a `View` can see the environment.
+    static func all(accent: Color) -> [LegendItem] {
         [
-            LegendItem(id: "done", title: String(localized: "All done"), color: .accentColor),
+            LegendItem(id: "done", title: String(localized: "All done"), color: accent),
             LegendItem(id: "partial", title: String(localized: "Some done"),
-                       color: Color.accentColor.opacity(0.35)),
-            LegendItem(id: "missed", title: String(localized: "Missed"), color: .orange.opacity(0.7))
+                       color: accent.opacity(0.35)),
+            LegendItem(id: "missed", title: String(localized: "Missed"),
+                       color: Color.goalMissed.opacity(0.7))
         ]
     }
 }
@@ -83,7 +87,7 @@ private struct MonthBar: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            Button { withAnimation(.snappy) { model.step(by: -1) } } label: {
+            Button { step(-1) } label: {
                 Image(systemName: "chevron.left")
             }
             .accessibilityLabel(Text("Previous month"))
@@ -96,7 +100,7 @@ private struct MonthBar: View {
 
             Spacer(minLength: 0)
 
-            Button { withAnimation(.snappy) { model.step(by: 1) } } label: {
+            Button { step(1) } label: {
                 Image(systemName: "chevron.right")
             }
             .accessibilityLabel(Text("Next month"))
@@ -104,6 +108,11 @@ private struct MonthBar: View {
         }
         .buttonStyle(.plain)
         .font(.headline)
+    }
+
+    private func step(_ delta: Int) {
+        withAnimation(.snappy) { model.step(by: delta) }
+        Haptics.play(.selection)
     }
 }
 
@@ -128,10 +137,14 @@ private struct MonthGrid: View {
                 ForEach(model.days) { day in
                     DayCell(day: day, isSelected: isSelected(day))
                         .onTapGesture {
+                            // A tap on a blank or future cell is not a
+                            // selection, so it gets no acknowledgement either —
+                            // a tick there would claim something happened.
                             guard day.isInMonth, !day.isFuture else { return }
                             withAnimation(.snappy) {
                                 model.selectedDay = isSelected(day) ? nil : day.date
                             }
+                            Haptics.play(.selection)
                         }
                 }
             }
@@ -152,6 +165,7 @@ private struct MonthGrid: View {
 /// the neighbouring months are dimmed rather than removed, so the weeks stay
 /// aligned under their headings.
 private struct DayCell: View {
+    @Environment(\.themeAccent) private var themeAccent
     let day: CalendarDay
     let isSelected: Bool
 
@@ -173,7 +187,7 @@ private struct DayCell: View {
             .overlay {
                 Circle()
                     .strokeBorder(
-                        isSelected ? Color.primary : (day.isToday ? Color.accentColor : .clear),
+                        isSelected ? Color.primary : (day.isToday ? themeAccent : .clear),
                         lineWidth: isSelected ? 2 : 1.5
                     )
             }
@@ -184,10 +198,10 @@ private struct DayCell: View {
 
     private var fill: Color {
         guard day.isInMonth, !day.isFuture, day.hasAnything else { return .clear }
-        if day.isComplete { return .accentColor }
-        if day.summary.completed > 0 { return .accentColor.opacity(0.18 + 0.5 * day.fraction) }
+        if day.isComplete { return themeAccent }
+        if day.summary.completed > 0 { return themeAccent.opacity(0.18 + 0.5 * day.fraction) }
         // Today is not a failure until it is over.
-        return day.isToday ? .clear : .orange.opacity(0.45)
+        return day.isToday ? .clear : Color.goalMissed.opacity(0.45)
     }
 
     private var foreground: Color {
@@ -195,14 +209,20 @@ private struct DayCell: View {
     }
 
     private var label: Text {
-        let date = Text(day.date, format: .dateTime.weekday(.wide).day().month(.wide))
-        guard day.isInMonth, !day.isFuture, day.hasAnything else { return date }
-        return Text("\(day.summary.completed) of \(day.summary.scheduled) goals done") + Text(verbatim: ", ") + date
+        // Assembled as a `String` and handed over verbatim rather than built
+        // by `Text` + `Text`, which is deprecated, and rather than as one
+        // interpolated key, which would add "%@, %@" to the catalog for three
+        // translators to puzzle over. A comma is not a sentence.
+        let date = day.date.formatted(.dateTime.weekday(.wide).day().month(.wide))
+        guard day.isInMonth, !day.isFuture, day.hasAnything else { return Text(verbatim: date) }
+        let summary = String(localized: "\(day.summary.completed) of \(day.summary.scheduled) goals done")
+        return Text(verbatim: "\(summary), \(date)")
     }
 }
 
 /// What happened on the day the user tapped.
 private struct SelectedDayCard: View {
+    @Environment(\.themeAccent) private var themeAccent
     @Bindable var model: CalendarModel
 
     var body: some View {
@@ -229,7 +249,7 @@ private struct SelectedDayCard: View {
                     HStack(spacing: 12) {
                         Image(systemName: row.goal.symbolName)
                             .font(.footnote)
-                            .foregroundStyle(Color.accentColor)
+                            .foregroundStyle(themeAccent)
                             .frame(width: 26, height: 26)
                             .background(Color(uiColor: .tertiarySystemFill), in: .circle)
 
@@ -243,7 +263,7 @@ private struct SelectedDayCard: View {
                             .foregroundStyle(.secondary)
 
                         Image(systemName: row.progress.isAchieved ? "checkmark.circle.fill" : "circle")
-                            .foregroundStyle(row.progress.isAchieved ? Color.green : .secondary)
+                            .foregroundStyle(row.progress.isAchieved ? Color.goalDone : .secondary)
                     }
                 }
             }
@@ -255,7 +275,6 @@ private struct SelectedDayCard: View {
     }
 
     private func amount(_ row: DayGoalProgress) -> String {
-        let kind = row.goal.measure.kind
         // A once-a-day goal has no interesting number — the tick is the answer.
         guard row.goal.loggingStyle != .single else { return "" }
         let done = MeasureFormatter.short(row.progress.total, measure: row.goal.measure)

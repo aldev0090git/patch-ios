@@ -2,6 +2,7 @@ import PatchCore
 import SwiftUI
 
 struct StatisticsView: View {
+    @Environment(\.themeAccent) private var themeAccent
     @State var model: StatisticsModel
 
     var body: some View {
@@ -66,7 +67,7 @@ struct StatisticsView: View {
                         Text(verbatim: "—").foregroundStyle(.secondary)
                     } else {
                         Text(model.completionRate, format: .percent.precision(.fractionLength(0)))
-                            .foregroundStyle(Color.accentColor)
+                            .foregroundStyle(themeAccent)
                             .contentTransition(.numericText())
                     }
                 }
@@ -84,7 +85,7 @@ struct StatisticsView: View {
                             .font(.headline)
                         Text("\(totals.missed) missed")
                             .font(.subheadline)
-                            .foregroundStyle(totals.missed > 0 ? .orange : .secondary)
+                            .foregroundStyle(totals.missed > 0 ? Color.goalMissed : .secondary)
                     }
                 }
             }
@@ -138,11 +139,21 @@ private struct PeriodBar: View {
             }
         }
         .foregroundStyle(.primary)
+        // The menu writes the selection straight through, so the feedback
+        // hangs off the value rather than off a button that never runs.
+        .onChange(of: model.selection.kind) { Haptics.play(.selection) }
+    }
+
+    /// One window back or forward, with a tick to say it moved. The title is
+    /// the only thing that changes on screen and it is easy to miss.
+    private func step(_ delta: Int) {
+        withAnimation(.snappy) { model.step(by: delta) }
+        Haptics.play(.selection)
     }
 
     private var stepper: some View {
         HStack(spacing: 10) {
-            Button { withAnimation(.snappy) { model.step(by: -1) } } label: {
+            Button { step(-1) } label: {
                 Image(systemName: "chevron.left")
             }
             .accessibilityLabel(Text("Previous period"))
@@ -154,7 +165,7 @@ private struct PeriodBar: View {
                 .frame(minWidth: 110)
                 .multilineTextAlignment(.center)
 
-            Button { withAnimation(.snappy) { model.step(by: 1) } } label: {
+            Button { step(1) } label: {
                 Image(systemName: "chevron.right")
             }
             .accessibilityLabel(Text("Next period"))
@@ -191,6 +202,7 @@ private struct PeriodBar: View {
 
 /// One goal's record over the window.
 private struct GoalStatisticsCard: View {
+    @Environment(\.themeAccent) private var themeAccent
     let row: GoalStatistics
 
     @ScaledMetric(relativeTo: .headline) private var iconSize: CGFloat = 34
@@ -202,7 +214,7 @@ private struct GoalStatisticsCard: View {
             HStack(spacing: 12) {
                 Image(systemName: row.goal.symbolName)
                     .font(.system(size: iconSize * 0.5))
-                    .foregroundStyle(Color.accentColor)
+                    .foregroundStyle(themeAccent)
                     .frame(width: iconSize, height: iconSize)
                     .background(Color(uiColor: .tertiarySystemFill), in: .circle)
 
@@ -231,7 +243,7 @@ private struct GoalStatisticsCard: View {
                         Label {
                             Text("\(statistics.currentStreak) day streak")
                         } icon: {
-                            Image(systemName: "flame.fill").foregroundStyle(.orange)
+                            Image(systemName: "flame.fill").foregroundStyle(Color.goalMissed)
                         }
                     }
                     if statistics.total > 0, row.goal.loggingStyle != .single {
@@ -269,7 +281,7 @@ private struct GoalStatisticsCard: View {
         } else {
             Text(statistics.completionRate, format: .percent.precision(.fractionLength(0)))
                 .font(.title3.weight(.semibold).monospacedDigit())
-                .foregroundStyle(statistics.missedDays == 0 ? .green : .primary)
+                .foregroundStyle(statistics.missedDays == 0 ? Color.goalDone : .primary)
         }
     }
 
@@ -286,6 +298,7 @@ private struct GoalStatisticsCard: View {
 /// How a long-run target is going: "12 000 ₴ of 100 000 ₴", a bar, and what
 /// it would take to still make the date.
 private struct OverallProgress: View {
+    @Environment(\.themeAccent) private var themeAccent
     let progress: CumulativeProgress
     let measure: Measure
 
@@ -298,13 +311,13 @@ private struct OverallProgress: View {
                 if let note {
                     Text(verbatim: note)
                         .font(.caption)
-                        .foregroundStyle(progress.isOverdue ? .orange : .secondary)
+                        .foregroundStyle(progress.isOverdue ? Color.goalMissed : .secondary)
                 }
             }
 
             GeometryReader { proxy in
                 Capsule()
-                    .fill(progress.isReached ? Color.green : Color.accentColor)
+                    .fill(progress.isReached ? Color.goalDone : themeAccent)
                     .frame(width: proxy.size.width * progress.fraction)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -341,6 +354,7 @@ private struct OverallProgress: View {
 /// Drawn from the two counts rather than from a fraction so that a window with
 /// nothing settled yet renders as an empty track instead of a misleading zero.
 private struct SplitBar: View {
+    @Environment(\.themeAccent) private var themeAccent
     let completed: Int
     let missed: Int
 
@@ -350,11 +364,11 @@ private struct SplitBar: View {
         GeometryReader { proxy in
             HStack(spacing: total > 0 && completed > 0 && missed > 0 ? 2 : 0) {
                 if completed > 0 {
-                    Capsule().fill(Color.accentColor)
+                    Capsule().fill(themeAccent)
                         .frame(width: width(completed, in: proxy.size.width))
                 }
                 if missed > 0 {
-                    Capsule().fill(Color.orange.opacity(0.75))
+                    Capsule().fill(Color.goalMissed.opacity(0.75))
                         .frame(width: width(missed, in: proxy.size.width))
                 }
                 if total == 0 {

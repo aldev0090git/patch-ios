@@ -7,6 +7,7 @@ import SwiftUI
 /// tone and make the second page make sense — and the second is the only one
 /// that asks for anything.
 struct OnboardingView: View {
+    @Environment(\.themeAccent) private var themeAccent
     @State var model: OnboardingModel
     let onFinish: () -> Void
 
@@ -54,7 +55,7 @@ struct OnboardingView: View {
 
             Image(systemName: "checkmark.seal.fill")
                 .font(.system(size: 72))
-                .foregroundStyle(Color.accentColor)
+                .foregroundStyle(themeAccent)
                 .scaleEffect(appeared ? 1 : 0.7)
                 .opacity(appeared ? 1 : 0)
 
@@ -95,6 +96,7 @@ struct OnboardingView: View {
                             isSelected: model.isSelected(template)
                         ) {
                             withAnimation(.snappy) { model.toggle(template) }
+                            Haptics.play(.selection)
                         }
                     }
                 }
@@ -119,28 +121,8 @@ struct OnboardingView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
 
-            VStack(spacing: 14) {
-                TipRow(
-                    symbol: "hand.tap",
-                    title: Text("Tap an amount to log it"),
-                    detail: Text("Or use Manual for anything else. The ring fills as the day goes.")
-                )
-                TipRow(
-                    symbol: "arrow.left",
-                    title: Text("Swipe a goal left to reset or archive it"),
-                    detail: Text(
-                        "Reset clears today's entries for that goal. Archiving hides it but keeps its history."
-                    )
-                )
-                TipRow(
-                    symbol: "arrow.right",
-                    title: Text("Swipe right to edit"),
-                    detail: Text(
-                        "Change the target, days or reminder at any time. Past days keep the target they had."
-                    )
-                )
-            }
-            .padding(.horizontal, 16)
+            HowItWorksView()
+                .padding(.horizontal, 16)
 
             Spacer(minLength: 0)
         }
@@ -156,7 +138,10 @@ struct OnboardingView: View {
             Button {
                 if page < 2 {
                     withAnimation(.snappy) { page += 1 }
+                    Haptics.play(.selection)
                 } else if model.finish() {
+                    // The one time the app has been set up rather than used.
+                    Haptics.play(.completed)
                     onFinish()
                 }
             } label: {
@@ -198,6 +183,7 @@ struct OnboardingView: View {
 }
 
 private struct PageDots: View {
+    @Environment(\.themeAccent) private var themeAccent
     let count: Int
     let current: Int
 
@@ -205,7 +191,7 @@ private struct PageDots: View {
         HStack(spacing: 6) {
             ForEach(0..<count, id: \.self) { index in
                 Circle()
-                    .fill(index == current ? Color.accentColor : Color(uiColor: .tertiaryLabel))
+                    .fill(index == current ? themeAccent : Color(uiColor: .tertiaryLabel))
                     .frame(width: 7, height: 7)
             }
         }
@@ -216,6 +202,7 @@ private struct PageDots: View {
 
 /// One offered goal. The whole row is the control, not just the tick.
 private struct TemplateRow: View {
+    @Environment(\.themeAccent) private var themeAccent
     let template: GoalTemplate
     let isSelected: Bool
     let onTap: () -> Void
@@ -227,7 +214,7 @@ private struct TemplateRow: View {
             HStack(spacing: 14) {
                 Image(systemName: template.symbolName)
                     .font(.system(size: iconSize * 0.45))
-                    .foregroundStyle(isSelected ? Color.accentColor : .secondary)
+                    .foregroundStyle(isSelected ? themeAccent : .secondary)
                     .frame(width: iconSize, height: iconSize)
                     .background(Color(uiColor: .tertiarySystemFill), in: .circle)
 
@@ -244,49 +231,19 @@ private struct TemplateRow: View {
 
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                     .font(.title3)
-                    .foregroundStyle(isSelected ? Color.accentColor : Color(uiColor: .tertiaryLabel))
+                    .foregroundStyle(isSelected ? themeAccent : Color(uiColor: .tertiaryLabel))
             }
             .padding(14)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background {
                 ZStack {
                     Color(uiColor: .secondarySystemGroupedBackground)
-                    if isSelected { Color.accentColor.opacity(0.12) }
+                    if isSelected { themeAccent.opacity(0.12) }
                 }
             }
             .clipShape(.rect(cornerRadius: 18, style: .continuous))
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
-    }
-}
-
-/// One thing worth knowing, on the last onboarding page.
-private struct TipRow: View {
-    let symbol: String
-    let title: Text
-    let detail: Text
-
-    @ScaledMetric(relativeTo: .headline) private var iconSize: CGFloat = 34
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 14) {
-            Image(systemName: symbol)
-                .font(.system(size: iconSize * 0.45, weight: .semibold))
-                .foregroundStyle(Color.accentColor)
-                .frame(width: iconSize, height: iconSize)
-                .background(Color(uiColor: .tertiarySystemFill), in: .circle)
-
-            VStack(alignment: .leading, spacing: 3) {
-                title.font(.subheadline.weight(.semibold))
-                detail
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            Spacer(minLength: 0)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

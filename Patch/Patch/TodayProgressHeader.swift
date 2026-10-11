@@ -26,7 +26,7 @@ struct TodayProgressHeader: View {
                 Text(overallFraction, format: .percent.precision(.fractionLength(0)))
                     .font(.system(size: 46, weight: .bold, design: .rounded))
                     .contentTransition(.numericText(value: overallFraction))
-                    .foregroundStyle(allDone ? AnyShapeStyle(.green) : AnyShapeStyle(.tint))
+                    .foregroundStyle(allDone ? AnyShapeStyle(Color.goalDone) : AnyShapeStyle(.tint))
 
                 Spacer()
 
@@ -78,8 +78,8 @@ private struct SegmentedBar: View {
     }
 
     private func fill(for day: DayProgress) -> AnyShapeStyle {
-        if day.isAchieved { return AnyShapeStyle(.green) }
-        if day.isFailed { return AnyShapeStyle(.orange) }
+        if day.isAchieved { return AnyShapeStyle(Color.goalDone) }
+        if day.isFailed { return AnyShapeStyle(Color.goalMissed) }
         return AnyShapeStyle(.tint)
     }
 }

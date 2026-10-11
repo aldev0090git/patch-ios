@@ -147,6 +147,38 @@ Four SwiftUI-level fixes failed before the cause was found, because none of
 them reach that animation. `GoalCardHeightUITests` pins the invariant by
 watching the card below.
 
+## Theming: `Color.accentColor` is not the accent
+
+`Color.accentColor` reads the **asset catalog** and ignores `.tint(_:)`, so a
+view using it stays blue while the rest of the app changes colour. The app sets
+both `.tint(_:)` and `\.themeAccent` once, at the top of `RootView`:
+
+- controls, `.foregroundStyle(.tint)` and `AnyShapeStyle(.tint)` follow `.tint`
+- anything needing the accent as a **value** — a fill, an opacity, a stroke —
+  reads `@Environment(\.themeAccent)`
+
+Both go **outside** the presentation modifiers. A sheet inherits the environment
+of the view its modifier is attached to, so a tint applied further in stops at
+the onboarding cover.
+
+**`Color.goalDone` and `Color.goalMissed` are not themed, deliberately.** Done
+and missed are states, not decoration; if they followed the accent, the same
+card would read green-for-finished under one theme and green-for-in-progress
+under another. That is also why `AccentTheme` offers no green — see the doc
+comment on it before adding a colour.
+
+## Haptics are imperative, not `.sensoryFeedback`
+
+Every event in `Haptics` acknowledges something the user *just did*, so it goes
+in the action that did it. `.sensoryFeedback(trigger:)` fires on any change to
+the value it watches, including the one the store makes when a screen first
+loads — a day already logged would buzz the phone on launch, and a reset would
+be indistinguishable from a log because both move the same number.
+
+Pick the event by comparing state **before and after** the write, never from the
+amount: finishing is a transition. `Haptics.isEnabled` reads `UserDefaults`
+directly so no call site has to carry the setting; absent means on.
+
 ## Running the simulator from the command line
 
 - The simulator wedges into `Busy ("Application failed preflight checks")`

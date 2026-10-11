@@ -14,8 +14,14 @@ struct RootView: View {
     /// through onboarding as though the app were new.
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
+    /// Read here and applied once, at the top. Every screen — and every sheet
+    /// presented from one — inherits both, so no view has to remember to ask
+    /// what the theme is.
+    @AppStorage(SettingsKey.appearance) private var appearance = Appearance.system
+    @AppStorage(SettingsKey.accent) private var accent = AccentTheme.blue
+
     var body: some View {
-        tabs
+        shell
             .id(hasCompletedOnboarding)
             .fullScreenCover(isPresented: .constant(!hasCompletedOnboarding)) {
                 OnboardingView(model: OnboardingModel(store: store)) {
@@ -32,9 +38,21 @@ struct RootView: View {
                     hasCompletedOnboarding = true
                 }
             }
+            // Outside the presentation modifiers, not inside: a sheet inherits
+            // the environment of the view the modifier is attached to, so a
+            // tint applied further in would stop at the onboarding cover and
+            // leave the first screen of the app the only unthemed one.
+            //
+            // `.tint` covers controls; `themeAccent` covers the places that
+            // need the colour as a value rather than as a style.
+            // `Color.accentColor` is not a third option — it reads the asset
+            // catalog and ignores `.tint` entirely.
+            .tint(accent.color)
+            .environment(\.themeAccent, accent.color)
+            .preferredColorScheme(appearance.colorScheme)
     }
 
-    private var tabs: some View {
+    private var shell: some View {
         // Rebuilt when onboarding finishes, so Today picks up the goals it was
         // created with. Today loads once on appear, and it appears behind the
         // cover — before there is anything to load.

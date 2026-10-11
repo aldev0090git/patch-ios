@@ -6,6 +6,7 @@ import SwiftUI
 /// Lifted out of `GoalEditor`, which had grown past the length the linter
 /// allows. They are self-contained controls and read better on their own.
 struct WeekdayPicker: View {
+    @Environment(\.themeAccent) private var themeAccent
     @Binding var selection: Set<Weekday>
 
     var body: some View {
@@ -26,7 +27,7 @@ struct WeekdayPicker: View {
                         .font(.subheadline.weight(.medium))
                         .frame(maxWidth: .infinity, minHeight: 36)
                         .background(
-                            isOn ? Color.accentColor.opacity(0.2) : Color(uiColor: .tertiarySystemFill),
+                            isOn ? themeAccent.opacity(0.2) : Color(uiColor: .tertiarySystemFill),
                             in: .capsule
                         )
                 }
@@ -43,6 +44,7 @@ struct WeekdayPicker: View {
 /// Seven across, so the columns line up with the weekday row above and with
 /// the calendar screen's own grid.
 struct MonthDayPicker: View {
+    @Environment(\.themeAccent) private var themeAccent
     @Binding var selection: Set<Int>
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 7)
@@ -59,7 +61,7 @@ struct MonthDayPicker: View {
                         .monospacedDigit()
                         .frame(maxWidth: .infinity, minHeight: 32)
                         .background(
-                            isOn ? Color.accentColor.opacity(0.2) : Color(uiColor: .tertiarySystemFill),
+                            isOn ? themeAccent.opacity(0.2) : Color(uiColor: .tertiarySystemFill),
                             in: .rect(cornerRadius: 8, style: .continuous)
                         )
                 }
