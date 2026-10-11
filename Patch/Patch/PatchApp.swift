@@ -9,9 +9,7 @@ struct PatchApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(
-                model: TodayModel(store: SwiftDataGoalStore(context: container.mainContext))
-            )
+            RootView(store: SwiftDataGoalStore(context: container.mainContext))
         }
         .modelContainer(container)
     }
