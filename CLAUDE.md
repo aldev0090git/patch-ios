@@ -72,7 +72,21 @@ live in `Patch/Patch/Localizable.xcstrings`.
 - **Never hand-assemble units.** `MeasureFormatter` uses Foundation's
   measurement and duration formatting, which already knows "хв", "мин", plural
   forms, and that 1.5 L is "1,5 л" in both other languages.
-- Goal templates carry a `titleKey`, never an English word.
+- Goal templates carry a `titleKey`, never an English word, and the key
+  **travels onto the goal** (`Goal.titleKey`). Titles are resolved at *display*
+  time by `Goal.localizedTitle`. Resolving once at creation and saving the word
+  froze every seeded goal into whichever language launched first, which is how
+  a Russian reader ended up with "Don't smoke" among Russian text. Renaming a
+  goal clears the key: a name the user typed is theirs and must not be
+  translated out from under them.
+- **`xcodebuild` does not write new keys into the catalog** — only the Xcode IDE
+  merges them. Working from the command line, read the extracted keys out of
+  `DerivedData/.../Build/Intermediates.noindex/Patch.build/.../Objects-normal/arm64/*.stringsdata`
+  (JSON despite the name) and add them to `Localizable.xcstrings` directly.
+  Check the diff of extracted-vs-catalog keys rather than trusting a build to
+  have noticed.
+- The Ukrainian and Russian strings are **unreviewed by a native speaker**. Say
+  so when handing work over.
 
 ## Testing
 
@@ -83,6 +97,15 @@ live in `Patch/Patch/Localizable.xcstrings`.
 - Domain tests use `fixedCalendar()` and `day(_:_:_:)` from `TestSupport.swift`.
   Never use `Date()` or `.current` in a test.
 - Run with `cd Packages/PatchKit && swift test`. Should stay under a second.
+- App tests: `xcodebuild test -only-testing:PatchTests`. Swift Testing results
+  do not show up in `xcodebuild`'s console output — pass `-resultBundlePath` and
+  read the count with `xcrun xcresulttool get test-results summary`.
+- **UI tests are deliberately out of CI** (`PatchUITests` is never in
+  `-only-testing`). They need a simulator and cost 10x minutes. They exist to
+  catch what unit tests cannot — a screen that renders empty, a tab that never
+  appears — and they attach screenshots, which `xcrun xcresulttool export
+  attachments` pulls out. **Run them and look at the result** before calling a
+  screen done; every UI bug so far was found by looking, not by reading code.
 
 ## Style
 
@@ -93,6 +116,21 @@ live in `Patch/Patch/Localizable.xcstrings`.
   reference for tone and density; match them.
 - SF Symbols for iconography, system materials and standard controls by default.
   The app should feel native before it feels custom.
+- **An empty state is not a zero.** A window where nothing has settled yet has
+  no completion rate; showing "0%" claims a verdict that has not been reached,
+  and colouring it green makes it worse. Unsettled states show an em dash, say
+  why in words, and sort below the rows that do have a record. This was got
+  wrong twice on the same screen.
+- Types used by a `nonisolated` helper, or by tests, must themselves be
+  `nonisolated`. The app target defaults to MainActor isolation, so a plain
+  `struct` is MainActor-isolated and unusable from a test.
+
+## Lint scope
+
+`.swiftlint.yml` `included:` must name **`Patch`** and **`Packages`**. It said
+`App` — a directory that does not exist — for the project's first 25 commits,
+so the lint job passed while silently checking none of the app's source. If the
+file count in SwiftLint's output drops, that is the bug.
 
 ## CI costs real minutes
 
