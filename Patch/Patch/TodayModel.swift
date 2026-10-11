@@ -120,28 +120,4 @@ final class TodayModel {
     ///
     /// Temporary: onboarding will replace this with goals the user actually
     /// chooses.
-    func seedIfEmpty() {
-        guard goals.isEmpty else { return }
-
-        let starters = [
-            GoalTemplateCatalog.read,
-            GoalTemplateCatalog.pushUps,
-            GoalTemplateCatalog.water,
-            GoalTemplateCatalog.quitSmoking,
-            GoalTemplateCatalog.gym
-        ]
-
-        do {
-            for template in starters {
-                // The template carries a key, not a word: these titles are the
-                // first thing a user ever sees and must arrive in their own
-                // language.
-                let title = String(localized: String.LocalizationValue(template.titleKey))
-                try store.save(template.makeGoal(title: title))
-            }
-            goals = try store.loadGoals()
-        } catch {
-            failure = String(localized: "Couldn't set up your first goals. \(error.localizedDescription)")
-        }
-    }
 }

@@ -99,10 +99,7 @@ struct ContentView: View {
                     withAnimation(.snappy) { model.save(goal) }
                 }
             }
-            .task {
-                model.load()
-                model.seedIfEmpty()
-            }
+            .task { model.load() }
             .alert(
                 "Something went wrong",
                 isPresented: Binding(

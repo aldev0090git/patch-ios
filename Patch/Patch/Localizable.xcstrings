@@ -1,6 +1,23 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%@ every day": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ щодня"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ каждый день"
+          }
+        }
+      }
+    },
     "%@ of %@": {
       "extractionState": "manual",
       "localizations": {
@@ -14,6 +31,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ из %@"
+          }
+        }
+      }
+    },
+    "%@ on %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ у %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ по %@"
           }
         }
       }
@@ -338,6 +372,23 @@
         }
       }
     },
+    "Couldn't create your goals. %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не вдалося створити цілі. %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось создать цели. %@"
+          }
+        }
+      }
+    },
     "Couldn't load your calendar. %@": {
       "extractionState": "manual",
       "localizations": {
@@ -644,6 +695,23 @@
         }
       }
     },
+    "Get started": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Почати"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начать"
+          }
+        }
+      }
+    },
     "Icon": {
       "extractionState": "manual",
       "localizations": {
@@ -916,6 +984,23 @@
         }
       }
     },
+    "Patch": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patch"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patch"
+          }
+        }
+      }
+    },
     "Period": {
       "extractionState": "manual",
       "localizations": {
@@ -929,6 +1014,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Период"
+          }
+        }
+      }
+    },
+    "Pick as many as you like. You can change all of this later.": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обирайте скільки завгодно. Усе це можна змінити пізніше."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбирайте сколько угодно. Всё это можно изменить позже."
           }
         }
       }
@@ -1052,6 +1154,23 @@
         }
       }
     },
+    "Small things, kept up. Track what you do each day and watch the days add up.": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Маленькі справи, зроблені регулярно. Відстежуйте, що робите щодня, і дивіться, як дні складаються."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Маленькие дела, сделанные регулярно. Отслеживайте, что делаете каждый день, и смотрите, как дни складываются."
+          }
+        }
+      }
+    },
     "Some done": {
       "extractionState": "manual",
       "localizations": {
@@ -1099,6 +1218,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Начало"
+          }
+        }
+      }
+    },
+    "Start with none": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Почати без цілей"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начать без целей"
           }
         }
       }
@@ -1273,6 +1409,23 @@
         }
       }
     },
+    "Track %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Відстежувати %lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отслеживать %lld"
+          }
+        }
+      }
+    },
     "Volume": {
       "extractionState": "manual",
       "localizations": {
@@ -1303,6 +1456,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Неделя"
+          }
+        }
+      }
+    },
+    "What do you want to keep up?": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Що хочете робити регулярно?"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Что хотите делать регулярно?"
           }
         }
       }

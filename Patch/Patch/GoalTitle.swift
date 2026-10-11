@@ -36,3 +36,18 @@ nonisolated extension Goal {
         return trimmed == existing.localizedTitle ? (existing.title, key) : (trimmed, nil)
     }
 }
+
+nonisolated extension GoalTemplate {
+    /// The template's name in the reader's language.
+    ///
+    /// Templates only ever carry a key — see ``Goal/titleKey`` for why the
+    /// resolved word must not be stored.
+    var localizedTitle: String {
+        String(localized: String.LocalizationValue(titleKey))
+    }
+
+    /// Builds the goal this template describes, named for the reader.
+    func makeLocalizedGoal(createdAt: Date = .now) -> Goal {
+        makeGoal(title: localizedTitle, createdAt: createdAt)
+    }
+}

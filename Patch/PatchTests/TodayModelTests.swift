@@ -158,32 +158,6 @@ struct TodayModelTests {
 
         #expect(model.todaysGoals.map(\.id) == [daily.id])
     }
-
-    @MainActor
-    @Test("Seeding fills an empty store and never runs twice")
-    func seedingIsOnlyForEmptyStores() {
-        let model = TodayModel(store: InMemoryGoalStore())
-        model.load()
-
-        model.seedIfEmpty()
-        let seeded = model.goals.count
-        model.seedIfEmpty()
-
-        #expect(seeded > 0)
-        #expect(model.goals.count == seeded)
-    }
-
-    @MainActor
-    @Test("Seeding leaves an existing store alone")
-    func seedingSkipsAPopulatedStore() {
-        let goal = Goal(title: "Read", measure: .minutes(20))
-        let model = TodayModel(store: InMemoryGoalStore(goals: [goal]))
-        model.load()
-
-        model.seedIfEmpty()
-
-        #expect(model.goals.count == 1)
-    }
 }
 
 @Suite("Today model failures")
