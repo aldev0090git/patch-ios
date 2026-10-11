@@ -15,6 +15,10 @@ struct RootView: View {
                 ContentView(model: TodayModel(store: store))
             }
 
+            Tab("Calendar", systemImage: "calendar") {
+                CalendarScreen(model: CalendarModel(store: store))
+            }
+
             Tab("Statistics", systemImage: "chart.bar") {
                 StatisticsView(model: StatisticsModel(store: store))
             }
