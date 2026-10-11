@@ -74,7 +74,7 @@ Packages/PatchKit/
   Sources/PatchStore/       The only place that imports SwiftData
   Tests/                    124 tests, ~30 ms, no simulator needed
 
-Patch/                      SwiftUI app target — 103 unit tests
+Patch/                      SwiftUI app target — 115 unit tests
   Patch/Localizable.xcstrings   English, Ukrainian, Russian
   PatchUITests/             Simulator tests, deliberately out of CI
 ```
@@ -167,6 +167,39 @@ allowed — someone who wants to write their own should not have to untick a
 decoy first. The last page covers the three things that cannot be discovered by
 looking: tap to log, swipe left to reset or archive, swipe right to edit.
 
+## Making it yours
+
+| Today | The same day, themed | Where you change it |
+|---|---|---|
+| ![Today](Docs/screenshots/today.png) | ![Today in dark and violet](Docs/screenshots/today-dark.png) | ![Settings](Docs/screenshots/settings.png) |
+
+Light, dark or follow the phone, and six accent colours.
+
+**Green and orange are not part of the theme.** Green means *a day you
+finished* and orange *a day you missed*; letting them follow the accent would
+mean the same card reads green-for-finished under one theme and
+green-for-in-progress under another, and someone who learnt the screen once
+would have to learn it again. That is also why the accent palette has no green
+in it — the one distinction the Today screen exists to draw is the one an
+accent must never blur.
+
+`Color.accentColor` is not how any of this works, which is worth knowing before
+reaching for it: it reads the asset catalog and ignores `.tint(_:)` entirely.
+Every call site that needs the accent as a *value* — a fill, an opacity, a
+stroke — takes it from the environment instead.
+
+### Vibration
+
+A light tap when you log something, a success note when a goal finishes, and
+two beats when the last goal of the day goes green. Reset is a rigid click:
+undoing work should feel like a switch thrown back, not like more work done.
+All of it is one switch away in Settings.
+
+The event is chosen by comparing the day before and after the entry lands,
+because "you finished something" is a transition and not a property of the
+number — the identical call is a light tap on the way to twenty push-ups and a
+success note on the one that reaches twenty.
+
 ## There are no accounts, deliberately
 
 Patch has no sign-in screen, no password, and no server.
@@ -205,9 +238,14 @@ The app icon is generated rather than committed as an opaque binary:
 swift Tools/make-app-icon.swift Patch/Patch/Assets.xcassets/AppIcon.appiconset
 ```
 
-The screenshots above come from `ScreenshotUITests`, which launches the app with
-a `-demo-data` argument. The seeder behind it is `#if DEBUG` only and cannot
-reach a release build.
+The screenshots above come from `ScreenshotUITests`, which launches the app
+with a `-demo-data` argument and captures every screen in both appearances. The
+seeder behind it is `#if DEBUG` only and cannot reach a release build.
+
+The theme is set by launch argument rather than by driving the Settings screen,
+because `UserDefaults` reads `-key value` pairs straight off the command line —
+so the capture exercises the app's real stored setting, and asserts that the
+swatch it launched with comes back selected.
 
 ## Roadmap
 
@@ -223,7 +261,7 @@ reach a release build.
 - [x] Localisation — English (base), Ukrainian, Russian
 - [x] CI — build, test and lint on every push
 - [x] App icon
-- [ ] Custom themes beyond system light and dark
+- [x] Themes — light/dark/system and six accents — and haptics
 - [ ] Home screen widget *(requires Apple Developer Program)*
 - [ ] iCloud sync via SwiftData + CloudKit *(requires Apple Developer Program)*
 - [ ] HealthKit step import *(requires Apple Developer Program)*
