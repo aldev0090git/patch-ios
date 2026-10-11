@@ -125,6 +125,41 @@ live in `Patch/Patch/Localizable.xcstrings`.
   `nonisolated`. The app target defaults to MainActor isolation, so a plain
   `struct` is MainActor-isolated and unusable from a test.
 
+## A goal card has exactly one height
+
+Both halves of `GoalCard` are always laid out, one of them transparent, so a
+done card is exactly as tall as an unfinished one. **Do not replace that with a
+conditional.** When the height changed, `UITableView` animated the row height
+underneath SwiftUI — scaling the row's content, so the card came out taller
+*and wider* and drew across its neighbour, because `List` does not clip rows.
+Four SwiftUI-level fixes failed before the cause was found, because none of
+them reach that animation. `GoalCardHeightUITests` pins the invariant by
+watching the card below.
+
+## Running the simulator from the command line
+
+- The simulator wedges into `Busy ("Application failed preflight checks")`
+  after repeated runs. Terminate **both** `com.aldev0090.Patch` and
+  `com.aldev0090.PatchUITests.xctrunner` and wait a few seconds between runs.
+- **`simctl io recordVideo` causes that state outright** — it blocks app
+  launches entirely. Capture frames with screenshot attachments from inside the
+  test instead, or `XCUIScreen.main.screenshot()` in a loop.
+- `XCUITest` waits for animations to settle before `tap()` returns, so
+  screenshots taken straight after a tap only ever catch the settled state.
+- Tapping a `Toggle` row in a `Form` lands on the row and does not reliably
+  flip it. Tap the switch end:
+  `toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()`.
+- Never drive a simulator the user has Xcode pointed at. Shutting one down
+  under a live debug session leaves a stale `lldb-rpc-server` and a wedged
+  DeviceHub, and Xcode then hangs on Replace and Stop.
+
+## The shared scheme keeps picking up a language
+
+Xcode rewrites `Patch.xcscheme` with whatever App Language the Run action is
+set to, so testing translations commits `language = "ru"` and every clone then
+launches in Russian. Check for it in diffs; the real fix is setting App Language
+back to "System Language" in Edit Scheme.
+
 ## Lint scope
 
 `.swiftlint.yml` `included:` must name **`Patch`** and **`Packages`**. It said
