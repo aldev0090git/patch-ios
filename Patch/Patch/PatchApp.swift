@@ -9,9 +9,20 @@ struct PatchApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView(store: SwiftDataGoalStore(context: container.mainContext))
+            RootView(store: demoAwareStore())
         }
         .modelContainer(container)
+    }
+
+    /// The real store, with a couple of months of plausible history when a
+    /// screenshot run asks for it. `DemoData` is `#if DEBUG` only, so this
+    /// collapses to the plain store in a release build.
+    private func demoAwareStore() -> GoalStore {
+        let store = SwiftDataGoalStore(context: container.mainContext)
+        #if DEBUG
+        if DemoData.isRequested { DemoData.install(into: store) }
+        #endif
+        return store
     }
 
     /// Falls back to an in-memory container rather than crashing.
