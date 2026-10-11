@@ -175,6 +175,24 @@ struct TemplateSummaryTests {
         #expect(mondayFirst.hasPrefix("Mon"))
     }
 
+    @Test("A goal on dates of the month names them in order")
+    func monthlyDatesAreNamed() {
+        let template = GoalTemplate(
+            id: "salary",
+            titleKey: "template.saveMoney",
+            symbolName: "banknote",
+            measure: .money(5000),
+            schedule: .daysOfMonth([15, 1])
+        )
+        let text = summary(template)
+
+        #expect(text.contains("1st"))
+        #expect(text.contains("15th"))
+        let first = try? #require(text.range(of: "1st"))
+        let fifteenth = try? #require(text.range(of: "15th"))
+        #expect(first?.lowerBound ?? text.endIndex < fifteenth?.lowerBound ?? text.startIndex)
+    }
+
     @Test("Every template produces a non-empty line")
     func allTemplatesDescribeThemselves() {
         for template in GoalTemplateCatalog.all {

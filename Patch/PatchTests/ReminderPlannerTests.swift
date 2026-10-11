@@ -37,6 +37,28 @@ struct ReminderPlannerTests {
         #expect(Set(plan.compactMap(\.weekday)) == [2, 4, 6])
     }
 
+    @Test("A goal on dates of the month gets one monthly notification per date")
+    func monthlyGoalPlansOnePerDate() {
+        let plan = ReminderPlanner.plan(for: goal(schedule: .daysOfMonth([1, 15])))
+
+        #expect(plan.count == 2)
+        #expect(Set(plan.compactMap(\.dayOfMonth)) == [1, 15])
+        // No weekday: a trigger with a day but no month repeats monthly, which
+        // is the whole point. A weekday as well would mean "the 1st, if it is
+        // a Monday".
+        #expect(plan.allSatisfy { $0.weekday == nil })
+        #expect(plan.allSatisfy { $0.components.day != nil })
+        #expect(plan.allSatisfy { $0.components.month == nil })
+    }
+
+    @Test("Date and weekday reminders never collide on an identifier")
+    func dateAndWeekdayIdentifiersDiffer() {
+        let byDate = ReminderPlanner.plan(for: goal(schedule: .daysOfMonth([2])))
+        let byWeekday = ReminderPlanner.plan(for: goal(schedule: .daysOfWeek([.monday])))
+
+        #expect(byDate.first?.id != byWeekday.first?.id)
+    }
+
     @Test("A goal with no reminder is never scheduled")
     func noReminderNoNotification() {
         #expect(ReminderPlanner.plan(for: goal(reminder: nil)).isEmpty)

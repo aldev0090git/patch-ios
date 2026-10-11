@@ -22,6 +22,10 @@ public final class StoredGoal {
     public var directionRaw: String = Direction.atLeast.rawValue
     public var scheduleIsDaily: Bool = true
     public var scheduleWeekdays: [Int] = []
+    /// Non-empty only for a date-of-month schedule, which is how it is told
+    /// apart from the other two without adding a discriminator an older build
+    /// would not understand.
+    public var scheduleMonthDays: [Int] = []
     public var cumulativeTarget: Decimal?
     public var createdAt: Date = Date()
     /// Split into two optional scalars rather than one embedded value:
@@ -50,9 +54,15 @@ public final class StoredGoal {
         case .daily:
             scheduleIsDaily = true
             scheduleWeekdays = []
+            scheduleMonthDays = []
         case .daysOfWeek(let days):
             scheduleIsDaily = false
             scheduleWeekdays = days.map(\.rawValue).sorted()
+            scheduleMonthDays = []
+        case .daysOfMonth(let days):
+            scheduleIsDaily = false
+            scheduleWeekdays = []
+            scheduleMonthDays = days.sorted()
         }
         cumulativeTarget = goal.cumulativeTarget
         createdAt = goal.createdAt
@@ -69,6 +79,14 @@ public final class StoredGoal {
     /// A newer version of the app syncing an unfamiliar measure kind must not
     /// crash an older one reading it. Showing the goal with a sensible default
     /// beats refusing to open the app.
+    /// Month days win when present, so a row written by a newer build still
+    /// reads correctly here and an older row keeps its old meaning.
+    private var schedule: Schedule {
+        if !scheduleMonthDays.isEmpty { return .daysOfMonth(Set(scheduleMonthDays)) }
+        if scheduleIsDaily { return .daily }
+        return .daysOfWeek(Set(scheduleWeekdays.compactMap(Weekday.init(rawValue:))))
+    }
+
     /// Unreadable history is dropped rather than fatal: the goal still works,
     /// it just judges every day against its current target, which is exactly
     /// where it stood before this existed.
@@ -95,9 +113,7 @@ public final class StoredGoal {
                 currencyCode: currencyCode
             ),
             direction: Direction(rawValue: directionRaw) ?? .atLeast,
-            schedule: scheduleIsDaily
-                ? .daily
-                : .daysOfWeek(Set(scheduleWeekdays.compactMap(Weekday.init(rawValue:)))),
+            schedule: schedule,
             cumulativeTarget: cumulativeTarget,
             createdAt: createdAt,
             targetHistory: targetHistory,

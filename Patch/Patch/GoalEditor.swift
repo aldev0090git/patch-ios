@@ -13,6 +13,15 @@ struct GoalEditor: View {
     private let onSave: (Goal) -> Void
 
     @State private var title: String
+    @State private var repeatMode: RepeatMode
+    @State private var monthDays: Set<Int>
+
+    /// Three states, so not a Bool. "Certain dates" is how a goal tied to a
+    /// date rather than a rhythm is expressed — money put aside when the
+    /// salary lands on the 1st, or on the 1st and the 15th.
+    private enum RepeatMode: Hashable {
+        case daily, certainWeekdays, certainDates
+    }
     @State private var currencyCode: String
     @State private var remindsMe: Bool
     @State private var notificationsDenied = false
@@ -21,7 +30,6 @@ struct GoalEditor: View {
     @State private var kind: MeasureKind
     @State private var target: Decimal
     @State private var direction: Direction
-    @State private var repeatsDaily: Bool
     @State private var weekdays: Set<Weekday>
 
     /// A short, deliberately curated list. A full symbol browser is thousands
@@ -60,11 +68,17 @@ struct GoalEditor: View {
 
         switch goal?.schedule ?? .daily {
         case .daily:
-            _repeatsDaily = State(initialValue: true)
+            _repeatMode = State(initialValue: .daily)
             _weekdays = State(initialValue: Set(Weekday.allCases))
+            _monthDays = State(initialValue: [])
         case .daysOfWeek(let days):
-            _repeatsDaily = State(initialValue: false)
+            _repeatMode = State(initialValue: .certainWeekdays)
             _weekdays = State(initialValue: days)
+            _monthDays = State(initialValue: [])
+        case .daysOfMonth(let dates):
+            _repeatMode = State(initialValue: .certainDates)
+            _weekdays = State(initialValue: Set(Weekday.allCases))
+            _monthDays = State(initialValue: dates)
         }
     }
 
@@ -137,14 +151,25 @@ struct GoalEditor: View {
                 }
 
                 Section("Repeat") {
-                    Picker("Days", selection: $repeatsDaily) {
-                        Text("Every day").tag(true)
-                        Text("Certain days").tag(false)
+                    Picker("Days", selection: $repeatMode) {
+                        Text("Every day").tag(RepeatMode.daily)
+                        Text("Certain days").tag(RepeatMode.certainWeekdays)
+                        Text("Certain dates").tag(RepeatMode.certainDates)
                     }
                     .pickerStyle(.segmented)
 
-                    if !repeatsDaily {
-                        weekdayPicker
+                    switch repeatMode {
+                    case .daily:
+                        EmptyView()
+                    case .certainWeekdays:
+                        WeekdayPicker(selection: $weekdays)
+                    case .certainDates:
+                        MonthDayPicker(selection: $monthDays)
+                        // The 31st has to mean something in February, and
+                        // guessing is worse than saying.
+                        Text("A date the month doesn't have falls on its last day.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -190,9 +215,17 @@ struct GoalEditor: View {
     }
 
     private var reminderExplanation: String {
-        repeatsDaily
+        repeatMode == .daily
             ? String(localized: "Every day at this time.")
             : String(localized: "Only on the days you picked below.")
+    }
+
+    private var chosenSchedule: Schedule {
+        switch repeatMode {
+        case .daily: .daily
+        case .certainWeekdays: .daysOfWeek(weekdays)
+        case .certainDates: .daysOfMonth(monthDays)
+        }
     }
 
     private var chosenReminder: Reminder? {
@@ -226,43 +259,13 @@ struct GoalEditor: View {
     }
 
     /// Ordered by the user's own first day of the week, not hardcoded to Monday.
-    private var weekdayPicker: some View {
-        let calendar = Calendar.current
-        let ordered = (0..<7).compactMap { offset in
-            Weekday(rawValue: (calendar.firstWeekday - 1 + offset) % 7 + 1)
-        }
-
-        return HStack(spacing: 6) {
-            ForEach(ordered, id: \.self) { day in
-                let isOn = weekdays.contains(day)
-                Button {
-                    if isOn {
-                        weekdays.remove(day)
-                    } else {
-                        weekdays.insert(day)
-                    }
-                } label: {
-                    Text(verbatim: calendar.veryShortWeekdaySymbols[day.rawValue - 1])
-                        .font(.subheadline.weight(.medium))
-                        .frame(maxWidth: .infinity, minHeight: 36)
-                        .background(
-                            isOn ? Color.accentColor.opacity(0.2) : Color(uiColor: .tertiarySystemFill),
-                            in: .capsule
-                        )
-                        .foregroundStyle(isOn ? Color.accentColor : .secondary)
-                }
-                .buttonStyle(.plain)
-                .accessibilityAddTraits(isOn ? [.isSelected] : [])
-            }
-        }
-        .padding(.vertical, 4)
-    }
-
-    /// A goal needs a name, somewhere to get to, and at least one day to do it
-    /// on. A zero target is allowed only when the point is to stay at zero.
     private var isValid: Bool {
         guard !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return false }
-        guard repeatsDaily || !weekdays.isEmpty else { return false }
+        switch repeatMode {
+        case .daily: break
+        case .certainWeekdays: if weekdays.isEmpty { return false }
+        case .certainDates: if monthDays.isEmpty { return false }
+        }
         return direction == .atMost || target > 0
     }
 
@@ -280,7 +283,7 @@ struct GoalEditor: View {
                 currencyCode: currencyCode
             ),
             direction: direction,
-            schedule: repeatsDaily ? .daily : .daysOfWeek(weekdays),
+            schedule: chosenSchedule,
             cumulativeTarget: existing?.cumulativeTarget,
             // Keeping the original creation date matters: statistics and streaks
             // both refuse to look back before it, so resetting it on every edit

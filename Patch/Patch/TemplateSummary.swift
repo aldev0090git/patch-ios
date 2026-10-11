@@ -29,7 +29,22 @@ nonisolated enum TemplateSummary {
         case .daysOfWeek(let days):
             let names = weekdayNames(days, calendar: calendar, locale: locale)
             return isConfirmation ? names : String(localized: "\(amount) on \(names)")
+        case .daysOfMonth(let dates):
+            let names = dateNames(dates, locale: locale)
+            return isConfirmation ? names : String(localized: "\(amount) on \(names)")
         }
+    }
+
+    /// "the 1st and the 15th", ordered and in the reader's language.
+    private static func dateNames(_ dates: Set<Int>, locale: Locale) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .ordinal
+        formatter.locale = locale
+
+        let names = dates.sorted().map { date in
+            formatter.string(from: NSNumber(value: date)) ?? String(date)
+        }
+        return ListFormatter.localizedString(byJoining: names)
     }
 
     /// Weekday names in the reader's own week order — a list starting on Monday

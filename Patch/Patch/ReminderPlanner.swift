@@ -11,6 +11,9 @@ nonisolated struct PlannedReminder: Hashable, Identifiable {
     let goalID: Goal.ID
     /// `nil` means every day; otherwise the `Calendar` weekday number.
     let weekday: Int?
+    /// Set instead of `weekday` for a goal tied to dates. A trigger with a day
+    /// but no month repeats monthly, which is exactly what is wanted.
+    let dayOfMonth: Int?
     let hour: Int
     let minute: Int
 
@@ -19,6 +22,7 @@ nonisolated struct PlannedReminder: Hashable, Identifiable {
     var components: DateComponents {
         var parts = DateComponents(hour: hour, minute: minute)
         parts.weekday = weekday
+        parts.day = dayOfMonth
         return parts
     }
 }
@@ -51,6 +55,7 @@ nonisolated enum ReminderPlanner {
                     id: identifier(goal: goal.id, weekday: nil),
                     goalID: goal.id,
                     weekday: nil,
+                    dayOfMonth: nil,
                     hour: reminder.hour,
                     minute: reminder.minute
                 )
@@ -61,6 +66,18 @@ nonisolated enum ReminderPlanner {
                     id: identifier(goal: goal.id, weekday: day.rawValue),
                     goalID: goal.id,
                     weekday: day.rawValue,
+                    dayOfMonth: nil,
+                    hour: reminder.hour,
+                    minute: reminder.minute
+                )
+            }
+        case .daysOfMonth(let dates):
+            return dates.sorted().map { date in
+                PlannedReminder(
+                    id: identifier(goal: goal.id, dayOfMonth: date),
+                    goalID: goal.id,
+                    weekday: nil,
+                    dayOfMonth: date,
                     hour: reminder.hour,
                     minute: reminder.minute
                 )
@@ -72,5 +89,9 @@ nonisolated enum ReminderPlanner {
     /// notifications instead of piling duplicates on top of them.
     static func identifier(goal: Goal.ID, weekday: Int?) -> String {
         weekday.map { "goal.\(goal.uuidString).\($0)" } ?? "goal.\(goal.uuidString).daily"
+    }
+
+    static func identifier(goal: Goal.ID, dayOfMonth: Int) -> String {
+        "goal.\(goal.uuidString).date.\(dayOfMonth)"
     }
 }

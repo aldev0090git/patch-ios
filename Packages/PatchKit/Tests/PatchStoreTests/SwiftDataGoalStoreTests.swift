@@ -105,6 +105,19 @@ struct SwiftDataGoalStoreTests {
         #expect(try store.loadGoals().first?.targetHistory.isEmpty == true)
     }
 
+    @Test("A date-of-month schedule survives a round trip")
+    @MainActor
+    func monthlyScheduleRoundTrip() throws {
+        let store = try makeStore()
+        try store.save(Goal(
+            title: "Save",
+            measure: .money(5000),
+            schedule: .daysOfMonth([1, 15])
+        ))
+
+        #expect(try store.loadGoals().first?.schedule == .daysOfMonth([1, 15]))
+    }
+
     @Test("A reminder survives a round trip")
     @MainActor
     func reminderRoundTrip() throws {

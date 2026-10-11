@@ -188,3 +188,74 @@ struct TargetHistoryTests {
         #expect(streak == 5)
     }
 }
+
+@Suite("Dates of the month")
+struct MonthlyScheduleTests {
+    private let calendar = fixedCalendar()
+
+    @Test("A goal on the 1st runs on the 1st and no other day")
+    func singleDate() {
+        let schedule = Schedule.daysOfMonth([1])
+        #expect(schedule.isScheduled(on: day(2026, 3, 1), calendar: calendar))
+        #expect(!schedule.isScheduled(on: day(2026, 3, 2), calendar: calendar))
+        #expect(schedule.isScheduled(on: day(2026, 4, 1), calendar: calendar))
+    }
+
+    @Test("Twice a month runs on both dates")
+    func twiceAMonth() {
+        // The salary case: paid on the 1st and the 15th.
+        let schedule = Schedule.daysOfMonth([1, 15])
+        #expect(schedule.isScheduled(on: day(2026, 3, 1), calendar: calendar))
+        #expect(schedule.isScheduled(on: day(2026, 3, 15), calendar: calendar))
+        #expect(!schedule.isScheduled(on: day(2026, 3, 16), calendar: calendar))
+    }
+
+    @Test("The 31st still happens in a month that has no 31st")
+    func shortMonthsFallBackToTheirLastDay() {
+        // Someone paid on the 31st is still paid in February. Skipping it
+        // would be invisible — a skipped day does not even break a streak.
+        let schedule = Schedule.daysOfMonth([31])
+        #expect(schedule.isScheduled(on: day(2026, 2, 28), calendar: calendar))
+        #expect(!schedule.isScheduled(on: day(2026, 2, 27), calendar: calendar))
+        #expect(schedule.isScheduled(on: day(2026, 1, 31), calendar: calendar))
+        #expect(!schedule.isScheduled(on: day(2026, 1, 30), calendar: calendar))
+    }
+
+    @Test("A leap February puts the 30th on the 29th")
+    func leapYear() {
+        let schedule = Schedule.daysOfMonth([30])
+        #expect(schedule.isScheduled(on: day(2028, 2, 29), calendar: calendar))
+        #expect(!schedule.isScheduled(on: day(2028, 2, 28), calendar: calendar))
+    }
+
+    @Test("A date that exists is not also pulled onto the last day")
+    func noDoubleCounting() {
+        // The 15th must not fire twice in a month that also ends on a day the
+        // set happens to contain.
+        let schedule = Schedule.daysOfMonth([15])
+        #expect(!schedule.isScheduled(on: day(2026, 3, 31), calendar: calendar))
+    }
+
+    @Test("An empty set never runs, rather than running every day")
+    func emptyNeverRuns() {
+        let schedule = Schedule.daysOfMonth([])
+        for date in 1...28 {
+            #expect(!schedule.isScheduled(on: day(2026, 3, date), calendar: calendar))
+        }
+    }
+
+    @Test("Unscheduled dates are skipped, not missed")
+    func unscheduledDaysAreNotFailures() {
+        let goal = Goal(
+            title: "Save",
+            measure: .money(5000),
+            schedule: .daysOfMonth([1]),
+            createdAt: day(2026, 1, 1)
+        )
+        let progress = ProgressCalculator(calendar: calendar)
+            .progress(for: goal, entries: [], on: day(2026, 3, 2))
+
+        #expect(!progress.isScheduled)
+        #expect(!progress.isAchieved)
+    }
+}
