@@ -32,7 +32,7 @@ public struct StreakCalculator: Sendable {
             }
             guard goal.schedule.isScheduled(on: day, calendar: calendar) else { continue }
 
-            if isAchieved(goal: goal, total: totals[day] ?? .zero) {
+            if isAchieved(goal: goal, total: totals[day] ?? .zero, on: day) {
                 streak += 1
             } else if isToday {
                 continue // still time left today
@@ -55,7 +55,7 @@ public struct StreakCalculator: Sendable {
             defer { day = calendar.date(byAdding: .day, value: 1, to: day) ?? .distantFuture }
             guard goal.schedule.isScheduled(on: day, calendar: calendar) else { continue }
 
-            if isAchieved(goal: goal, total: totals[day] ?? .zero) {
+            if isAchieved(goal: goal, total: totals[day] ?? .zero, on: day) {
                 run += 1
                 best = max(best, run)
             } else {
@@ -65,10 +65,12 @@ public struct StreakCalculator: Sendable {
         return best
     }
 
-    private func isAchieved(goal: Goal, total: Decimal) -> Bool {
+    /// Judged against the target in force on that day, not today's — raising
+    /// a target must not retroactively break a streak that was genuinely met.
+    private func isAchieved(goal: Goal, total: Decimal, on day: Date) -> Bool {
         switch goal.direction {
-        case .atLeast: total >= goal.measure.dailyTarget
-        case .atMost: total <= goal.measure.dailyTarget
+        case .atLeast: total >= goal.dailyTarget(on: day, calendar: calendar)
+        case .atMost: total <= goal.dailyTarget(on: day, calendar: calendar)
         }
     }
 }

@@ -246,15 +246,13 @@ struct GoalEditor: View {
 
     private func makeGoal() -> Goal {
         let name = Goal.titleToSave(typed: title, editing: existing)
-        return Goal(
+        let newTarget = MeasureInput.toCanonical(target, kind: kind)
+        let built = Goal(
             id: existing?.id ?? UUID(),
             title: name.title,
             titleKey: name.key,
             symbolName: symbolName,
-            measure: Measure(
-                kind: kind,
-                dailyTarget: MeasureInput.toCanonical(target, kind: kind)
-            ),
+            measure: Measure(kind: kind, dailyTarget: existing?.measure.dailyTarget ?? newTarget),
             direction: direction,
             schedule: repeatsDaily ? .daily : .daysOfWeek(weekdays),
             cumulativeTarget: existing?.cumulativeTarget,
@@ -262,9 +260,22 @@ struct GoalEditor: View {
             // both refuse to look back before it, so resetting it on every edit
             // would quietly erase the goal's history.
             createdAt: existing?.createdAt ?? .now,
+            targetHistory: existing?.targetHistory ?? [],
             reminder: chosenReminder,
             archivedAt: existing?.archivedAt
         )
+
+        // Recorded as a change rather than written straight in, so the days
+        // already logged keep being judged against what they were asked for.
+        // A brand new goal has nothing to preserve, and changing the kind
+        // changes the unit, which makes the old numbers meaningless anyway.
+        guard existing != nil, kind == existing?.measure.kind else {
+            var fresh = built
+            fresh.measure = Measure(kind: kind, dailyTarget: newTarget)
+            fresh.targetHistory = []
+            return fresh
+        }
+        return built.withTarget(newTarget)
     }
 }
 

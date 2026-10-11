@@ -24,6 +24,9 @@ public final class StoredGoal {
     public var createdAt: Date = Date()
     /// Split into two optional scalars rather than one embedded value:
     /// CloudKit wants plain, defaulted or optional properties.
+    /// JSON rather than parallel arrays: CloudKit takes `Data` happily, and
+    /// two arrays that must stay the same length is a bug waiting to happen.
+    public var targetHistoryData: Data?
     public var reminderHour: Int?
     public var reminderMinute: Int?
     public var archivedAt: Date?
@@ -50,6 +53,9 @@ public final class StoredGoal {
         }
         cumulativeTarget = goal.cumulativeTarget
         createdAt = goal.createdAt
+        targetHistoryData = goal.targetHistory.isEmpty
+            ? nil
+            : try? JSONEncoder().encode(goal.targetHistory)
         reminderHour = goal.reminder?.hour
         reminderMinute = goal.reminder?.minute
         archivedAt = goal.archivedAt
@@ -60,6 +66,14 @@ public final class StoredGoal {
     /// A newer version of the app syncing an unfamiliar measure kind must not
     /// crash an older one reading it. Showing the goal with a sensible default
     /// beats refusing to open the app.
+    /// Unreadable history is dropped rather than fatal: the goal still works,
+    /// it just judges every day against its current target, which is exactly
+    /// where it stood before this existed.
+    private var targetHistory: [TargetChange] {
+        guard let targetHistoryData else { return [] }
+        return (try? JSONDecoder().decode([TargetChange].self, from: targetHistoryData)) ?? []
+    }
+
     /// Both halves or neither — a half-written row is not a reminder.
     private var reminder: Reminder? {
         guard let reminderHour, let reminderMinute else { return nil }
@@ -82,6 +96,7 @@ public final class StoredGoal {
                 : .daysOfWeek(Set(scheduleWeekdays.compactMap(Weekday.init(rawValue:)))),
             cumulativeTarget: cumulativeTarget,
             createdAt: createdAt,
+            targetHistory: targetHistory,
             reminder: reminder,
             archivedAt: archivedAt
         )

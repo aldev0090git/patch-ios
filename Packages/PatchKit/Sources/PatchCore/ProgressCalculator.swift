@@ -35,7 +35,7 @@ public struct ProgressCalculator: Sendable {
         return DayProgress(
             date: day,
             total: totals[day] ?? .zero,
-            target: goal.measure.dailyTarget,
+            target: goal.dailyTarget(on: day, calendar: calendar),
             direction: goal.direction,
             isScheduled: goal.schedule.isScheduled(on: day, calendar: calendar)
         )

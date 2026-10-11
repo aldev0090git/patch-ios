@@ -81,6 +81,30 @@ struct SwiftDataGoalStoreTests {
         #expect(try store.loadGoals().first?.titleKey == nil)
     }
 
+    @Test("Target history survives a round trip, so the past stays judged correctly")
+    @MainActor
+    func targetHistoryRoundTrip() throws {
+        let store = try makeStore()
+        let goal = Goal(title: "Read", measure: .minutes(20))
+            .withTarget(3600, changedOn: Date(timeIntervalSince1970: 1_767_225_600))
+
+        try store.save(goal)
+        let restored = try #require(try store.loadGoals().first)
+
+        #expect(restored.targetHistory.count == 2)
+        #expect(restored.targetHistory == goal.targetHistory)
+        #expect(restored.measure.dailyTarget == 3600)
+    }
+
+    @Test("A goal that never changed its target stores no history")
+    @MainActor
+    func absentHistoryStaysAbsent() throws {
+        let store = try makeStore()
+        try store.save(Goal(title: "Read", measure: .minutes(20)))
+
+        #expect(try store.loadGoals().first?.targetHistory.isEmpty == true)
+    }
+
     @Test("A reminder survives a round trip")
     @MainActor
     func reminderRoundTrip() throws {
