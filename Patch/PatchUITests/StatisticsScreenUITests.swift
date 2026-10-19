@@ -13,15 +13,14 @@ final class StatisticsScreenUITests: XCTestCase {
 
     @MainActor
     func testLoggingOnTodayShowsUpInStatistics() throws {
+        // Demo data rather than whatever a previous test left behind: on an
+        // empty store the onboarding cover sits over everything, and logging
+        // one goal by hand left the window's contents depending on test order.
         let app = XCUIApplication()
+        app.launchArguments = ["-demo-data"]
         app.launch()
 
-        // Finish one goal so the window has something settled in it.
-        let done = app.buttons["Done"].firstMatch
-        if done.waitForExistence(timeout: 10) {
-            done.tap()
-        }
-
+        XCTAssertTrue(app.buttons["today.add"].waitForExistence(timeout: 15), "No Today screen")
         app.tabBars.buttons["Statistics"].tap()
 
         // The heading only renders once the model has loaded and found rows.
@@ -33,8 +32,11 @@ final class StatisticsScreenUITests: XCTestCase {
         attach(app.screenshot(), named: "Statistics")
 
         // A window from before any goal existed has nothing to say, and must
-        // say so rather than rendering a wall of 0%.
-        app.buttons["Previous period"].tap()
+        // say so rather than rendering a wall of 0%. The demo history starts
+        // about nine weeks back, so twelve steps is safely before it.
+        for _ in 0..<12 {
+            app.buttons["Previous period"].tap()
+        }
         XCTAssertTrue(
             app.staticTexts["Nothing to report yet"].waitForExistence(timeout: 5),
             "An empty window did not show the empty state"

@@ -9,7 +9,7 @@ final class OnboardingUITests: XCTestCase {
     @MainActor
     func testFirstRunCreatesTheChosenGoals() throws {
         let app = XCUIApplication()
-        app.launchArguments = ["-AppleLanguages", "(uk)", "-AppleLocale", "uk_UA"]
+        app.launchArguments = ["-reset-state", "-AppleLanguages", "(uk)", "-AppleLocale", "uk_UA"]
         app.launch()
 
         let primary = app.buttons["onboarding.primary"]

@@ -10,14 +10,14 @@ final class CalendarScreenUITests: XCTestCase {
 
     @MainActor
     func testCalendarShowsTheMonthAndADaysGoals() throws {
+        // Demo data rather than whatever a previous test left behind: on an
+        // empty store the onboarding cover sits over everything and the tab
+        // bar is never reachable.
         let app = XCUIApplication()
+        app.launchArguments = ["-demo-data"]
         app.launch()
 
-        let done = app.buttons["Done"].firstMatch
-        if done.waitForExistence(timeout: 10) {
-            done.tap()
-        }
-
+        XCTAssertTrue(app.buttons["today.add"].waitForExistence(timeout: 15), "No Today screen")
         app.tabBars.buttons["Calendar"].tap()
         XCTAssertTrue(
             app.staticTexts["Calendar"].waitForExistence(timeout: 10),
@@ -26,8 +26,11 @@ final class CalendarScreenUITests: XCTestCase {
         attach(app.screenshot(), named: "Calendar")
 
         // Tapping today should open the day's goals underneath the grid.
+        // By identifier, so it cannot land on a day borrowed from a
+        // neighbouring month that happens to carry the same number.
         let today = Calendar.current.component(.day, from: Date())
-        app.staticTexts["\(today)"].firstMatch.tap()
+        app.descendants(matching: .any)
+            .matching(identifier: "calendar.day.\(today)").firstMatch.tap()
         attach(app.screenshot(), named: "Calendar - day selected")
 
         app.buttons["Previous month"].tap()

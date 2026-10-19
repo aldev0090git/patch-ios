@@ -84,7 +84,7 @@ final class ScreenshotUITests: XCTestCase {
     @MainActor
     private func captureOnboarding(_ look: Look) {
         let app = XCUIApplication()
-        app.launchArguments = Look.language + look.arguments
+        app.launchArguments = Look.language + look.arguments + ["-reset-state"]
         app.launch()
 
         let onboarding = app.buttons["onboarding.primary"]
