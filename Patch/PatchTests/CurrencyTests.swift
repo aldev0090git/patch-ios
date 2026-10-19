@@ -71,6 +71,14 @@ struct CurrencyTests {
         #expect(CurrencyOptions.all.prefix(4) == ["USD", "EUR", "UAH", "RUB"])
     }
 
+    @Test("A new money goal starts in dollars, not the phone's currency")
+    func newGoalsStartInDollars() {
+        // Deliberate: savings are usually thought of in dollars whatever the
+        // phone is set to, and this is the first entry in the picker anyway.
+        #expect(CurrencyOptions.defaultForNewGoals == "USD")
+        #expect(CurrencyOptions.all.first == CurrencyOptions.defaultForNewGoals)
+    }
+
     @Test("The reader's own currency is never more than one scroll away")
     func ownCurrencyIsFeatured() {
         #expect(CurrencyOptions.featured.contains(CurrencyOptions.deviceDefault))

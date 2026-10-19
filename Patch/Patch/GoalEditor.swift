@@ -73,7 +73,7 @@ struct GoalEditor: View {
                 ?? .now
         )
         _currencyCode = State(
-            initialValue: goal?.measure.currencyCode ?? CurrencyOptions.deviceDefault
+            initialValue: goal?.measure.currencyCode ?? CurrencyOptions.defaultForNewGoals
         )
         switch goal?.schedule ?? .daily {
         case .daily:

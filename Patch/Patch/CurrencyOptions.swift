@@ -11,6 +11,15 @@ nonisolated enum CurrencyOptions {
         Locale.autoupdatingCurrent.currency?.identifier ?? "USD"
     }
 
+    /// What a new money goal starts in.
+    ///
+    /// Not the phone's own currency, which is the obvious choice and the
+    /// wrong one here: money goals in this app are usually savings, and
+    /// people who save tend to think of the sum in dollars whatever they are
+    /// paid in. It is one tap to change, and the picker that changes it opens
+    /// with this at the top.
+    static let defaultForNewGoals = "USD"
+
     /// Offered first, in this order, because between them they cover almost
     /// every goal this app is likely to hold.
     ///
