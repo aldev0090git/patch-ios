@@ -59,12 +59,19 @@ final class NotificationScheduler {
 
         for reminder in planned {
             let content = UNMutableNotificationContent()
-            content.title = String(localized: "How is today going?")
-            // Deliberately says nothing about which goals are outstanding. A
-            // repeating trigger's text is fixed when it is scheduled, so a
-            // count written now would be yesterday's by the time it arrives —
+            // Deliberately says nothing about which goals are outstanding,
+            // and asks rather than tells. Two reasons, one technical and one
+            // not.
+            //
+            // A repeating trigger's text is fixed when it is scheduled, so any
+            // count written now would be yesterday's by the time it arrives,
             // and "3 left" when the answer is none is worse than no number.
-            content.body = String(localized: "Open Patch and tick off what you have done.")
+            //
+            // And a reminder that scolds gets the app muted. "Don't forget"
+            // assumes the day went badly, which on most days is both wrong and
+            // unpleasant; this works whether the day is finished or not.
+            content.title = String(localized: "How's today going?")
+            content.body = String(localized: "Tick off what you've done today.")
             content.sound = .default
 
             let request = UNNotificationRequest(

@@ -1083,23 +1083,6 @@
         }
       }
     },
-    "How is today going?": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Як минає день?"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Как проходит день?"
-          }
-        }
-      }
-    },
     "How it works": {
       "extractionState": "manual",
       "localizations": {
@@ -1113,6 +1096,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Как это работает"
+          }
+        }
+      }
+    },
+    "How's today going?": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Як минає день?"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Как проходит день?"
           }
         }
       }
@@ -1419,23 +1419,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Как только вы последите за целью день-другой, здесь появятся её показатели."
-          }
-        }
-      }
-    },
-    "Open Patch and tick off what you have done.": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Відкрийте Patch і відмітьте, що вже зробили."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Откройте Patch и отметьте, что уже сделали."
           }
         }
       }
@@ -2082,6 +2065,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Три вещи, которые стоит знать перед началом."
+          }
+        }
+      }
+    },
+    "Tick off what you've done today.": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Відмітьте, що ви зробили сьогодні."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отметьте, что вы сделали сегодня."
           }
         }
       }
