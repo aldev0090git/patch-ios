@@ -148,9 +148,16 @@ struct CalendarModelTests {
         )
         let model = model(goals: [daily, sundays])
 
-        // A Monday, so the Sunday-only goal must not appear.
+        // A Monday, so the Sunday-only goal must not appear — and one the
+        // goals already existed on. Without that second condition this test
+        // passes or fails depending on where in the month it is run: on the
+        // 19th the month's first Monday is older than `created`, both goals
+        // are correctly filtered out as not-yet-created, and the expectation
+        // below is left comparing against an empty list.
         let monday = model.days.first {
-            calendar().component(.weekday, from: $0.date) == 2 && !$0.isFuture && $0.isInMonth
+            calendar().component(.weekday, from: $0.date) == 2
+                && !$0.isFuture && $0.isInMonth
+                && $0.date >= calendar().startOfDay(for: created)
         }
         model.selectedDay = try? #require(monday?.date)
 
