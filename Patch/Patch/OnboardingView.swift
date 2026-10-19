@@ -18,11 +18,15 @@ struct OnboardingView: View {
         VStack(spacing: 0) {
             TabView(selection: $page) {
                 welcome.tag(0)
-                picker.tag(1)
+                // Before the picker, not after: choosing from a list of goals
+                // means nothing until you know what a goal can do. The
+                // allowance shape in particular is the one nobody guesses.
+                shapes.tag(1)
+                picker.tag(2)
                 // Last, so the gestures are the freshest thing in mind when
                 // the app opens. A swipe nobody knows about may as well not
                 // exist, and Reset lives behind one.
-                howItWorks.tag(2)
+                howItWorks.tag(3)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
 
@@ -76,6 +80,29 @@ struct OnboardingView: View {
 
     // MARK: - Page two
 
+    private var shapes: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("What a goal can be")
+                    .font(.title2.bold())
+                Text("Three shapes cover everything. Tap the examples — they really work.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 16)
+
+            ScrollView {
+                GoalShapesView()
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 8)
+            }
+        }
+        .padding(.top, 24)
+    }
+
+    // MARK: - Page three
+
     private var picker: some View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 6) {
@@ -107,7 +134,7 @@ struct OnboardingView: View {
         .padding(.top, 24)
     }
 
-    // MARK: - Page three
+    // MARK: - Page four
 
     private var howItWorks: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -133,10 +160,10 @@ struct OnboardingView: View {
 
     private var footer: some View {
         VStack(spacing: 12) {
-            PageDots(count: 3, current: page)
+            PageDots(count: 4, current: page)
 
             Button {
-                if page < 2 {
+                if page < 3 {
                     withAnimation(.snappy) { page += 1 }
                     Haptics.play(.selection)
                 } else if model.finish() {
@@ -172,7 +199,7 @@ struct OnboardingView: View {
     private var primaryLabel: some View {
         if page == 0 {
             Text("Get started")
-        } else if page == 1 {
+        } else if page < 3 {
             Text("Continue")
         } else if model.selectionCount == 0 {
             Text("Start with none")

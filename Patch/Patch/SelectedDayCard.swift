@@ -74,44 +74,29 @@ struct SelectedDayCard: View {
     @ViewBuilder
     private func goalRow(_ row: DayGoalProgress) -> some View {
         if model.canLog(row.goal, on: day) {
-            // Two sibling buttons rather than one with a button inside it:
-            // nesting them makes the outer tap area swallow the inner one.
-            HStack(spacing: 6) {
-                Button {
-                    tapped(row)
-                } label: {
-                    rowContent(row)
-                }
-                .buttonStyle(.plain)
-                .contextMenu {
-                    if model.hasLogged(row.goal, on: day) {
-                        Button("Clear this day", systemImage: "arrow.uturn.backward", role: .destructive) {
-                            clear(row.goal)
-                        }
-                    }
-                }
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(Text(verbatim: accessibilityLabel(row)))
-                .accessibilityHint(hint(for: row))
-                .accessibilityAddTraits(row.progress.isAchieved ? [.isButton, .isSelected] : .isButton)
-                .accessibilityIdentifier("day.row")
-
-                // On the row, not only behind a long press. Reset spent a
-                // release hidden behind a swipe nobody found, and a way to
-                // undo that only the author knows about is not a way to undo.
+            Button {
+                tapped(row)
+            } label: {
+                rowContent(row)
+            }
+            .buttonStyle(.plain)
+            // Clearing lives in the long press, as it does on Today. A
+            // permanent button here made the rows ragged — it is only on the
+            // ones with something logged — and made this the one screen where
+            // undo is a control rather than a gesture. The gesture is taught
+            // on the How it works page instead.
+            .contextMenu {
                 if model.hasLogged(row.goal, on: day) {
-                    Button("Clear this day", systemImage: "arrow.uturn.backward") {
+                    Button("Clear this day", systemImage: "arrow.uturn.backward", role: .destructive) {
                         clear(row.goal)
                     }
-                    .labelStyle(.iconOnly)
-                    .buttonStyle(.plain)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 44, height: 44)
-                    .contentShape(.rect)
-                    .accessibilityIdentifier("day.clear")
                 }
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text(verbatim: accessibilityLabel(row)))
+            .accessibilityHint(hint(for: row))
+            .accessibilityAddTraits(row.progress.isAchieved ? [.isButton, .isSelected] : .isButton)
+            .accessibilityIdentifier("day.row")
         } else {
             rowContent(row)
         }

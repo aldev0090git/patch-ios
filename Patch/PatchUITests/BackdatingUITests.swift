@@ -13,7 +13,7 @@ final class BackdatingUITests: XCTestCase {
     @MainActor
     func testLoggingAPastDayChangesTheRow() {
         let app = XCUIApplication()
-        app.launchArguments = ["-demo-data"]
+        app.launchArguments = ["-reset-state", "-demo-data"]
         app.launch()
 
         XCTAssertTrue(app.buttons["today.add"].waitForExistence(timeout: 10), "No Today screen")
@@ -53,9 +53,9 @@ final class BackdatingUITests: XCTestCase {
     }
 
     @MainActor
-    func testAPastDayCanBeClearedFromTheRow() {
+    func testAPastDayCanBeClearedByLongPress() {
         let app = XCUIApplication()
-        app.launchArguments = ["-demo-data"]
+        app.launchArguments = ["-reset-state", "-demo-data"]
         app.launch()
 
         XCTAssertTrue(app.buttons["today.add"].waitForExistence(timeout: 10), "No Today screen")
@@ -66,20 +66,29 @@ final class BackdatingUITests: XCTestCase {
         XCTAssertTrue(firstOfMonth.waitForExistence(timeout: 10), "No calendar grid")
         firstOfMonth.tap()
 
-        // Visible on the row, not only behind a long press — a way to undo
-        // that only the author knows about is not a way to undo.
-        let clear = app.descendants(matching: .any).matching(identifier: "day.clear").firstMatch
-        XCTAssertTrue(clear.waitForExistence(timeout: 5), "No visible way to clear a logged day")
-
-        // Every row, not the first one: the clear button belongs to whichever
-        // goal actually has something logged on that day, which is not
-        // necessarily the row at the top.
         let rows = app.descendants(matching: .any).matching(identifier: "day.row")
+        XCTAssertTrue(rows.firstMatch.waitForExistence(timeout: 5), "The day offered no goals")
         let before = (0..<rows.count).map { rows.element(boundBy: $0).label }
+
+        // Clearing is a long press, as it is on Today. Find a row that has
+        // something on it — the demo history does not fill every goal every
+        // day, and a row with nothing logged offers no Clear.
+        let clear = app.buttons["Clear this day"]
+        var opened = false
+        for index in 0..<rows.count where !opened {
+            rows.element(boundBy: index).press(forDuration: 1.0)
+            if clear.waitForExistence(timeout: 3) {
+                opened = true
+            } else {
+                app.tap()
+                sleep(1)
+            }
+        }
+        XCTAssertTrue(opened, "No goal on this day offered a way to clear it")
         clear.tap()
         sleep(2)
-        let after = (0..<rows.count).map { rows.element(boundBy: $0).label }
 
+        let after = (0..<rows.count).map { rows.element(boundBy: $0).label }
         XCTAssertNotEqual(before, after, "Clearing a day changed nothing")
     }
 

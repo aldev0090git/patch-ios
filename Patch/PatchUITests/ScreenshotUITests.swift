@@ -51,7 +51,7 @@ final class ScreenshotUITests: XCTestCase {
     @MainActor
     private func captureEditor(_ look: Look) {
         let app = XCUIApplication()
-        app.launchArguments = Look.language + look.arguments + ["-demo-data"]
+        app.launchArguments = Look.language + look.arguments + ["-reset-state", "-demo-data"]
         app.launch()
 
         // Identifiers, not labels, throughout this one: it is the test that
@@ -93,17 +93,21 @@ final class ScreenshotUITests: XCTestCase {
 
         onboarding.tap()
         sleep(1)
-        attach(app.screenshot(), named: "\(look.rawValue)-02-choose")
+        attach(app.screenshot(), named: "\(look.rawValue)-02-shapes")
 
         onboarding.tap()
         sleep(1)
-        attach(app.screenshot(), named: "\(look.rawValue)-03-how-it-works")
+        attach(app.screenshot(), named: "\(look.rawValue)-03-choose")
+
+        onboarding.tap()
+        sleep(1)
+        attach(app.screenshot(), named: "\(look.rawValue)-04-how-it-works")
     }
 
     @MainActor
     private func captureScreens(_ look: Look) {
         let app = XCUIApplication()
-        app.launchArguments = Look.language + look.arguments + ["-demo-data"]
+        app.launchArguments = Look.language + look.arguments + ["-reset-state", "-demo-data"]
         app.launch()
 
         XCTAssertTrue(app.staticTexts["Today"].waitForExistence(timeout: 10), "No Today screen")

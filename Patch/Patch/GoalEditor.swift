@@ -103,7 +103,7 @@ struct GoalEditor: View {
                     symbolPicker
                 }
 
-                Section("Target") {
+                Section {
                     Picker("Measure", selection: $kind) {
                         ForEach(MeasureKind.allCases, id: \.self) { kind in
                             Text(MeasureInput.kindLabel(for: kind)).tag(kind)
@@ -116,6 +116,13 @@ struct GoalEditor: View {
                         Text(verbatim: unitTrailing)
                             .foregroundStyle(.secondary)
                     }
+                    // Every other row here is a `Picker`, which has a label
+                    // for the separator to align with. This one has only a
+                    // placeholder, so SwiftUI found no leading label and lined
+                    // the separator up with the trailing unit instead — a
+                    // short stub two-thirds across that read as no separator
+                    // at all.
+                    .alignmentGuide(.listRowSeparatorLeading) { $0[.leading] }
 
                     if kind == .currency {
                         // Two sections rather than one long list: the four
@@ -139,6 +146,13 @@ struct GoalEditor: View {
                         Text("Reach the target").tag(Direction.atLeast)
                         Text("Stay under it").tag(Direction.atMost)
                     }
+                } header: {
+                    Text("Target")
+                } footer: {
+                    // The one choice on this form whose consequence is not
+                    // obvious from its label, and the one somebody picked and
+                    // then could not work out what they had made.
+                    aimExplanation
                 }
 
                 Section("Overall goal") {
@@ -211,6 +225,17 @@ struct GoalEditor: View {
         kind == .currency
             ? CurrencyOptions.symbol(for: currencyCode)
             : MeasureInput.unitLabel(for: kind)
+    }
+
+    /// Says what the chosen direction will actually do, with the kind of
+    /// example that makes it land.
+    @ViewBuilder
+    private var aimExplanation: some View {
+        if direction == .atLeast {
+            Text("Amounts add up until you reach the target, like reading 20 minutes.")
+        } else {
+            Text("A limit. Log each one and the day stays good while you are under it, like at most 2 coffees.")
+        }
     }
 
     /// Nil unless there is a real number behind it — an overall goal of zero

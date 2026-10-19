@@ -23,6 +23,13 @@ struct HowItWorksView: View {
                 )
             )
             TipRow(
+                symbol: "calendar",
+                title: Text("Missed a day? Fix it later"),
+                detail: Text(
+                    "Open the day in the Calendar and log it there. Nothing stops you going back."
+                )
+            )
+            TipRow(
                 symbol: "arrow.right",
                 title: Text("Swipe right to edit"),
                 detail: Text(
@@ -64,15 +71,36 @@ struct TipRow: View {
     }
 }
 
-/// The same three tips as a screen of their own, for the Settings route.
+/// The whole explanation as a screen of its own, for the Settings route.
+///
+/// Two halves, in the order someone needs them: what a goal *can be* — the
+/// three shapes, as cards they can tap — and then the gestures for working
+/// with one. The shapes come first because the gestures make no sense until
+/// you know what you are gesturing at.
 struct HowItWorksSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                HowItWorksView()
-                    .padding(20)
+                VStack(alignment: .leading, spacing: 28) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("What a goal can be")
+                            .font(.title3.bold())
+                        Text("Three shapes cover everything Patch tracks. The examples below are real — tap them.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                        GoalShapesView()
+                    }
+
+                    VStack(alignment: .leading, spacing: 14) {
+                        Text("Working with a goal")
+                            .font(.title3.bold())
+                        HowItWorksView()
+                    }
+                }
+                .padding(20)
             }
             .background(Color(uiColor: .systemGroupedBackground))
             .navigationTitle("How it works")
