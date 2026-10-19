@@ -6,7 +6,6 @@ struct ContentView: View {
     @State var model: TodayModel
     @State private var editing: Editing?
     @State private var isShowingSettings = false
-    @State private var scheduler = NotificationScheduler()
 
     /// What the editor sheet is currently doing. One piece of state rather
     /// than a bool plus an optional goal, which can disagree with each other.
@@ -103,10 +102,15 @@ struct ContentView: View {
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Settings", systemImage: "gearshape") { isShowingSettings = true }
                         .labelStyle(.iconOnly)
+                        // Identified as well as labelled: the label is
+                        // localised, so a test that names it only works in
+                        // the language it was written in.
+                        .accessibilityIdentifier("today.settings")
                 }
                 ToolbarItem(placement: .primaryAction) {
                     Button("Add goal", systemImage: "plus") { editing = .new }
                         .labelStyle(.iconOnly)
+                        .accessibilityIdentifier("today.add")
                 }
             }
             .sheet(isPresented: $isShowingSettings) {
@@ -115,15 +119,9 @@ struct ContentView: View {
             .sheet(item: $editing) { editing in
                 GoalEditor(goal: editing.goal) { goal in
                     withAnimation(.snappy) { model.save(goal) }
-                    Task { await scheduler.sync(goals: model.goals) }
                 }
             }
-            .task {
-                model.load()
-                // Also on every appear: a goal can reach the store from
-                // onboarding or a future sync without this screen being told.
-                await scheduler.sync(goals: model.goals)
-            }
+            .task { model.load() }
             // One place for the bad news, so no caller has to remember to
             // report its own failure.
             .onChange(of: model.failure) { _, failure in
@@ -176,9 +174,6 @@ struct ContentView: View {
     private func archive(_ goal: Goal) {
         withAnimation(.snappy) { model.archive(goal) }
         if model.failure == nil { Haptics.play(.archived) }
-        // An archived goal must stop reminding you about itself; nothing gets
-        // notifications switched off faster.
-        Task { await scheduler.sync(goals: model.goals) }
     }
 }
 

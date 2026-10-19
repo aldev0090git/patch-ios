@@ -301,6 +301,23 @@
         }
       }
     },
+    "A nudge to open Patch and tick off your day — not one per goal.": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нагадування відкрити Patch і відмітити свій день — одне на застосунок, а не на кожну ціль."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Напоминание открыть Patch и отметить свой день — одно на приложение, а не на каждую цель."
+          }
+        }
+      }
+    },
     "A short tap when you log something, and a longer one when you finish the day.": {
       "extractionState": "manual",
       "localizations": {
@@ -348,6 +365,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Добавить"
+          }
+        }
+      }
+    },
+    "Add a time": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Додати час"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить время"
           }
         }
       }
@@ -556,19 +590,19 @@
         }
       }
     },
-    "Change the target, days or reminder at any time. Past days keep the target they had.": {
+    "Change the target or the days at any time. Past days keep the target they had.": {
       "extractionState": "manual",
       "localizations": {
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Змінюйте ціль, дні чи нагадування будь-коли. Минулі дні зберігають свою попередню ціль."
+            "value": "Змінюйте ціль або дні будь-коли. Минулі дні зберігають свою ціль."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Меняйте цель, дни или напоминание когда угодно. Прошедшие дни сохраняют свою прежнюю цель."
+            "value": "Меняйте цель или дни когда угодно. Прошлые дни сохраняют свою цель."
           }
         }
       }
@@ -777,6 +811,23 @@
         }
       }
     },
+    "Daily reminders": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Щоденні нагадування"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ежедневные напоминания"
+          }
+        }
+      }
+    },
     "Dark": {
       "extractionState": "manual",
       "localizations": {
@@ -981,23 +1032,6 @@
         }
       }
     },
-    "Every day at this time.": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Щодня о цій порі."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Каждый день в это время."
-          }
-        }
-      }
-    },
     "Get started": {
       "extractionState": "manual",
       "localizations": {
@@ -1045,6 +1079,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Зелёный всегда означает завершённый день, а оранжевый — пропущенный, при любом акценте."
+          }
+        }
+      }
+    },
+    "How is today going?": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Як минає день?"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Как проходит день?"
           }
         }
       }
@@ -1372,19 +1423,19 @@
         }
       }
     },
-    "Only on the days you picked below.": {
+    "Open Patch and tick off what you have done.": {
       "extractionState": "manual",
       "localizations": {
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Лише у дні, які ви обрали нижче."
+            "value": "Відкрийте Patch і відмітьте, що вже зробили."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Только в дни, которые вы выбрали ниже."
+            "value": "Откройте Patch и отметьте, что уже сделали."
           }
         }
       }
@@ -1576,24 +1627,7 @@
         }
       }
     },
-    "Remind me": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нагадувати"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Напоминать"
-          }
-        }
-      }
-    },
-    "Reminder": {
+    "Reminders": {
       "extractionState": "manual",
       "localizations": {
         "uk": {
@@ -1605,7 +1639,7 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Напоминание"
+            "value": "Напоминания"
           }
         }
       }
@@ -1861,23 +1895,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ещё идёт сегодня"
-          }
-        }
-      }
-    },
-    "Still to do today.": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ще треба зробити сьогодні."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ещё нужно сделать сегодня."
           }
         }
       }

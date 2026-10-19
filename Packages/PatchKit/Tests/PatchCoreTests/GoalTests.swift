@@ -72,14 +72,18 @@ struct ReminderTests {
 
     @Test("An impossible time is clamped rather than refused")
     func outOfRangeIsClamped() {
-        // A corrupt row must not cost the user the whole goal.
+        // A corrupt stored value must not cost the user their reminders.
         #expect(Reminder(hour: 99, minute: 99) == Reminder(hour: 23, minute: 59))
         #expect(Reminder(hour: -4, minute: -1) == Reminder(hour: 0, minute: 0))
     }
 
-    @Test("A goal has no reminder unless one is set")
-    func remindersAreOptional() {
-        #expect(Goal(title: "Read", measure: .minutes(20)).reminder == nil)
+    @Test("Check-ins sort down the day, not by the order they were added")
+    func ordersByClockTime() {
+        let times = [Reminder(hour: 20, minute: 0), Reminder(hour: 8, minute: 45),
+                     Reminder(hour: 8, minute: 5)]
+        #expect(times.sorted() == [Reminder(hour: 8, minute: 5),
+                                   Reminder(hour: 8, minute: 45),
+                                   Reminder(hour: 20, minute: 0)])
     }
 }
 

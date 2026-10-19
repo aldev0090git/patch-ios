@@ -26,7 +26,7 @@ struct HowItWorksView: View {
                 symbol: "arrow.right",
                 title: Text("Swipe right to edit"),
                 detail: Text(
-                    "Change the target, days or reminder at any time. Past days keep the target they had."
+                    "Change the target or the days at any time. Past days keep the target they had."
                 )
             )
         }

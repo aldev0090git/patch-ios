@@ -28,9 +28,6 @@ struct GoalEditor: View {
         case daily, certainWeekdays, certainDates
     }
     @State private var currencyCode: String
-    @State private var remindsMe: Bool
-    @State private var notificationsDenied = false
-    @State private var reminderTime: Date
     @State private var symbolName: String
     @State private var kind: MeasureKind
     @State private var target: Decimal
@@ -78,11 +75,6 @@ struct GoalEditor: View {
         _currencyCode = State(
             initialValue: goal?.measure.currencyCode ?? CurrencyOptions.deviceDefault
         )
-        _remindsMe = State(initialValue: goal?.reminder != nil)
-        // Defaults to a time someone is likely awake and not yet asleep, rather
-        // than to whenever the editor happened to be opened.
-        _reminderTime = State(initialValue: Self.time(from: goal?.reminder) ?? Self.defaultTime)
-
         switch goal?.schedule ?? .daily {
         case .daily:
             _repeatMode = State(initialValue: .daily)
@@ -160,34 +152,6 @@ struct GoalEditor: View {
                     }
                 }
 
-                Section("Reminder") {
-                    Toggle("Remind me", isOn: $remindsMe)
-                    if remindsMe, notificationsDenied {
-                        // iOS only ever shows its prompt once, so asking again
-                        // does nothing. Say where the switch actually is.
-                        Label {
-                            Text("Notifications are off for Patch. Turn them on in Settings.")
-                        } icon: {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(Color.goalMissed)
-                        }
-                        .font(.caption)
-                    }
-                    if remindsMe {
-                        DatePicker(
-                            "Time",
-                            selection: $reminderTime,
-                            displayedComponents: .hourAndMinute
-                        )
-                        // Says what will actually happen: the reminder follows
-                        // the goal's own days, so a Mon/Wed goal is silent on
-                        // Sunday and the user should not have to guess that.
-                        Text(reminderExplanation)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
                 Section("Repeat") {
                     Picker("Days", selection: $repeatMode) {
                         Text("Every day").tag(RepeatMode.daily)
@@ -211,15 +175,12 @@ struct GoalEditor: View {
                     }
                 }
             }
-            .onChange(of: remindsMe) { _, isOn in
-                guard isOn else { notificationsDenied = false; return }
-                Task { notificationsDenied = await !NotificationScheduler().requestAuthorization() }
-            }
             .navigationTitle(existing == nil ? Text("New Goal") : Text("Edit Goal"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
+                        .accessibilityIdentifier("editor.cancel")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -228,6 +189,7 @@ struct GoalEditor: View {
                     }
                     .fontWeight(.semibold)
                     .disabled(!isValid)
+                    .accessibilityIdentifier("editor.save")
                 }
             }
         }
@@ -239,23 +201,6 @@ struct GoalEditor: View {
         kind == .currency
             ? CurrencyOptions.symbol(for: currencyCode)
             : MeasureInput.unitLabel(for: kind)
-    }
-
-    private static let defaultTime: Date = {
-        Calendar.current.date(from: DateComponents(hour: 20, minute: 0)) ?? .now
-    }()
-
-    private static func time(from reminder: Reminder?) -> Date? {
-        guard let reminder else { return nil }
-        return Calendar.current.date(
-            from: DateComponents(hour: reminder.hour, minute: reminder.minute)
-        )
-    }
-
-    private var reminderExplanation: String {
-        repeatMode == .daily
-            ? String(localized: "Every day at this time.")
-            : String(localized: "Only on the days you picked below.")
     }
 
     /// Nil unless there is a real number behind it — an overall goal of zero
@@ -271,13 +216,6 @@ struct GoalEditor: View {
         case .certainWeekdays: .daysOfWeek(weekdays)
         case .certainDates: .daysOfMonth(monthDays)
         }
-    }
-
-    private var chosenReminder: Reminder? {
-        guard remindsMe else { return nil }
-        let parts = Calendar.current.dateComponents([.hour, .minute], from: reminderTime)
-        guard let hour = parts.hour, let minute = parts.minute else { return nil }
-        return Reminder(hour: hour, minute: minute)
     }
 
     private var symbolPicker: some View {
@@ -336,7 +274,6 @@ struct GoalEditor: View {
             // would quietly erase the goal's history.
             createdAt: existing?.createdAt ?? .now,
             targetHistory: existing?.targetHistory ?? [],
-            reminder: chosenReminder,
             archivedAt: existing?.archivedAt
         )
 

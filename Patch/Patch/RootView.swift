@@ -20,6 +20,10 @@ struct RootView: View {
     @AppStorage(SettingsKey.appearance) private var appearance = Appearance.system
     @AppStorage(SettingsKey.accent) private var accent = AccentTheme.blue
 
+    @AppStorage(SettingsKey.remindersEnabled) private var remindersEnabled = false
+    @AppStorage(SettingsKey.reminderTimes) private var reminderTimesRaw
+        = DailyCheckIns.text(DailyCheckIns.standard)
+
     var body: some View {
         shell
             .id(hasCompletedOnboarding)
@@ -37,6 +41,14 @@ struct RootView: View {
                 if !hasCompletedOnboarding, let goals = try? store.loadGoals(), !goals.isEmpty {
                     hasCompletedOnboarding = true
                 }
+
+                // Re-stated on every launch rather than only when the setting
+                // changes. Permission can be revoked in iOS Settings, and a
+                // restored backup brings the preference without the requests.
+                await NotificationScheduler().sync(
+                    times: DailyCheckIns.parse(reminderTimesRaw),
+                    isEnabled: remindersEnabled
+                )
             }
             // Outside the presentation modifiers, not inside: a sheet inherits
             // the environment of the view the modifier is attached to, so a

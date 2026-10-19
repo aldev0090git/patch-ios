@@ -81,10 +81,20 @@ live in `Patch/Patch/Localizable.xcstrings`.
   translated out from under them.
 - **`xcodebuild` does not write new keys into the catalog** — only the Xcode IDE
   merges them. Working from the command line, read the extracted keys out of
-  `DerivedData/.../Build/Intermediates.noindex/Patch.build/.../Objects-normal/arm64/*.stringsdata`
-  (JSON despite the name) and add them to `Localizable.xcstrings` directly.
-  Check the diff of extracted-vs-catalog keys rather than trusting a build to
-  have noticed.
+  `DerivedData/Patch-*/Build/Intermediates.noindex/Patch.build/*/Patch.build/Objects-normal/arm64/*.stringsdata`
+  (JSON despite the name; `tables` maps a table name to a **list** of
+  `{key, location}`) and add them to `Localizable.xcstrings` directly. Check
+  the diff of extracted-vs-catalog keys rather than trusting a build to have
+  noticed, and **confirm the files are newer than your edit** — a stale
+  `stringsdata` reports every removed key as still in use. The parallel tree
+  under `DerivedData/Patch-*/Localization/Strings/` is the IDE's and is not
+  refreshed by `xcodebuild`.
+- **A translation can be correct and still wrong.** "Overall goal / Work toward
+  a total" is measure-neutral in English; the Russian said "Копить до суммы"
+  ("save up to a sum"), which made a feature that also covers 1000 km and 100
+  hours look like it was only for money. And two segments of one control
+  translated to strings that both truncated to "Определённы…", so the picker
+  offered the same option twice. Look at the screen in each language.
 - The Ukrainian and Russian strings are **unreviewed by a native speaker**. Say
   so when handing work over.
 
@@ -167,6 +177,17 @@ card would read green-for-finished under one theme and green-for-in-progress
 under another. That is also why `AccentTheme` offers no green — see the doc
 comment on it before adding a colour.
 
+## iOS schedules at most 64 local notifications per app
+
+Anything that plans notifications has to have a ceiling it cannot cross, and a
+test for it. Per-goal reminders had neither: one request per day a goal ran on
+meant ten weekday goals asked for seventy, iOS kept the 64 soonest, and the
+rest were dropped with no error — reminders that simply never arrived.
+
+Reminders are now **whole-app check-ins**, capped at `DailyCheckIns.maximum`.
+Do not reintroduce a per-goal reminder, and do not raise that cap without
+working out the worst case.
+
 ## Haptics are imperative, not `.sensoryFeedback`
 
 Every event in `Haptics` acknowledges something the user *just did*, so it goes
@@ -192,6 +213,11 @@ directly so no call site has to carry the setting; absent means on.
 - Tapping a `Toggle` row in a `Form` lands on the row and does not reliably
   flip it. Tap the switch end:
   `toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()`.
+- To check a translation in place, run `ScreenshotUITests` with
+  `TEST_RUNNER_PATCH_UI_LANGUAGE=ru`. A plain shell variable does not reach the
+  runner — it runs on the simulator — but `xcodebuild` forwards anything
+  prefixed `TEST_RUNNER_`, with the prefix stripped. Such a run must query by
+  **accessibility identifier**, never by label: the labels are translated.
 - Never drive a simulator the user has Xcode pointed at. Shutting one down
   under a live debug session leaves a stale `lldb-rpc-server` and a wedged
   DeviceHub, and Xcode then hangs on Replace and Stop.

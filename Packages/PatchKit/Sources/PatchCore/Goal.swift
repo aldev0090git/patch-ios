@@ -44,9 +44,6 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
     /// Past daily targets, oldest first. Empty while the target has never
     /// changed — see ``dailyTarget(on:calendar:)``.
     public var targetHistory: [TargetChange]
-    /// When to be nudged, if at all. Always follows ``schedule`` — a goal on
-    /// Mondays and Wednesdays is never reminded on a Sunday.
-    public var reminder: Reminder?
     /// Archived goals stop appearing in Today but keep their history.
     /// Soft deletion also avoids destructive CloudKit sync surprises.
     public var archivedAt: Date?
@@ -63,7 +60,6 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
         cumulativeDeadline: Date? = nil,
         createdAt: Date = .now,
         targetHistory: [TargetChange] = [],
-        reminder: Reminder? = nil,
         archivedAt: Date? = nil
     ) {
         self.id = id
@@ -77,7 +73,6 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
         self.cumulativeDeadline = cumulativeDeadline
         self.createdAt = createdAt
         self.targetHistory = targetHistory
-        self.reminder = reminder
         self.archivedAt = archivedAt
     }
 

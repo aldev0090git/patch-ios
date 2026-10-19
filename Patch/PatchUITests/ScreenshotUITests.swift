@@ -24,6 +24,15 @@ final class ScreenshotUITests: XCTestCase {
         var arguments: [String] {
             ["-appearance", rawValue, "-accentTheme", accent]
         }
+
+        /// Set `PATCH_UI_LANGUAGE` to check a translation in place. Unset for
+        /// the README captures, which are English.
+        static var language: [String] {
+            guard let code = ProcessInfo.processInfo.environment["PATCH_UI_LANGUAGE"] else {
+                return []
+            }
+            return ["-AppleLanguages", "(\(code))", "-AppleLocale", code]
+        }
     }
 
     override func setUpWithError() throws {
@@ -34,13 +43,48 @@ final class ScreenshotUITests: XCTestCase {
     @MainActor func testCaptureOnboardingDark() { captureOnboarding(.dark) }
     @MainActor func testCaptureScreensLight() { captureScreens(.light) }
     @MainActor func testCaptureScreensDark() { captureScreens(.dark) }
+    @MainActor func testCaptureEditor() { captureEditor(.light) }
+
+    /// The goal editor and the reminder settings, which the README set does
+    /// not cover and which are the two densest forms in the app — the places
+    /// a translation is most likely to overflow a row.
+    @MainActor
+    private func captureEditor(_ look: Look) {
+        let app = XCUIApplication()
+        app.launchArguments = Look.language + look.arguments + ["-demo-data"]
+        app.launch()
+
+        // Identifiers, not labels, throughout this one: it is the test that
+        // gets run against a translation, and every label it could name is
+        // translated.
+        let add = app.buttons["today.add"]
+        XCTAssertTrue(add.waitForExistence(timeout: 10), "No Today screen")
+        add.tap()
+        XCTAssertTrue(app.buttons["editor.save"].waitForExistence(timeout: 10), "No goal editor")
+        sleep(1)
+        attach(app.screenshot(), named: "\(look.rawValue)-10-editor-top")
+
+        app.swipeUp()
+        sleep(1)
+        attach(app.screenshot(), named: "\(look.rawValue)-11-editor-bottom")
+
+        app.buttons["editor.cancel"].tap()
+        sleep(1)
+        app.buttons["today.settings"].tap()
+        let reminders = app.switches["settings.reminders"]
+        XCTAssertTrue(reminders.waitForExistence(timeout: 10), "No reminder setting")
+        // Tapping the row lands on the row; the switch end is what flips it.
+        reminders.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+        sleep(2)
+        attach(app.screenshot(), named: "\(look.rawValue)-12-reminders")
+    }
 
     /// Onboarding only exists on a clean install, and demo data skips it, so
     /// it gets its own run with no goals in the store.
     @MainActor
     private func captureOnboarding(_ look: Look) {
         let app = XCUIApplication()
-        app.launchArguments = look.arguments
+        app.launchArguments = Look.language + look.arguments
         app.launch()
 
         let onboarding = app.buttons["onboarding.primary"]
@@ -59,7 +103,7 @@ final class ScreenshotUITests: XCTestCase {
     @MainActor
     private func captureScreens(_ look: Look) {
         let app = XCUIApplication()
-        app.launchArguments = look.arguments + ["-demo-data"]
+        app.launchArguments = Look.language + look.arguments + ["-demo-data"]
         app.launch()
 
         XCTAssertTrue(app.staticTexts["Today"].waitForExistence(timeout: 10), "No Today screen")

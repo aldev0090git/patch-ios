@@ -135,28 +135,6 @@ struct SwiftDataGoalStoreTests {
         #expect(restored.cumulativeDeadline == deadline)
     }
 
-    @Test("A reminder survives a round trip")
-    @MainActor
-    func reminderRoundTrip() throws {
-        let store = try makeStore()
-        try store.save(Goal(
-            title: "Read",
-            measure: .minutes(20),
-            reminder: Reminder(hour: 21, minute: 15)
-        ))
-
-        #expect(try store.loadGoals().first?.reminder == Reminder(hour: 21, minute: 15))
-    }
-
-    @Test("A goal with no reminder does not grow one")
-    @MainActor
-    func absentReminderStaysAbsent() throws {
-        let store = try makeStore()
-        try store.save(Goal(title: "Read", measure: .minutes(20)))
-
-        #expect(try store.loadGoals().first?.reminder == nil)
-    }
-
     @Test("A daily schedule round trips as daily")
     @MainActor
     func dailyScheduleRoundTrip() throws {

@@ -45,20 +45,26 @@ final class NotificationScheduler {
     /// Makes iOS match the plan exactly.
     ///
     /// Clears this app's pending requests first rather than diffing them: the
-    /// plan is small, rebuilding it is cheap, and a diff that goes wrong
-    /// leaves someone being reminded about a goal they deleted.
-    func sync(goals: [Goal]) async {
-        let planned = ReminderPlanner.plan(for: goals)
+    /// plan is at most four requests, rebuilding it is cheap, and a diff that
+    /// goes wrong leaves someone being reminded at a time they deleted.
+    ///
+    /// Called on launch and whenever the setting changes, so a reminder
+    /// removed in Settings is gone from iOS before the sheet closes.
+    func sync(times: [Reminder], isEnabled: Bool) async {
+        let planned = ReminderPlanner.plan(times: times, isEnabled: isEnabled)
         let existing = await center.pendingNotificationRequests().map(\.identifier)
         center.removePendingNotificationRequests(withIdentifiers: existing)
 
         guard !planned.isEmpty, await isAuthorized else { return }
 
-        let titles = Dictionary(uniqueKeysWithValues: goals.map { ($0.id, $0.localizedTitle) })
         for reminder in planned {
             let content = UNMutableNotificationContent()
-            content.title = titles[reminder.goalID] ?? String(localized: "Patch")
-            content.body = String(localized: "Still to do today.")
+            content.title = String(localized: "How is today going?")
+            // Deliberately says nothing about which goals are outstanding. A
+            // repeating trigger's text is fixed when it is scheduled, so a
+            // count written now would be yesterday's by the time it arrives —
+            // and "3 left" when the answer is none is worse than no number.
+            content.body = String(localized: "Open Patch and tick off what you have done.")
             content.sound = .default
 
             let request = UNNotificationRequest(

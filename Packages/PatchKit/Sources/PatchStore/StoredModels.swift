@@ -34,8 +34,6 @@ public final class StoredGoal {
     /// JSON rather than parallel arrays: CloudKit takes `Data` happily, and
     /// two arrays that must stay the same length is a bug waiting to happen.
     public var targetHistoryData: Data?
-    public var reminderHour: Int?
-    public var reminderMinute: Int?
     public var archivedAt: Date?
 
     public init(_ goal: Goal) {
@@ -71,8 +69,6 @@ public final class StoredGoal {
         targetHistoryData = goal.targetHistory.isEmpty
             ? nil
             : try? JSONEncoder().encode(goal.targetHistory)
-        reminderHour = goal.reminder?.hour
-        reminderMinute = goal.reminder?.minute
         archivedAt = goal.archivedAt
     }
 
@@ -97,12 +93,6 @@ public final class StoredGoal {
         return (try? JSONDecoder().decode([TargetChange].self, from: targetHistoryData)) ?? []
     }
 
-    /// Both halves or neither — a half-written row is not a reminder.
-    private var reminder: Reminder? {
-        guard let reminderHour, let reminderMinute else { return nil }
-        return Reminder(hour: reminderHour, minute: reminderMinute)
-    }
-
     public var domain: Goal {
         Goal(
             id: id,
@@ -120,7 +110,6 @@ public final class StoredGoal {
             cumulativeDeadline: cumulativeDeadline,
             createdAt: createdAt,
             targetHistory: targetHistory,
-            reminder: reminder,
             archivedAt: archivedAt
         )
     }

@@ -1,3 +1,4 @@
+import PatchCore
 import SwiftUI
 
 /// Look and feel, plus the one bit of help worth keeping reachable.
@@ -12,7 +13,17 @@ struct SettingsView: View {
     @AppStorage(SettingsKey.accent) private var accent = AccentTheme.blue
     @AppStorage(SettingsKey.haptics) private var hapticsEnabled = true
 
+    /// Off until asked for. Turning it on is what triggers iOS's permission
+    /// prompt, and an app that asks on first launch, before it has shown what
+    /// it is for, is the app people deny — after which there is no second
+    /// chance, because iOS only ever prompts once.
+    @AppStorage(SettingsKey.remindersEnabled) private var remindersEnabled = false
+    @AppStorage(SettingsKey.reminderTimes) private var reminderTimesRaw
+        = DailyCheckIns.text(DailyCheckIns.standard)
+
     @State private var isShowingHowItWorks = false
+    @State private var notificationsDenied = false
+    @State private var scheduler = NotificationScheduler()
 
     var body: some View {
         NavigationStack {
@@ -52,6 +63,8 @@ struct SettingsView: View {
                     Text("A short tap when you log something, and a longer one when you finish the day.")
                 }
 
+                reminders
+
                 Section {
                     Button {
                         isShowingHowItWorks = true
@@ -78,6 +91,27 @@ struct SettingsView: View {
             .sheet(isPresented: $isShowingHowItWorks) {
                 HowItWorksSheet()
             }
+            .task {
+                // Only worth checking when reminders are meant to be on: the
+                // warning is about a promise the app cannot keep, and it has
+                // made no promise while the switch is off.
+                guard remindersEnabled else { return }
+                notificationsDenied = await !scheduler.isAuthorized
+            }
+            .onChange(of: remindersEnabled) { _, isOn in
+                Task {
+                    // Asked here, at the moment someone says they want
+                    // reminders, rather than on first launch when they have
+                    // nothing to say yes to.
+                    if isOn {
+                        notificationsDenied = await !scheduler.requestAuthorization()
+                    } else {
+                        notificationsDenied = false
+                    }
+                    await syncReminders()
+                }
+            }
+            .onChange(of: reminderTimesRaw) { Task { await syncReminders() } }
         }
     }
 
@@ -121,6 +155,95 @@ struct SettingsView: View {
                     .strokeBorder(option.color, lineWidth: 2)
                     .opacity(isSelected ? 1 : 0)
             }
+    }
+
+    /// One set of times for the whole app, not one per goal — see
+    /// ``DailyCheckIns`` for the three reasons, one of which was a bug.
+    @ViewBuilder
+    private var reminders: some View {
+        Section {
+            Toggle("Daily reminders", isOn: $remindersEnabled)
+                .accessibilityIdentifier("settings.reminders")
+
+            if remindersEnabled, notificationsDenied {
+                // iOS only ever shows its prompt once, so asking again does
+                // nothing. Say where the switch actually is.
+                Label {
+                    Text("Notifications are off for Patch. Turn them on in Settings.")
+                } icon: {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(Color.goalMissed)
+                }
+                .font(.caption)
+            }
+
+            if remindersEnabled {
+                timeRows
+                if times.count < DailyCheckIns.maximum {
+                    Button("Add a time", systemImage: "plus") {
+                        times += [DailyCheckIns.suggestedAddition(after: times)]
+                        Haptics.play(.selection)
+                    }
+                }
+            }
+        } header: {
+            Text("Reminders")
+        } footer: {
+            Text("A nudge to open Patch and tick off your day — not one per goal.")
+        }
+    }
+
+    /// Swipe-to-delete only appears once there are two, because a reminder
+    /// list with nothing in it is a switch that is on and does nothing.
+    @ViewBuilder
+    private var timeRows: some View {
+        let rows = ForEach(times, id: \.self) { time in
+            DatePicker(
+                "Time",
+                selection: binding(for: time),
+                displayedComponents: .hourAndMinute
+            )
+            .accessibilityIdentifier("reminder.\(ReminderPlanner.identifier(for: time))")
+        }
+
+        if times.count > 1 {
+            rows.onDelete { offsets in
+                times = times.enumerated()
+                    .filter { !offsets.contains($0.offset) }
+                    .map(\.element)
+            }
+        } else {
+            rows
+        }
+    }
+
+    private var times: [Reminder] {
+        get { DailyCheckIns.parse(reminderTimesRaw) }
+        nonmutating set { reminderTimesRaw = DailyCheckIns.text(newValue) }
+    }
+
+    /// Bound by value rather than by index: editing a time re-sorts the list,
+    /// so the row an index pointed at a moment ago may now be a different one.
+    private func binding(for time: Reminder) -> Binding<Date> {
+        Binding(
+            get: { Self.date(from: time) },
+            set: { newValue in
+                let parts = Calendar.current.dateComponents([.hour, .minute], from: newValue)
+                guard let hour = parts.hour, let minute = parts.minute else { return }
+                let replacement = Reminder(hour: hour, minute: minute)
+                times = times.map { $0 == time ? replacement : $0 }
+            }
+        )
+    }
+
+    private static func date(from reminder: Reminder) -> Date {
+        Calendar.current.date(
+            from: DateComponents(hour: reminder.hour, minute: reminder.minute)
+        ) ?? .now
+    }
+
+    private func syncReminders() async {
+        await scheduler.sync(times: times, isEnabled: remindersEnabled)
     }
 
     private static var version: String {

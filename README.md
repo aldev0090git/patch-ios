@@ -72,9 +72,9 @@ Packages/PatchKit/
     GoalTemplate.swift      Ready-made goals for onboarding
     GoalStore.swift         The persistence contract, plus an in-memory store
   Sources/PatchStore/       The only place that imports SwiftData
-  Tests/                    124 tests, ~30 ms, no simulator needed
+  Tests/                    122 tests, ~30 ms, no simulator needed
 
-Patch/                      SwiftUI app target — 115 unit tests
+Patch/                      SwiftUI app target — 119 unit tests
   Patch/Localizable.xcstrings   English, Ukrainian, Russian
   PatchUITests/             Simulator tests, deliberately out of CI
 ```
@@ -188,6 +188,21 @@ reaching for it: it reads the asset catalog and ignores `.tint(_:)` entirely.
 Every call site that needs the accent as a *value* — a fill, an opacity, a
 stroke — takes it from the environment instead.
 
+### Reminders are for the app, not for each goal
+
+One set of check-in times — 12:00 and 20:00 by default, up to four — rather
+than a time on every goal.
+
+Per-goal reminders sounded thorough and were worse three ways. They nag: five
+habits with a time each is five notifications a day, and nothing gets an app's
+notifications switched off faster. They are tedious to keep. And they silently
+broke — **iOS allows 64 pending local notifications per app**, and one request
+per day a goal runs on meant ten weekday goals asking for seventy. iOS keeps
+the 64 soonest and discards the rest without an error, so some reminders simply
+never arrived.
+
+Four whole-app check-ins cannot reach that ceiling, and a test pins it.
+
 ### Vibration
 
 A light tap when you log something, a success note when a goal finishes, and
@@ -256,7 +271,7 @@ swatch it launched with comes back selected.
 - [x] Today, Calendar and Statistics screens
 - [x] Create, edit and archive goals
 - [x] Onboarding from goal templates
-- [x] Local notification reminders, following each goal's own schedule
+- [x] Daily reminders — a nudge for the app, not an alarm per goal
 - [x] Currencies, dates-of-month schedules, long-run targets
 - [x] Localisation — English (base), Ukrainian, Russian
 - [x] CI — build, test and lint on every push

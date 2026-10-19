@@ -8,6 +8,8 @@ nonisolated enum SettingsKey {
     static let appearance = "appearance"
     static let accent = "accentTheme"
     static let haptics = "hapticsEnabled"
+    static let remindersEnabled = "remindersEnabled"
+    static let reminderTimes = "reminderTimes"
 }
 
 /// Light, dark, or whatever the phone is doing.
