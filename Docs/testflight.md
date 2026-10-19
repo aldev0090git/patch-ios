@@ -1,7 +1,11 @@
 # Getting Patch onto TestFlight
 
-Written while the Apple Developer Program enrolment was still pending, so the
-steps below are in the order they will actually be needed.
+**Done — Patch has been on TestFlight since 20 October 2026.** What follows is
+what was actually required, kept because every step of it has to be repeated
+for each new build, and because the parts that were not obvious are the parts
+that cost time.
+
+Public link: `https://testflight.apple.com/join/W2KmuhsA`
 
 ## Before anything else
 
@@ -9,6 +13,14 @@ TestFlight needs a **paid Apple Developer Program membership** ($99/year). A
 free Apple ID gives you a Personal Team, which signs builds onto *your own*
 devices with a profile that expires after seven days — useful for testing on
 real hardware, useless for sharing.
+
+**Enrol on the web**, at `developer.apple.com/programs/enroll/`. The in-app
+purchase route — Xcode, or the Apple Developer app — is refused for a Ukrainian
+Apple Account with *"This item is currently not available in your
+country/region"*. That is a storefront limit on the subscription, not a
+restriction on the programme: Ukraine is a supported territory, and the web
+purchase went through immediately. Activation took hours, not the two business
+days quoted.
 
 Enrol as an **Individual** unless there is a registered company: Organization
 enrolment additionally needs a D-U-N-S number. The only practical difference is
@@ -20,6 +32,20 @@ government ID exactly. Apple quotes 24–48 hours; outside the US it is routinel
 longer. Past 48 hours, open a ticket with Apple Developer Support quoting the
 Enrollment ID.
 
+## What has to exist before a build can be uploaded
+
+1. An **explicit App ID** at *Certificates, Identifiers & Profiles* —
+   `com.aldev0090.Patch`, matching case exactly. Xcode's wildcard team profile
+   is not enough; App Store Connect will not offer the bundle ID without it.
+   **No capabilities**: the app has no entitlements file and claims nothing.
+2. An **app record** in App Store Connect. The name must be unique across the
+   whole App Store — "Patch" was taken, hence **Patch: Habit Tracker**. The
+   name under the icon on the home screen is unaffected; that comes from the
+   bundle display name.
+3. **Test Information** filled in: feedback email, a beta description, contact
+   details, and review notes. Say *"no account or sign-in is needed"* — an
+   app a reviewer cannot get into is the usual cause of a rejection.
+
 ## Signing, without putting a team ID in the repository
 
 `DEVELOPMENT_TEAM` is deliberately **unset** in `project.pbxproj`. That is what
@@ -29,17 +55,21 @@ ID into the project file and takes that away.
 
 Keep it local instead:
 
-```bash
-# Signing.xcconfig — ignored by git
-DEVELOPMENT_TEAM = ABCDE12345
-CODE_SIGN_STYLE = Automatic
+This is already wired up. `Patch/Signing.xcconfig` is committed and holds only
+an *optional* include; the team lives in `Patch/Signing.local.xcconfig`, which
+is gitignored:
+
+```
+DEVELOPMENT_TEAM = YOURTEAMID
 ```
 
-Then in Xcode: **Project → Info → Configurations**, set both Debug and Release
-of the `Patch` target to use `Signing.xcconfig`. Add `Signing.xcconfig` to
-`.gitignore` alongside `secrets.xcconfig`, and check the diff of
-`project.pbxproj` afterwards — Xcode writes `DEVELOPMENT_TEAM` into the project
-anyway if the team is ever picked from the Signing tab.
+Because the include is `#include?`, a fresh clone with no local file builds for
+the simulator with no team, no warning and no error — which is all anyone
+reading the code needs.
+
+**Watch the diff.** Picking a team in Xcode's Signing & Capabilities tab writes
+`DEVELOPMENT_TEAM` back into `project.pbxproj` regardless. If it appears there,
+move it to the local xcconfig and revert the project file.
 
 ## Archive and upload
 
@@ -47,7 +77,13 @@ anyway if the team is ever picked from the Signing tab.
    has already seen, and this is the single most common upload failure.
    `MARKETING_VERSION` stays `1.0` until the app is actually released.
 2. Xcode → **Product → Destination → Any iOS Device**, then **Product → Archive**.
-3. In the Organizer: **Distribute App → TestFlight (and App Store)**.
+   Archive is greyed out on a simulator destination.
+3. In the Organizer: **Distribute App → App Store Connect**.
+
+   **Not "TestFlight Internal Only".** That marks the build internal-only for
+   ever: it can never reach external testers or the App Store, and the fix is
+   to archive and upload again. "App Store Connect" covers internal testing,
+   external testing and release from the one build.
 
 `ITSAppUsesNonExemptEncryption` is set to `NO` in the build settings, so uploads
 will not land in "Missing Compliance" and no export question is asked per build.
@@ -72,7 +108,14 @@ For TestFlight itself:
 - Builds **expire after 90 days**.
 
 External testing also wants a beta app description and a feedback email before
-review.
+review, and a **public link** is far easier than collecting addresses — anyone
+with the URL installs through TestFlight. Set a tester limit on it: a public
+link really is public, and a cap is the only thing between a link that leaks
+and a support burden.
+
+Watch for one thing in the external flow: the **"Sign-in required"** box comes
+up ticked by default. Patch has no sign-in, so untick it, or the form demands
+credentials that do not exist and will not let you continue.
 
 ## What to ask testers for
 
@@ -86,11 +129,12 @@ Two things this project genuinely cannot check on its own:
 - **How the haptics feel.** Every one of them was written and merged against a
   simulator, which has none.
 
-## Still open
+## Settled on a real device
 
-**Landscape.** The build declares landscape support, but no screen was designed
-for it and a UI-test rotation did not produce a usable landscape layout — the
-window stayed portrait-shaped. That result is not trustworthy (driving rotation
-from `XCUIDevice` is unreliable with SwiftUI), so this needs five seconds on a
-real device before deciding between supporting it properly and locking the app
-to portrait.
+All three of the things that could only be judged on hardware have been:
+
+- **Haptics** feel right. They had every one of them been written against a
+  simulator with no Taptic Engine.
+- **Landscape** works. The header now adapts to a compact height rather than
+  taking 40% of the screen.
+- **VoiceOver** works.

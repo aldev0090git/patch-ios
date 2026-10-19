@@ -2,6 +2,8 @@
 
 A goal and habit tracker for iPhone, built in SwiftUI.
 
+**On TestFlight:** [testflight.apple.com/join/W2KmuhsA](https://testflight.apple.com/join/W2KmuhsA)
+
 Reading twenty minutes a day, a hundred push-ups, two litres of water, money put
 aside when the salary lands, a day without smoking — Patch treats all of these as
 the same thing, and that single idea shapes the whole codebase.
@@ -72,9 +74,9 @@ Packages/PatchKit/
     GoalTemplate.swift      Ready-made goals for onboarding
     GoalStore.swift         The persistence contract, plus an in-memory store
   Sources/PatchStore/       The only place that imports SwiftData
-  Tests/                    122 tests, ~30 ms, no simulator needed
+  Tests/                    132 tests, ~30 ms, no simulator needed
 
-Patch/                      SwiftUI app target — 119 unit tests
+Patch/                      SwiftUI app target — 122 unit tests
   Patch/Localizable.xcstrings   English, Ukrainian, Russian
   PatchUITests/             Simulator tests, deliberately out of CI
 ```
@@ -224,6 +226,18 @@ login: the user is already signed into iCloud, so their goals reach a new
 iPhone without an account system existing at all. No credentials to lose, no
 recovery flow to build, and no one else's habit data on anybody's server.
 
+### And your data can leave
+
+"We never send it anywhere" would be a hollow promise if the data could never
+get out either — a lock with no key. Settings exports everything as a file you
+keep: **JSON** for a complete backup, every field of every goal and every
+entry including archived ones, in a shape that can be read back; or **CSV**,
+one row per goal per day, which is what opens usefully in a spreadsheet.
+
+Amounts in the CSV are in canonical units with a column naming them, because
+formatting them for display would make the file depend on who exported it. Two
+exports of the same data are byte-identical, so backups can be diffed.
+
 A third-party login like Google would only buy something if there were a backend
 to talk to, and there isn't one — it would mean building and paying for a
 server, and becoming the data controller for other people's personal routines,
@@ -277,6 +291,10 @@ swatch it launched with comes back selected.
 - [x] CI — build, test and lint on every push
 - [x] App icon
 - [x] Themes — light/dark/system and six accents — and haptics
+- [x] Backdating — fill in a day you forgot, from the Calendar
+- [x] Accessibility — VoiceOver, Dynamic Type, 44pt targets, Reduce Motion
+- [x] Data export — JSON backup and CSV, through the share sheet
+- [x] On TestFlight
 - [ ] Home screen widget *(requires Apple Developer Program)*
 - [ ] iCloud sync via SwiftData + CloudKit *(requires Apple Developer Program)*
 - [ ] HealthKit step import *(requires Apple Developer Program)*
