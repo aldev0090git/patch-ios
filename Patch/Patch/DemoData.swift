@@ -38,8 +38,20 @@ enum DemoData {
         )
         saving.cumulativeDeadline = calendar.date(byAdding: .month, value: 4, to: .now)
 
+        // An allowance, which is the one goal shape the other five do not
+        // cover: `atMost`, where being inside the limit is not the same as
+        // being finished for the day. The Today card got that wrong for a
+        // release, and nothing in the demo data would have shown it.
+        let coffee = Goal(
+            title: "Coffee",
+            symbolName: "cup.and.saucer",
+            measure: .times(2),
+            direction: .atMost,
+            createdAt: start
+        )
+
         let goals = [read, water, pushUps, gym, saving]
-        for goal in goals { try? store.save(goal) }
+        for goal in goals + [coffee] { try? store.save(goal) }
 
         // A fixed generator, so every screenshot run produces the same picture.
         var seed: UInt64 = 20_261_011
@@ -59,11 +71,24 @@ enum DemoData {
             }
         }
 
+        // Coffee runs after the others so that adding it did not shift the
+        // random sequence the rest of the history was generated from.
+        for dayOffset in stride(from: 62, through: 1, by: -1) {
+            guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: .now) else { continue }
+            // Usually one or two, occasionally a third — so the calendar shows
+            // real days over the limit rather than a flawless run.
+            let cups = next() < 0.8 ? Int(next() * 2) + 1 : 3
+            for _ in 0..<cups {
+                try? store.log(Entry(goalID: coffee.id, amount: 1, loggedAt: date))
+            }
+        }
+
         // Today, deliberately part-finished: the Today screen is at its most
         // informative mid-morning, not at midnight or bedtime.
         try? store.log(Entry(goalID: read.id, amount: 600, loggedAt: .now))
         try? store.log(Entry(goalID: water.id, amount: 1000, loggedAt: .now))
         try? store.log(Entry(goalID: pushUps.id, amount: 20, loggedAt: .now))
+        try? store.log(Entry(goalID: coffee.id, amount: 1, loggedAt: .now))
     }
 
     private static func log(

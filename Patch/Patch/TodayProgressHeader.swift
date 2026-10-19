@@ -13,6 +13,12 @@ import SwiftUI
 struct TodayProgressHeader: View {
     let progress: [DayProgress]
 
+    /// Scaled, not fixed. `Font.system(size:)` ignores Dynamic Type
+    /// completely — the audit reports it as "Dynamic Type font sizes are
+    /// unsupported" — so the one number this screen exists to show stayed
+    /// 46pt however large the reader had set their text.
+    @ScaledMetric(relativeTo: .largeTitle) private var percentSize: CGFloat = 46
+
     private var completed: Int { progress.count(where: \.isAchieved) }
 
     private var overallFraction: Double {
@@ -24,7 +30,7 @@ struct TodayProgressHeader: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(alignment: .firstTextBaseline) {
                 Text(overallFraction, format: .percent.precision(.fractionLength(0)))
-                    .font(.system(size: 46, weight: .bold, design: .rounded))
+                    .font(.system(size: percentSize, weight: .bold, design: .rounded))
                     .contentTransition(.numericText(value: overallFraction))
                     .foregroundStyle(allDone ? AnyShapeStyle(Color.goalDone) : AnyShapeStyle(.tint))
 

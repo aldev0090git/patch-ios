@@ -8,6 +8,7 @@ import SwiftUI
 /// tabs also stay legible at accessibility text sizes where four do not.
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @AppStorage(SettingsKey.appearance) private var appearance = Appearance.system
     @AppStorage(SettingsKey.accent) private var accent = AccentTheme.blue
@@ -134,7 +135,8 @@ struct SettingsView: View {
             }
             Spacer(minLength: 0)
         }
-        .animation(.snappy(duration: 0.25), value: accent)
+        .animation(Motion.animation(.snappy(duration: 0.25), reduceMotion: reduceMotion),
+                   value: accent)
     }
 
     /// Selection is shown by a ring around the swatch, not a tick inside it.

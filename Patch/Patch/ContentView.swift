@@ -3,6 +3,8 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.themeAccent) private var themeAccent
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State var model: TodayModel
     @State private var editing: Editing?
     @State private var isShowingSettings = false
@@ -118,7 +120,9 @@ struct ContentView: View {
             }
             .sheet(item: $editing) { editing in
                 GoalEditor(goal: editing.goal) { goal in
-                    withAnimation(.snappy) { model.save(goal) }
+                    withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
+                        model.save(goal)
+                    }
                 }
             }
             // On every appearance, not once. A tab keeps its view alive, so
@@ -175,7 +179,9 @@ struct ContentView: View {
     }
 
     private func archive(_ goal: Goal) {
-        withAnimation(.snappy) { model.archive(goal) }
+        withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
+            model.archive(goal)
+        }
         if model.failure == nil { Haptics.play(.archived) }
     }
 }

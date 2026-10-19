@@ -244,7 +244,7 @@ struct GoalEditor: View {
                         .foregroundStyle(symbol == symbolName ? themeAccent : .secondary)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(Text(verbatim: symbol))
+                .accessibilityLabel(Text(verbatim: SymbolNames.localizedName(for: symbol)))
                 .accessibilityAddTraits(symbol == symbolName ? [.isSelected] : [])
             }
         }

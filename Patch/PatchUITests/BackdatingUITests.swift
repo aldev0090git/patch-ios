@@ -52,6 +52,37 @@ final class BackdatingUITests: XCTestCase {
         )
     }
 
+    @MainActor
+    func testAPastDayCanBeClearedFromTheRow() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-demo-data"]
+        app.launch()
+
+        XCTAssertTrue(app.buttons["today.add"].waitForExistence(timeout: 10), "No Today screen")
+        app.tabBars.buttons.element(boundBy: 1).tap()
+
+        let firstOfMonth = app.descendants(matching: .any)
+            .matching(identifier: "calendar.day.1").firstMatch
+        XCTAssertTrue(firstOfMonth.waitForExistence(timeout: 10), "No calendar grid")
+        firstOfMonth.tap()
+
+        // Visible on the row, not only behind a long press — a way to undo
+        // that only the author knows about is not a way to undo.
+        let clear = app.descendants(matching: .any).matching(identifier: "day.clear").firstMatch
+        XCTAssertTrue(clear.waitForExistence(timeout: 5), "No visible way to clear a logged day")
+
+        // Every row, not the first one: the clear button belongs to whichever
+        // goal actually has something logged on that day, which is not
+        // necessarily the row at the top.
+        let rows = app.descendants(matching: .any).matching(identifier: "day.row")
+        let before = (0..<rows.count).map { rows.element(boundBy: $0).label }
+        clear.tap()
+        sleep(2)
+        let after = (0..<rows.count).map { rows.element(boundBy: $0).label }
+
+        XCTAssertNotEqual(before, after, "Clearing a day changed nothing")
+    }
+
     private func attach(_ screenshot: XCUIScreenshot, named name: String) {
         let attachment = XCTAttachment(screenshot: screenshot)
         attachment.name = name

@@ -3,6 +3,12 @@ import SwiftUI
 
 struct StatisticsView: View {
     @Environment(\.themeAccent) private var themeAccent
+
+    /// Scaled, not fixed. `Font.system(size:)` ignores Dynamic Type
+    /// completely — the audit reports it as "Dynamic Type font sizes are
+    /// unsupported" — so the one number this screen exists to show stayed
+    /// 44pt however large the reader had set their text.
+    @ScaledMetric(relativeTo: .largeTitle) private var percentSize: CGFloat = 44
     @State var model: StatisticsModel
 
     var body: some View {
@@ -74,7 +80,7 @@ struct StatisticsView: View {
                             .contentTransition(.numericText())
                     }
                 }
-                .font(.system(size: 44, weight: .bold, design: .rounded))
+                .font(.system(size: percentSize, weight: .bold, design: .rounded))
 
                 Spacer()
 
@@ -108,6 +114,7 @@ struct StatisticsView: View {
 
 /// Picks the kind of window, and walks backwards and forwards through it.
 private struct PeriodBar: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Bindable var model: StatisticsModel
 
     var body: some View {
@@ -150,7 +157,9 @@ private struct PeriodBar: View {
     /// One window back or forward, with a tick to say it moved. The title is
     /// the only thing that changes on screen and it is easy to miss.
     private func step(_ delta: Int) {
-        withAnimation(.snappy) { model.step(by: delta) }
+        withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
+            model.step(by: delta)
+        }
         Haptics.play(.selection)
     }
 
@@ -158,6 +167,8 @@ private struct PeriodBar: View {
         HStack(spacing: 10) {
             Button { step(-1) } label: {
                 Image(systemName: "chevron.left")
+                    .frame(width: 44, height: 44)
+                    .contentShape(.rect)
             }
             .accessibilityLabel(Text("Previous period"))
 
@@ -170,6 +181,8 @@ private struct PeriodBar: View {
 
             Button { step(1) } label: {
                 Image(systemName: "chevron.right")
+                    .frame(width: 44, height: 44)
+                    .contentShape(.rect)
             }
             .accessibilityLabel(Text("Next period"))
             // Nothing has happened in the future. A live arrow that walks into
@@ -220,6 +233,9 @@ private struct GoalStatisticsCard: View {
                     .foregroundStyle(themeAccent)
                     .frame(width: iconSize, height: iconSize)
                     .background(Color(uiColor: .tertiarySystemFill), in: .circle)
+                    // Decorative: the goal's name is right beside it, and the
+                    // symbol has no readable name of its own.
+                    .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(verbatim: row.goal.localizedTitle)

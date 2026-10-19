@@ -15,6 +15,8 @@ struct GoalCard: View {
     let onLog: (Decimal) -> Void
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @Environment(\.themeAccent) private var themeAccent
 
     /// Scaled so the ring and the tick grow with the text rather than shrinking
@@ -63,13 +65,17 @@ struct GoalCard: View {
             // Scoped to the background. Animating the whole card instead meant
             // its frame animated too, and while a swipe row was closing the two
             // fought: the card slid out of its own row and resized mid-flight.
-            .animation(.easeOut(duration: 0.35), value: progress.isAchieved)
-            .animation(.easeOut(duration: 0.35), value: progress.isFailed)
+            .animation(Motion.animation(.easeOut(duration: 0.35), reduceMotion: reduceMotion),
+                       value: progress.isAchieved)
+            .animation(Motion.animation(.easeOut(duration: 0.35), reduceMotion: reduceMotion),
+                       value: progress.isFailed)
         }
         .clipShape(.rect(cornerRadius: 22, style: .continuous))
         .sheet(isPresented: $isEnteringManually) {
             ManualEntrySheet(goal: goal) { amount in
-                withAnimation(.snappy) { onLog(amount) }
+                withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
+                    onLog(amount)
+                }
             }
         }
     }
@@ -98,8 +104,10 @@ struct GoalCard: View {
             Spacer(minLength: 8)
 
             statusIcon
-                .animation(.snappy, value: progress.isAchieved)
-                .animation(.snappy, value: progress.isFailed)
+                .animation(Motion.animation(.snappy, reduceMotion: reduceMotion),
+                           value: progress.isAchieved)
+                .animation(Motion.animation(.snappy, reduceMotion: reduceMotion),
+                           value: progress.isFailed)
         }
     }
 
@@ -111,12 +119,14 @@ struct GoalCard: View {
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: statusIconSize))
                 .foregroundStyle(.white, Color.goalDone)
-                .transition(.scale.combined(with: .opacity))
+                .transition(Motion.transition(.scale.combined(with: .opacity),
+                                              reduceMotion: reduceMotion))
         } else if progress.isFailed {
             Image(systemName: "exclamationmark.circle.fill")
                 .font(.system(size: statusIconSize))
                 .foregroundStyle(.white, Color.goalMissed)
-                .transition(.scale.combined(with: .opacity))
+                .transition(Motion.transition(.scale.combined(with: .opacity),
+                                              reduceMotion: reduceMotion))
         }
     }
 
@@ -133,21 +143,58 @@ struct GoalCard: View {
     private var footer: some View {
         ZStack {
             actions
-                .opacity(progress.isAchieved ? 0 : 1)
-                .allowsHitTesting(!progress.isAchieved)
-                .accessibilityHidden(progress.isAchieved)
+                .opacity(isSettled ? 0 : 1)
+                .allowsHitTesting(!isSettled)
+                .accessibilityHidden(isSettled)
 
             doneFooter
-                .opacity(progress.isAchieved ? 1 : 0)
-                .accessibilityHidden(!progress.isAchieved)
+                .opacity(isSettled ? 1 : 0)
+                .allowsHitTesting(isSettled)
+                .accessibilityHidden(!isSettled)
         }
-        .animation(.easeInOut(duration: 0.3), value: progress.isAchieved)
+        .animation(Motion.animation(.easeInOut(duration: 0.3), reduceMotion: reduceMotion),
+                   value: isSettled)
+    }
+
+    /// Whether the day's work is over, and the card should show its streak
+    /// instead of its buttons.
+    ///
+    /// **Not the same as achieved.** An `atMost` goal is inside its limit from
+    /// midnight — `0 <= 2` — so treating "achieved" as "finished" hid every
+    /// control on an allowance goal for the whole day. You could not log the
+    /// coffee, which also meant the goal could never fail, which is the one
+    /// thing it exists to notice. A limit is never finished with; it is only
+    /// still intact.
+    private var isSettled: Bool {
+        goal.direction == .atLeast && progress.isAchieved
+    }
+
+    private var doneFooter: some View {
+        HStack(spacing: 8) {
+            doneSummary
+            Spacer(minLength: 8)
+            // Hitting the target does not mean you stopped. Reading 25 minutes
+            // against a 20-minute goal is true and worth recording, and the
+            // long-run totals add up every entry — capping the day at its
+            // target would quietly under-report a savings goal.
+            //
+            // A `.bordered` `.small` button is exactly the height of the
+            // action buttons underneath, so the card keeps its one height.
+            // Check that before changing this control.
+            if goal.loggingStyle == .incremental {
+                Button("Add more", systemImage: "plus") { isEnteringManually = true }
+                    .labelStyle(.iconOnly)
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    .accessibilityIdentifier("card.addMore")
+            }
+        }
     }
 
     /// What a finished goal says for itself. The streak is the reward for
     /// having done it; without one there is nothing to boast about yet.
     @ViewBuilder
-    private var doneFooter: some View {
+    private var doneSummary: some View {
         if streak > 1 {
             Label {
                 Text("\(streak) day streak")
@@ -155,12 +202,10 @@ struct GoalCard: View {
                 Image(systemName: "flame.fill").foregroundStyle(Color.goalMissed)
             }
             .font(.subheadline.weight(.medium))
-            .frame(maxWidth: .infinity, alignment: .leading)
         } else {
             Text("Done for today")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
@@ -176,14 +221,18 @@ struct GoalCard: View {
                         actionButton(
                             Text(verbatim: MeasureFormatter.short(option.amount, measure: goal.measure))
                         ) {
-                            withAnimation(.snappy) { onLog(option.amount) }
+                            withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
+                    onLog(option.amount)
+                }
                         }
                     }
                     actionButton(Text("Manual")) { isEnteringManually = true }
 
                 case .single:
                     actionButton(Text("Done")) {
-                        withAnimation(.snappy) { onLog(1) }
+                        withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
+                            onLog(1)
+                        }
                     }
                 }
             }
@@ -207,7 +256,12 @@ struct GoalCard: View {
             label
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
-                .frame(maxWidth: .infinity)
+                // 44pt tall because this is the app's primary control and it
+                // was about 28 — under the smallest target iOS asks for. The
+                // expanding frame goes on the label, not the button: on the
+                // button it only equalises the invisible slots, leaving "5"
+                // as a tiny pill beside a wide "Manual".
+                .frame(maxWidth: .infinity, minHeight: 44)
         }
         .buttonStyle(.bordered)
         .controlSize(.small)
@@ -234,6 +288,7 @@ struct GoalCard: View {
 }
 
 private struct ProgressRing: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let fraction: Double
     let symbolName: String
     let accent: Color
@@ -257,11 +312,17 @@ private struct ProgressRing: View {
                 .foregroundStyle(accent)
         }
         .frame(width: size, height: size)
+        // Decorative. The ring repeats what the subtitle already says in
+        // words, and its glyph has no name VoiceOver could read — it was
+        // announcing "figure.strengthtraining.functional".
+        .accessibilityHidden(true)
         // Must not overshoot. Any bounce sends the trim past its target, and
         // past zero means SwiftUI clamps the negative part and then settles
         // back up through a small positive — a stub of arc on a ring that is
         // supposed to be empty. `easeOut` sweeps without overshooting.
-        .animation(.easeOut(duration: 0.4), value: fraction)
-        .animation(.easeOut(duration: 0.3), value: accent)
+        .animation(Motion.animation(.easeOut(duration: 0.4), reduceMotion: reduceMotion),
+                   value: fraction)
+        .animation(Motion.animation(.easeOut(duration: 0.3), reduceMotion: reduceMotion),
+                   value: accent)
     }
 }
