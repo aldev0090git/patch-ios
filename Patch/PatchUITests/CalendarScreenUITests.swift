@@ -14,7 +14,7 @@ final class CalendarScreenUITests: XCTestCase {
         // empty store the onboarding cover sits over everything and the tab
         // bar is never reachable.
         let app = XCUIApplication()
-        app.launchArguments = ["-demo-data"]
+        app.launchArguments = ["-reset-state", "-demo-data"]
         app.launch()
 
         XCTAssertTrue(app.buttons["today.add"].waitForExistence(timeout: 15), "No Today screen")

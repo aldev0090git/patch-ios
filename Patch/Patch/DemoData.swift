@@ -67,7 +67,7 @@ enum DemoData {
                 // Roughly three days in four, so streaks are real and gaps are
                 // real. The calendar needs both to be worth looking at.
                 guard next() < 0.76 else { continue }
-                log(goal: goal, on: date, into: store, random: next)
+                log(goal: goal, on: date, into: store, calendar: calendar, random: next)
             }
         }
 
@@ -78,8 +78,10 @@ enum DemoData {
             // Usually one or two, occasionally a third — so the calendar shows
             // real days over the limit rather than a flawless run.
             let cups = next() < 0.8 ? Int(next() * 2) + 1 : 3
-            for _ in 0..<cups {
-                try? store.log(Entry(goalID: coffee.id, amount: 1, loggedAt: date))
+            for cup in 0..<cups {
+                let at = calendar.date(bySettingHour: 8 + cup * 4, minute: 0, second: 0, of: date)
+                    ?? calendar.startOfDay(for: date)
+                try? store.log(Entry(goalID: coffee.id, amount: 1, loggedAt: at))
             }
         }
 
@@ -95,6 +97,7 @@ enum DemoData {
         goal: Goal,
         on date: Date,
         into store: GoalStore,
+        calendar: Calendar,
         random: () -> Double
     ) {
         let target = goal.measure.dailyTarget
@@ -102,14 +105,25 @@ enum DemoData {
         switch goal.measure.kind {
         case .duration, .volume:
             // Logged in pieces through the day, as these actually are.
+            //
+            // Anchored to fixed hours rather than offset from the seeding
+            // time. `date` is "now, n days ago", so adding three hours per
+            // piece pushed yesterday's last piece into today whenever the app
+            // was seeded after six in the evening — and today's totals then
+            // depended on the clock. Morning, midday, late afternoon always
+            // land inside the day they belong to.
             let pieces = Int(random() * 2) + 2
             let each = target / Decimal(pieces)
             for piece in 0..<pieces {
-                let at = date.addingTimeInterval(Double(piece) * 3600 * 3)
+                let at = calendar.date(
+                    bySettingHour: 8 + piece * 4, minute: 0, second: 0, of: date
+                ) ?? calendar.startOfDay(for: date)
                 try? store.log(Entry(goalID: goal.id, amount: each, loggedAt: at))
             }
         default:
-            try? store.log(Entry(goalID: goal.id, amount: target, loggedAt: date))
+            let at = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: date)
+                ?? calendar.startOfDay(for: date)
+            try? store.log(Entry(goalID: goal.id, amount: target, loggedAt: at))
         }
     }
 }

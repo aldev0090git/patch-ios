@@ -24,7 +24,7 @@ final class GoalCardHeightUITests: XCTestCase {
     @MainActor
     func testFinishingAndResettingAGoalDoNotChangeItsCardHeight() {
         let app = XCUIApplication()
-        app.launchArguments = ["-demo-data"]
+        app.launchArguments = ["-reset-state", "-demo-data"]
         app.launch()
 
         // Read is first and part-finished; Push-ups is below it, so it moves

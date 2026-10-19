@@ -34,10 +34,13 @@ struct PatchApp: App {
         let schema = Schema([StoredGoal.self, StoredEntry.self])
 
         #if DEBUG
-        // A UI test that needs a first run cannot uninstall the app, and the
-        // simulator keeps whatever the last test left behind — so the
-        // onboarding tests only passed when run on their own. This gives them
-        // an empty store without touching the one on disk.
+        // A UI test cannot uninstall the app, and the simulator keeps
+        // whatever the last test wrote — so a test that logs something leaves
+        // it there for the next one. Twenty minutes logged against Read by one
+        // run meant the next run opened with Read already finished and its
+        // buttons hidden. This gives any test a fresh store, on its own or in
+        // a suite, without touching the one on disk; pair it with
+        // `-demo-data` for a deterministic couple of months of history.
         if CommandLine.arguments.contains("-reset-state") {
             UserDefaults.standard.removeObject(forKey: "hasCompletedOnboarding")
             let fresh = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)

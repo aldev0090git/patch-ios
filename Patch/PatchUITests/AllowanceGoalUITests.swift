@@ -14,16 +14,20 @@ final class AllowanceGoalUITests: XCTestCase {
     @MainActor
     func testAnAllowanceGoalCanBeLoggedAndCanFail() {
         let app = XCUIApplication()
-        app.launchArguments = ["-demo-data"]
+        app.launchArguments = ["-reset-state", "-demo-data"]
         app.launch()
 
         XCTAssertTrue(app.buttons["today.add"].waitForExistence(timeout: 10), "No Today screen")
 
-        // "Within limit" is unique to the one `atMost` goal in the demo data,
-        // as are its bare "1" and "2" buttons — every other goal's amounts
-        // carry a unit or read "Done".
-        let state = app.staticTexts["Within limit"]
-        XCTAssertTrue(state.waitForExistence(timeout: 5), "No allowance goal on Today")
+        // The demo allowance starts the day on one cup of two, and that
+        // subtitle is unique to it — every other goal's amounts carry a unit.
+        // It is also the thing that was broken: an allowance used to say
+        // "Within limit" at nothing logged and at one of two alike, so logging
+        // one looked like it had done nothing.
+        XCTAssertTrue(
+            app.staticTexts["1 of 2"].waitForExistence(timeout: 5),
+            "An allowance goal showed no number, only a verdict"
+        )
 
         let one = app.buttons["1"]
         XCTAssertTrue(
@@ -36,8 +40,10 @@ final class AllowanceGoalUITests: XCTestCase {
         one.tap()
         one.tap()
 
+        // Three of two: the number is its own warning, and the card turns
+        // orange behind it.
         XCTAssertTrue(
-            app.staticTexts["Over the limit"].waitForExistence(timeout: 5),
+            app.staticTexts["3 of 2"].waitForExistence(timeout: 5),
             "Logging past the limit did not fail the day"
         )
     }
