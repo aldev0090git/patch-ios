@@ -70,7 +70,7 @@ struct RootView: View {
         // cover — before there is anything to load.
         TabView {
             Tab("Today", systemImage: "checkmark.circle") {
-                ContentView(model: TodayModel(store: store))
+                ContentView(store: store, model: TodayModel(store: store))
             }
 
             Tab("Calendar", systemImage: "calendar") {

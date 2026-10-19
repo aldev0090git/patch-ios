@@ -2,6 +2,11 @@ import PatchCore
 import SwiftUI
 
 struct ContentView: View {
+    /// Held as well as the model because exporting reads the store directly
+    /// rather than whatever this screen last loaded — a backup of a stale
+    /// copy is worse than no backup.
+    let store: GoalStore
+
     @Environment(\.themeAccent) private var themeAccent
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -116,7 +121,7 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $isShowingSettings) {
-                SettingsView()
+                SettingsView(store: store)
             }
             .sheet(item: $editing) { editing in
                 GoalEditor(goal: editing.goal) { goal in
@@ -194,5 +199,6 @@ struct ContentView: View {
         GoalTemplateCatalog.water.makeGoal(title: "Water"),
         GoalTemplateCatalog.quitSmoking.makeGoal(title: "Don't smoke")
     ]
-    return ContentView(model: TodayModel(store: InMemoryGoalStore(goals: goals)))
+    let store = InMemoryGoalStore(goals: goals)
+    return ContentView(store: store, model: TodayModel(store: store))
 }

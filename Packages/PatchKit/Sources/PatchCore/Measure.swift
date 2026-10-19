@@ -19,7 +19,11 @@ public enum MeasureKind: String, Codable, Sendable, CaseIterable, Hashable {
 }
 
 extension MeasureKind {
-    /// Short name of the unit amounts are stored in. Diagnostics only.
+    /// Short name of the unit amounts are stored in.
+    ///
+    /// Not for display — `MeasureFormatter` owns that, in the reader's own
+    /// language. This is for anything that has to name the unit plainly: a
+    /// diagnostic, or the `unit` column of an export.
     public var canonicalUnit: String {
         switch self {
         case .duration: "s"

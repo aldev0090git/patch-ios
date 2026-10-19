@@ -1,5 +1,6 @@
 import PatchCore
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// Look and feel, plus the one bit of help worth keeping reachable.
 ///
@@ -7,6 +8,8 @@ import SwiftUI
 /// places you go back to, and this is a place you visit twice a year. Three
 /// tabs also stay legible at accessibility text sizes where four do not.
 struct SettingsView: View {
+    let store: GoalStore
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -65,6 +68,8 @@ struct SettingsView: View {
                 }
 
                 reminders
+
+                yourData
 
                 Section {
                     Button {
@@ -157,6 +162,57 @@ struct SettingsView: View {
                     .strokeBorder(option.color, lineWidth: 2)
                     .opacity(isSelected ? 1 : 0)
             }
+    }
+
+    /// Taking your data away.
+    ///
+    /// Patch has no account and no server, which is only a defensible
+    /// position if the data can also leave. "We never send it anywhere" has
+    /// to come with "and here it is whenever you want it", or it is a lock
+    /// with no key.
+    @ViewBuilder
+    private var yourData: some View {
+        Section {
+            if let archive {
+                ShareLink(
+                    item: ExportFile(document: archive, type: .json),
+                    preview: SharePreview(archive.filename)
+                ) {
+                    Label("Export everything", systemImage: "square.and.arrow.up")
+                }
+                .accessibilityIdentifier("settings.exportJSON")
+            }
+            if let spreadsheet {
+                ShareLink(
+                    item: ExportFile(document: spreadsheet, type: .commaSeparatedText),
+                    preview: SharePreview(spreadsheet.filename)
+                ) {
+                    Label("Export as a spreadsheet", systemImage: "tablecells")
+                }
+                .accessibilityIdentifier("settings.exportCSV")
+            }
+        } header: {
+            Text("Your data")
+        } footer: {
+            Text("Everything, as a file you keep. The first is a complete backup; the second opens in a spreadsheet.")
+        }
+    }
+
+    /// Read from the store rather than from anything on screen, so a backup
+    /// is of what is actually saved. Archived goals included — archiving
+    /// hides a goal, it does not throw its history away.
+    private var archive: ExportDocument? {
+        guard let goals = try? store.loadGoals(), let entries = try? store.loadEntries() else {
+            return nil
+        }
+        return GoalExport.json(goals: goals, entries: entries)
+    }
+
+    private var spreadsheet: ExportDocument? {
+        guard let goals = try? store.loadGoals(), let entries = try? store.loadEntries() else {
+            return nil
+        }
+        return GoalExport.csv(goals: goals, entries: entries)
     }
 
     /// One set of times for the whole app, not one per goal — see
@@ -257,5 +313,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView()
+    SettingsView(store: InMemoryGoalStore())
 }
