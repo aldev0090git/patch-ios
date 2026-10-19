@@ -19,6 +19,9 @@ struct TodayProgressHeader: View {
     /// 46pt however large the reader had set their text.
     @ScaledMetric(relativeTo: .largeTitle) private var percentSize: CGFloat = 46
 
+    /// `.compact` means a landscape iPhone, where height is the scarce thing.
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+
     private var completed: Int { progress.count(where: \.isAchieved) }
 
     private var overallFraction: Double {
@@ -26,28 +29,48 @@ struct TodayProgressHeader: View {
         return progress.reduce(0) { $0 + $1.fraction } / Double(progress.count)
     }
 
+    /// Landscape on a phone leaves about half the height of portrait, and the
+    /// header was taking roughly 40% of it — one goal visible, and the rest
+    /// below the fold. Everything here still appears; it is only smaller and
+    /// closer together.
+    private var isShort: Bool { verticalSizeClass == .compact }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: isShort ? 8 : 14) {
             HStack(alignment: .firstTextBaseline) {
                 Text(overallFraction, format: .percent.precision(.fractionLength(0)))
-                    .font(.system(size: percentSize, weight: .bold, design: .rounded))
+                    .font(.system(size: isShort ? percentSize * 0.6 : percentSize,
+                                  weight: .bold, design: .rounded))
                     .contentTransition(.numericText(value: overallFraction))
                     .foregroundStyle(allDone ? AnyShapeStyle(Color.goalDone) : AnyShapeStyle(.tint))
 
                 Spacer()
 
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text("\(completed) of \(progress.count)")
-                        .font(.headline)
-                        .contentTransition(.numericText(value: Double(completed)))
-                    Text(allDone ? "All done" : "goals done")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                // Side by side when height is short, stacked when it is not.
+                // Two lines cost more than they are worth on a landscape phone.
+                if isShort {
+                    HStack(spacing: 6) {
+                        Text("\(completed) of \(progress.count)")
+                            .font(.subheadline.weight(.semibold))
+                            .contentTransition(.numericText(value: Double(completed)))
+                        Text(allDone ? "All done" : "goals done")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                } else {
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text("\(completed) of \(progress.count)")
+                            .font(.headline)
+                            .contentTransition(.numericText(value: Double(completed)))
+                        Text(allDone ? "All done" : "goals done")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
 
             SegmentedBar(progress: progress)
-                .frame(height: 10)
+                .frame(height: isShort ? 6 : 10)
         }
         .animation(.snappy, value: overallFraction)
         .accessibilityElement(children: .ignore)
