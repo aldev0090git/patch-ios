@@ -11,16 +11,35 @@ nonisolated enum CurrencyOptions {
         Locale.autoupdatingCurrent.currency?.identifier ?? "USD"
     }
 
-    /// Every ISO currency, with the reader's own first.
+    /// Offered first, in this order, because between them they cover almost
+    /// every goal this app is likely to hold.
+    ///
+    /// Alphabetical order put AED, AFN and ALL at the top of a list of about
+    /// a hundred and sixty, which is nobody's currency and three scrolls away
+    /// from everybody's.
+    static let common = ["USD", "EUR", "UAH", "RUB"]
+
+    /// ``common``, plus the reader's own if it is not already one of them.
+    ///
+    /// Appended rather than put first: a short list whose order never changes
+    /// can be learnt, and someone in Poland still finds PLN without scrolling.
+    static var featured: [String] {
+        let own = deviceDefault
+        return common.contains(own) ? common : common + [own]
+    }
+
+    /// Everything else, alphabetically.
+    static var others: [String] {
+        let shown = Set(featured)
+        return Locale.commonISOCurrencyCodes.filter { !shown.contains($0) }.sorted()
+    }
+
+    /// Every ISO currency, the featured few first.
     ///
     /// Not a curated shortlist: someone saving in a currency we did not think
     /// of would simply be unable to, and the list costs nothing to offer in
     /// full.
-    static var all: [String] {
-        let own = deviceDefault
-        let rest = Locale.commonISOCurrencyCodes.filter { $0 != own }.sorted()
-        return [own] + rest
-    }
+    static var all: [String] { featured + others }
 
     /// "EUR — Euro", in the reader's language.
     static func label(for code: String, locale: Locale = .autoupdatingCurrent) -> String {

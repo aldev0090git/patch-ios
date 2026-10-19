@@ -118,9 +118,19 @@ struct GoalEditor: View {
                     }
 
                     if kind == .currency {
+                        // Two sections rather than one long list: the four
+                        // that cover almost every case, then the other
+                        // hundred and sixty for the cases they do not.
                         Picker("Currency", selection: $currencyCode) {
-                            ForEach(CurrencyOptions.all, id: \.self) { code in
-                                Text(verbatim: CurrencyOptions.label(for: code)).tag(code)
+                            Section("Common") {
+                                ForEach(CurrencyOptions.featured, id: \.self) { code in
+                                    Text(verbatim: CurrencyOptions.label(for: code)).tag(code)
+                                }
+                            }
+                            Section("All currencies") {
+                                ForEach(CurrencyOptions.others, id: \.self) { code in
+                                    Text(verbatim: CurrencyOptions.label(for: code)).tag(code)
+                                }
                             }
                         }
                     }

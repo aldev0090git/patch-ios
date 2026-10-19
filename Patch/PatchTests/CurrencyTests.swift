@@ -63,10 +63,29 @@ struct CurrencyTests {
         }
     }
 
-    @Test("The reader's own currency is offered first")
-    func ownCurrencyLeadsTheList() {
-        #expect(CurrencyOptions.all.first == CurrencyOptions.deviceDefault)
-        #expect(Set(CurrencyOptions.all).count == CurrencyOptions.all.count)
+    @Test("The four that cover almost every case lead the list, in a fixed order")
+    func commonCurrenciesLeadTheList() {
+        // A fixed order can be learnt. Alphabetical put AED, AFN and ALL on
+        // top of about a hundred and sixty — nobody's currency, and three
+        // scrolls from everybody's.
+        #expect(CurrencyOptions.all.prefix(4) == ["USD", "EUR", "UAH", "RUB"])
+    }
+
+    @Test("The reader's own currency is never more than one scroll away")
+    func ownCurrencyIsFeatured() {
+        #expect(CurrencyOptions.featured.contains(CurrencyOptions.deviceDefault))
+        // Appended, not inserted, so the four above it never move.
+        #expect(CurrencyOptions.featured.prefix(4) == ["USD", "EUR", "UAH", "RUB"])
+    }
+
+    @Test("Nothing is offered twice, and nothing is lost")
+    func thePartsMakeTheWhole() {
+        let all = CurrencyOptions.all
+        #expect(Set(all).count == all.count)
+        #expect(all == CurrencyOptions.featured + CurrencyOptions.others)
+        // Every ISO code is still reachable: the sections split the list, they
+        // do not shorten it.
+        #expect(Set(Locale.commonISOCurrencyCodes).isSubset(of: Set(all)))
     }
 
     @Test("A symbol never comes back as digits")
