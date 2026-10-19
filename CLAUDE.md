@@ -218,6 +218,14 @@ directly so no call site has to carry the setting; absent means on.
   runner — it runs on the simulator — but `xcodebuild` forwards anything
   prefixed `TEST_RUNNER_`, with the prefix stripped. Such a run must query by
   **accessibility identifier**, never by label: the labels are translated.
+- **`xcodebuild` writes into the same DerivedData the user's Xcode uses.** A
+  command-line build, a `touch` of the sources to force string re-extraction,
+  or deleting anything under `DerivedData/Patch-*` invalidates the open Xcode's
+  incremental state, and it then reports errors for symbols that exist — "Cannot
+  find 'Haptics' in scope", "Type 'Color' has no member 'goalMissed'" — which
+  cost a round trip to diagnose. Prefer `-derivedDataPath` somewhere scratch for
+  anything other than a quick check, and if the user reports phantom errors,
+  confirm with a clean build in an isolated path before touching their code.
 - Never drive a simulator the user has Xcode pointed at. Shutting one down
   under a live debug session leaves a stale `lldb-rpc-server` and a wedged
   DeviceHub, and Xcode then hangs on Replace and Stop.
