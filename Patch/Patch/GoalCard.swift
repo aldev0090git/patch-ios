@@ -83,7 +83,7 @@ struct GoalCard: View {
     private var header: some View {
         HStack(spacing: 14) {
             ProgressRing(
-                fraction: progress.isFailed ? 1 : progress.fraction,
+                fraction: ringFraction,
                 symbolName: goal.symbolName,
                 accent: accent,
                 size: ringSize
@@ -119,12 +119,17 @@ struct GoalCard: View {
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: statusIconSize))
                 .foregroundStyle(.white, Color.goalDone)
+                // Labelled, because the subtitle now carries numbers rather
+                // than a verdict, and this mark is where the verdict lives.
+                .accessibilityLabel(goal.direction == .atMost
+                                    ? Text("Within limit") : Text("Done"))
                 .transition(Motion.transition(.scale.combined(with: .opacity),
                                               reduceMotion: reduceMotion))
         } else if progress.isFailed {
             Image(systemName: "exclamationmark.circle.fill")
                 .font(.system(size: statusIconSize))
                 .foregroundStyle(.white, Color.goalMissed)
+                .accessibilityLabel(Text("Over the limit"))
                 .transition(Motion.transition(.scale.combined(with: .opacity),
                                               reduceMotion: reduceMotion))
         }
@@ -154,6 +159,20 @@ struct GoalCard: View {
         }
         .animation(Motion.animation(.easeInOut(duration: 0.3), reduceMotion: reduceMotion),
                    value: isSettled)
+    }
+
+    /// How full the ring is.
+    ///
+    /// An allowance uses the share of the limit spent, not `fraction` — which
+    /// is binary for `atMost` and so sat at completely full from midnight,
+    /// telling you nothing. Logging one coffee against a limit of two now
+    /// moves the ring to half, which is the whole point of having one.
+    ///
+    /// Clamped, because a ring cannot be more than full. Going over is said
+    /// by the colour and the mark, not by a longer arc.
+    private var ringFraction: Double {
+        if let used = progress.budgetUsed { return min(1, used) }
+        return progress.isFailed ? 1 : progress.fraction
     }
 
     /// Whether the day's work is over, and the card should show its streak
@@ -276,11 +295,11 @@ struct GoalCard: View {
                 ? String(localized: "Done today")
                 : String(localized: "Not yet")
         }
-        if goal.direction == .atMost {
-            return progress.isAchieved
-                ? String(localized: "Within limit")
-                : String(localized: "Over the limit")
-        }
+        // Numbers, not just a verdict. "Within limit" was the same sentence
+        // at nothing logged and at one coffee of two, so logging one looked
+        // like it had done nothing at all. The same "n of n" the other goals
+        // use; over the limit reads as "3 of 2", which is its own warning, and
+        // the colour and the mark say the rest.
         let done = MeasureFormatter.short(progress.total, measure: goal.measure)
         let target = MeasureFormatter.short(progress.target, measure: goal.measure)
         return String(localized: "\(done) of \(target)")
