@@ -29,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CEA1B2C3D4E5F60708091A2B /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = SOURCE_ROOT; };
 		CED82F2F307AD6F5005B6D44 /* Patch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Patch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CED82F3C307AD6F6005B6D44 /* PatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CED82F46307AD6F6005B6D44 /* PatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PatchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +74,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE1B456C3086B749004FE4DB /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				CEA1B2C3D4E5F60708091A2B /* Signing.xcconfig */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		CED82F26307AD6F5005B6D44 = {
 			isa = PBXGroup;
 			children = (
@@ -80,6 +89,7 @@
 				CED82F3F307AD6F6005B6D44 /* PatchTests */,
 				CED82F49307AD6F6005B6D44 /* PatchUITests */,
 				CED82F30307AD6F5005B6D44 /* Products */,
+				CE1B456C3086B749004FE4DB /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -375,6 +385,7 @@
 		};
 		CED82F4F307AD6F6005B6D44 /* Debug configuration for PBXNativeTarget "Patch" */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CEA1B2C3D4E5F60708091A2B /* Signing.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -418,6 +429,7 @@
 		};
 		CED82F50307AD6F6005B6D44 /* Release configuration for PBXNativeTarget "Patch" */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CEA1B2C3D4E5F60708091A2B /* Signing.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

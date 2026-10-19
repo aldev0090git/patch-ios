@@ -12,3 +12,6 @@ secrets.xcconfig
 *.p12
 *.mobileprovision
 .env
+
+# Signing — a team ID belongs to a person, not to the repository
+Signing.local.xcconfig

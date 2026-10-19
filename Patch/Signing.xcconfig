@@ -1,0 +1,17 @@
+// Signing, kept out of the committed project.
+//
+// Picking a team in Xcode's Signing & Capabilities tab writes
+// DEVELOPMENT_TEAM straight into project.pbxproj, which is committed — so a
+// clone would carry one person's team and fail to build for everyone else.
+// This repository's promise is that anyone can clone it and press Run.
+//
+// The include below is optional (note the `?`): without the local file there
+// is no team and no warning, which is exactly right for someone who has just
+// cloned this and only wants the simulator.
+//
+// To sign on a real device, create Signing.local.xcconfig beside this file:
+//
+//     DEVELOPMENT_TEAM = YOURTEAMID
+//
+// It is ignored by git. Do not add your team to this file.
+#include? "Signing.local.xcconfig"
