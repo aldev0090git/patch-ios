@@ -528,13 +528,13 @@
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Певні числа"
+            "value": "Числа"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Определённые числа"
+            "value": "Числа"
           }
         }
       }
@@ -545,13 +545,13 @@
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Певні дні"
+            "value": "Дні тижня"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Определённые дни"
+            "value": "Дни недели"
           }
         }
       }
@@ -2126,13 +2126,13 @@
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Сума"
+            "value": "Скільки всього"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Сумма"
+            "value": "Сколько всего"
           }
         }
       }
@@ -2279,13 +2279,13 @@
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Накопичувати до суми"
+            "value": "Іти до загальної цілі"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Копить до суммы"
+            "value": "Идти к общей цели"
           }
         }
       }
