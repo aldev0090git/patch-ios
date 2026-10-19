@@ -163,6 +163,7 @@ final class CalendarModel {
         do {
             try store.log(entry)
             entries.append(entry)
+            publishToWidget()
         } catch {
             failure = String(localized: "Couldn't save that. \(error.localizedDescription)")
         }
@@ -179,9 +180,16 @@ final class CalendarModel {
             try store.deleteEntries(ids: doomed.map(\.id))
             let ids = Set(doomed.map(\.id))
             entries.removeAll { ids.contains($0.id) }
+            publishToWidget()
         } catch {
             failure = String(localized: "Couldn't reset that. \(error.localizedDescription)")
         }
+    }
+
+    /// Logging a past day can change today's picture — clearing today from
+    /// the Calendar, for one — so the home screen follows these writes too.
+    private func publishToWidget() {
+        WidgetPublisher.publish(goals: goals, entries: entries, calendar: calendar)
     }
 
     /// Midday, not midnight.

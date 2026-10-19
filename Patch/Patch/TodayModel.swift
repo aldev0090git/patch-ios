@@ -74,6 +74,7 @@ final class TodayModel {
         do {
             goals = try store.loadGoals()
             entries = try store.loadEntries()
+            publishToWidget()
         } catch {
             failure = String(localized: "Couldn't load your goals. \(error.localizedDescription)")
         }
@@ -84,6 +85,7 @@ final class TodayModel {
         do {
             try store.log(entry)
             entries.append(entry)
+            publishToWidget()
         } catch {
             failure = String(localized: "Couldn't save that. \(error.localizedDescription)")
         }
@@ -100,6 +102,7 @@ final class TodayModel {
             try store.deleteEntries(ids: doomed.map(\.id))
             let ids = Set(doomed.map(\.id))
             entries.removeAll { ids.contains($0.id) }
+            publishToWidget()
         } catch {
             failure = String(localized: "Couldn't reset that. \(error.localizedDescription)")
         }
@@ -110,6 +113,7 @@ final class TodayModel {
         do {
             try store.save(goal)
             goals = try store.loadGoals()
+            publishToWidget()
         } catch {
             failure = String(localized: "Couldn't save that. \(error.localizedDescription)")
         }
@@ -120,6 +124,13 @@ final class TodayModel {
     /// The goal stops appearing in Today but its history survives, so last
     /// month's statistics do not quietly change. Hard deletion would also
     /// fight CloudKit once sync is on.
+    /// After every write, so the home screen is never behind the app. Only
+    /// on success: a failed write must not advertise a day that did not
+    /// happen.
+    private func publishToWidget() {
+        WidgetPublisher.publish(goals: goals, entries: entries, calendar: calendar)
+    }
+
     func archive(_ goal: Goal) {
         var archived = goal
         archived.archivedAt = .now
