@@ -30,7 +30,10 @@ struct StatisticsView: View {
                     .padding(.bottom, 12)
                     .background(.bar)
             }
-            .task { model.load() }
+            // On every appearance, not once. A tab keeps its view alive, so
+            // a goal logged on another one stayed invisible here until the
+            // app was relaunched — and backdating makes that obvious.
+            .onAppear { model.load() }
             .alert(
                 "Something went wrong",
                 isPresented: Binding(

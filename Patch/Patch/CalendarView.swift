@@ -29,7 +29,10 @@ struct CalendarScreen: View {
                     .padding(.bottom, 12)
                     .background(.bar)
             }
-            .task { model.load() }
+            // On every appearance, not once. A tab keeps its view alive, so
+            // a goal logged on another one stayed invisible here until the
+            // app was relaunched — and backdating makes that obvious.
+            .onAppear { model.load() }
             .alert(
                 "Something went wrong",
                 isPresented: Binding(
@@ -194,6 +197,14 @@ private struct DayCell: View {
             .opacity(day.isInMonth ? 1 : 0.25)
             .accessibilityElement()
             .accessibilityLabel(label)
+            // Only the month's own days are identified: the cells borrowed
+            // from the neighbouring months would collide with them, and a
+            // test that taps "the 1st" must not land on next month's.
+            .accessibilityIdentifier(day.isInMonth ? "calendar.day.\(dayNumber)" : "")
+    }
+
+    private var dayNumber: Int {
+        Calendar.current.component(.day, from: day.date)
     }
 
     private var fill: Color {
@@ -220,15 +231,28 @@ private struct DayCell: View {
     }
 }
 
-/// What happened on the day the user tapped.
+/// What happened on the day the user tapped — and the only place a day that
+/// has already passed can be corrected.
+///
+/// Tapping a row logs against *that* day rather than today. The controls are
+/// the ones the goal already has on the Today screen — a once-a-day goal
+/// toggles, an incremental one opens the same amount picker — because a goal
+/// should not behave differently depending on which screen you reached it
+/// from.
 private struct SelectedDayCard: View {
     @Environment(\.themeAccent) private var themeAccent
     @Bindable var model: CalendarModel
 
+    /// Which goal's amount picker is open. One optional rather than a bool
+    /// plus a goal, which can disagree with each other.
+    @State private var entering: Goal?
+
+    private var day: Date { model.selectedDay ?? .now }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
-                Text(model.selectedDay ?? .now, format: .dateTime.weekday(.wide).day().month(.wide))
+                Text(day, format: .dateTime.weekday(.wide).day().month(.wide))
                     .font(.headline)
                 Spacer()
                 Button("Close", systemImage: "xmark") {
@@ -246,25 +270,14 @@ private struct SelectedDayCard: View {
                     .foregroundStyle(.secondary)
             } else {
                 ForEach(rows) { row in
-                    HStack(spacing: 12) {
-                        Image(systemName: row.goal.symbolName)
-                            .font(.footnote)
-                            .foregroundStyle(themeAccent)
-                            .frame(width: 26, height: 26)
-                            .background(Color(uiColor: .tertiarySystemFill), in: .circle)
-
-                        Text(verbatim: row.goal.localizedTitle)
-                            .font(.subheadline)
-
-                        Spacer(minLength: 8)
-
-                        Text(verbatim: amount(row))
-                            .font(.caption.monospacedDigit())
-                            .foregroundStyle(.secondary)
-
-                        Image(systemName: row.progress.isAchieved ? "checkmark.circle.fill" : "circle")
-                            .foregroundStyle(row.progress.isAchieved ? Color.goalDone : .secondary)
-                    }
+                    goalRow(row)
+                }
+                if model.isSelectedDayWritable {
+                    // Nothing about a list of rows says it can be written to,
+                    // and a feature nobody finds may as well not exist.
+                    Text("Tap a goal to log it for this day.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
         }
@@ -272,6 +285,117 @@ private struct SelectedDayCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(uiColor: .secondarySystemGroupedBackground))
         .clipShape(.rect(cornerRadius: 22, style: .continuous))
+        .sheet(item: $entering) { goal in
+            ManualEntrySheet(goal: goal) { amount in
+                log(amount, for: goal)
+            }
+        }
+    }
+
+    /// A row is a button only when the day can actually take an entry. A
+    /// future day, or a goal that was not scheduled, stays plain text — a
+    /// control that does nothing is worse than no control.
+    @ViewBuilder
+    private func goalRow(_ row: DayGoalProgress) -> some View {
+        if model.canLog(row.goal, on: day) {
+            Button {
+                tapped(row)
+            } label: {
+                rowContent(row)
+            }
+            .buttonStyle(.plain)
+            .contextMenu {
+                if model.hasLogged(row.goal, on: day) {
+                    Button("Clear this day", systemImage: "arrow.uturn.backward", role: .destructive) {
+                        clear(row.goal)
+                    }
+                }
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text(verbatim: accessibilityLabel(row)))
+            .accessibilityHint(hint(for: row))
+            .accessibilityAddTraits(row.progress.isAchieved ? [.isButton, .isSelected] : .isButton)
+            .accessibilityIdentifier("day.row")
+        } else {
+            rowContent(row)
+        }
+    }
+
+    private func rowContent(_ row: DayGoalProgress) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: row.goal.symbolName)
+                .font(.footnote)
+                .foregroundStyle(themeAccent)
+                .frame(width: 26, height: 26)
+                .background(Color(uiColor: .tertiarySystemFill), in: .circle)
+
+            Text(verbatim: row.goal.localizedTitle)
+                .font(.subheadline)
+
+            Spacer(minLength: 8)
+
+            Text(verbatim: amount(row))
+                .font(.caption.monospacedDigit())
+                .foregroundStyle(.secondary)
+
+            Image(systemName: row.progress.isAchieved ? "checkmark.circle.fill" : "circle")
+                .foregroundStyle(row.progress.isAchieved ? Color.goalDone : .secondary)
+        }
+        .contentShape(.rect)
+    }
+
+    /// A once-a-day goal toggles, like the checkbox it looks like. Anything
+    /// that accumulates opens the picker, because "how much" has no answer
+    /// the app could guess.
+    private func tapped(_ row: DayGoalProgress) {
+        switch row.goal.loggingStyle {
+        case .single:
+            if row.progress.isAchieved {
+                clear(row.goal)
+            } else {
+                log(1, for: row.goal)
+            }
+        case .incremental:
+            entering = row.goal
+        }
+    }
+
+    private func log(_ amount: Decimal, for goal: Goal) {
+        let wasAchieved = model.progress(for: goal, on: day).isAchieved
+        withAnimation(.snappy) { model.log(amount, for: goal, on: day) }
+
+        guard model.failure == nil else { return }
+        // No two-beat celebration here even when the day is finished off:
+        // that one belongs to finishing *today*, not to tidying up a
+        // Tuesday three weeks ago.
+        Haptics.play(model.progress(for: goal, on: day).isAchieved && !wasAchieved ? .completed : .logged)
+    }
+
+    private func clear(_ goal: Goal) {
+        withAnimation(.snappy) { model.clearDay(for: goal, on: day) }
+        if model.failure == nil { Haptics.play(.reset) }
+    }
+
+    /// Spoken as one sentence. Without this the row reads as four separate
+    /// elements — a symbol name, a title, "17 min of 20 min", and a circle —
+    /// and the tick, which is the whole answer, is the least obvious of them.
+    private func accessibilityLabel(_ row: DayGoalProgress) -> String {
+        let state = row.progress.isAchieved
+            ? String(localized: "Done")
+            : String(localized: "Not yet")
+        let detail = amount(row)
+        return detail.isEmpty
+            ? "\(row.goal.localizedTitle), \(state)"
+            : "\(row.goal.localizedTitle), \(detail), \(state)"
+    }
+
+    private func hint(for row: DayGoalProgress) -> Text {
+        if row.goal.loggingStyle == .single {
+            return row.progress.isAchieved
+                ? Text("Clears this day")
+                : Text("Marks this day done")
+        }
+        return Text("Adds an amount to this day")
     }
 
     private func amount(_ row: DayGoalProgress) -> String {

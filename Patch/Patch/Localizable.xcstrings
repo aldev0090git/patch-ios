@@ -403,6 +403,23 @@
         }
       }
     },
+    "Adds an amount to this day": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Додає значення до цього дня"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавляет значение к этому дню"
+          }
+        }
+      }
+    },
     "Aim to": {
       "extractionState": "manual",
       "localizations": {
@@ -620,6 +637,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Меняйте цель или дни когда угодно. Прошлые дни сохраняют свою цель."
+          }
+        }
+      }
+    },
+    "Clear this day": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Очистити цей день"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Очистить этот день"
+          }
+        }
+      }
+    },
+    "Clears this day": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Очищає цей день"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Очищает этот день"
           }
         }
       }
@@ -1215,6 +1266,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Вручную"
+          }
+        }
+      }
+    },
+    "Marks this day done": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Позначає цей день виконаним"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отмечает этот день выполненным"
           }
         }
       }
@@ -1963,6 +2031,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Системное"
+          }
+        }
+      }
+    },
+    "Tap a goal to log it for this day.": {
+      "extractionState": "manual",
+      "localizations": {
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Торкніться цілі, щоб відмітити її за цей день."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нажмите на цель, чтобы отметить её за этот день."
           }
         }
       }
