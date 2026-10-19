@@ -33,7 +33,11 @@ struct ManualEntrySheet: View {
                 .pickerStyle(.wheel)
                 .labelsHidden()
             }
-            .navigationTitle(goal.title)
+            // `localizedTitle`, not `title`: a goal seeded from a template
+            // keeps the English word in `title` and carries its key
+            // separately, so this sheet was the one screen showing "Read" to
+            // a Russian reader.
+            .navigationTitle(Text(verbatim: goal.localizedTitle))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
