@@ -92,6 +92,10 @@ struct SettingsView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
+                        // Identified because the localisation sweep has to
+                        // close this sheet in a language where "Done" is
+                        // "Готово".
+                        .accessibilityIdentifier("settings.done")
                 }
             }
             .sheet(isPresented: $isShowingHowItWorks) {
