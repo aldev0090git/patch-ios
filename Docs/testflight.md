@@ -37,7 +37,13 @@ Enrollment ID.
 1. An **explicit App ID** at *Certificates, Identifiers & Profiles* —
    `com.aldev0090.Patch`, matching case exactly. Xcode's wildcard team profile
    is not enough; App Store Connect will not offer the bundle ID without it.
-   **No capabilities**: the app has no entitlements file and claims nothing.
+
+   **Capabilities, as they were added:** App Groups (for the widget's shared
+   snapshot) and HealthKit. Tick **HealthKit**, not *HealthKit Estimate
+   Recalibration* — that is a narrow entitlement for apps correcting Apple's
+   own VO2 max estimates with their own hardware. Adding a capability
+   **invalidates existing provisioning profiles**; Xcode regenerates them, but
+   a signing error on the next archive is why.
 2. An **app record** in App Store Connect. The name must be unique across the
    whole App Store — "Patch" was taken, hence **Patch: Habit Tracker**. The
    name under the icon on the home screen is unaffected; that comes from the
@@ -97,6 +103,16 @@ Create the app record once, against bundle ID `com.aldev0090.Patch`.
 the app's best story: **Data Not Collected**, every category. No accounts, no
 server, no analytics, no third-party SDKs, no tracking. Nothing leaves the
 phone.
+
+Reading Apple Health does **not** change that answer. Apple defines collection
+as transmitting data off the device; Patch reads a daily total, writes it into
+its own local store and sends it nowhere. It stays "Data Not Collected".
+
+It does, however, require a **privacy policy URL** — App Review guideline 5.1.3
+makes one mandatory for any app that accesses HealthKit. TestFlight does not
+check for it; submission does. The text is in `Docs/privacy-policy.md` and
+needs to be served somewhere public, with a contact address filled in, before
+the app is submitted.
 
 For TestFlight itself:
 

@@ -188,6 +188,50 @@ Reminders are now **whole-app check-ins**, capped at `DailyCheckIns.maximum`.
 Do not reintroduce a per-goal reminder, and do not raise that cap without
 working out the worst case.
 
+## Apple Health fills goals in; it does not own them
+
+A goal carries an optional `healthSource`, set by the user in the editor. It is
+an explicit choice rather than an inference because **the domain cannot tell a
+step goal from a push-up goal** — both are `MeasureKind.count`, deliberately,
+and nothing about "10 000" says a phone can count it. Matching on a template id
+or a title would break the moment someone renames their goal, which the app
+invites them to do.
+
+- **The units already line up.** Patch stores counts dimensionless, distance in
+  metres, duration in seconds; HealthKit's SI units for these are `count()`,
+  `meter()` and `second()`. There is no conversion in this feature. A factor
+  appearing in `HealthKitReader.unit(for:)` means a measure kind has drifted
+  from its stored unit — fix that, not the reader.
+- **Imports are deltas, not totals.** Entries are immutable and Health's figure
+  for today climbs all day, so `HealthImportPlanner` writes the difference
+  between what Health says and what this goal has *already imported*. That is
+  what `Entry.source` is for: without it the planner would have to subtract the
+  whole day's total and would silently swallow anything logged by hand. Manual
+  and imported amounts add up, which is the honest reading of "I did both".
+- **A negative delta is correct**, not a bug. Deleting a workout in the Health
+  app lowers the day, and a goal that stayed high would claim something the
+  user has just said did not happen.
+- **Read permission cannot be queried.** `authorizationStatus(for:)` reports
+  *write* access only; Apple hides whether a read was refused, because "this
+  app knows you declined" is itself a disclosure. A refusal is indistinguishable
+  from a day with no data. So nothing in the app claims a goal is connected —
+  the editor footer says where to look instead. (`statusForAuthorizationRequest`
+  *is* answerable, but only says whether the question has been put — which
+  `requestAuthorization` already handles by not re-prompting, so it is not
+  worth keeping a wrapper for.)
+- Import runs on appear and on every return to the foreground, guarded by
+  `TodayModel.isImporting`: launch and the first `scenePhase` change would
+  otherwise both read the same entries before either had written.
+
+### The simulator does have HealthKit
+
+`Health.app`, `HealthKit.framework` and `HealthKitUI.framework` all ship in the
+iOS simulator runtime, and `isHealthDataAvailable()` is true there, so
+`HealthLinkUITests` can check that the editor row appears and disappears with
+the chosen measure. What the simulator has no sensors for is *data* — add
+samples by hand in its Health app, or test the numbers on a phone. The policy
+is covered without either, in `HealthImportTests`.
+
 ## Haptics are imperative, not `.sensoryFeedback`
 
 Every event in `Haptics` acknowledges something the user *just did*, so it goes
