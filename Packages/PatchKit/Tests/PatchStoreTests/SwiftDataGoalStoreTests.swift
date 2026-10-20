@@ -33,6 +33,21 @@ struct SwiftDataGoalStoreTests {
         return SwiftDataGoalStore(context: context)
     }
 
+    @Test("An arranged order survives a round trip, and absent means zero")
+    @MainActor
+    func sortIndexRoundTrip() throws {
+        let store = try makeStore()
+        try store.save(Goal(title: "Second", measure: .times(1), sortIndex: 1))
+        try store.save(Goal(title: "First", measure: .times(1), sortIndex: 0))
+        // A goal saved without one — every goal that existed before this
+        // field did — must read back as zero rather than as garbage.
+        try store.save(Goal(title: "Unarranged", measure: .times(1)))
+
+        let loaded = try store.loadGoals()
+        #expect(loaded.first { $0.title == "Second" }?.sortIndex == 1)
+        #expect(loaded.first { $0.title == "Unarranged" }?.sortIndex == 0)
+    }
+
     @Test("A goal's Health link and an entry's source survive a round trip")
     @MainActor
     func healthFieldsRoundTrip() throws {

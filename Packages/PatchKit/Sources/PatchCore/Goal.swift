@@ -44,6 +44,13 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
     /// Past daily targets, oldest first. Empty while the target has never
     /// changed — see ``dailyTarget(on:calendar:)``.
     public var targetHistory: [TargetChange]
+    /// Where this goal sits in the list the user arranged.
+    ///
+    /// Zero for every goal until someone reorders, which is why sorting is
+    /// always `(sortIndex, createdAt)` — with the whole list at zero the
+    /// creation date decides, which is exactly the order the app had before
+    /// this existed.
+    public var sortIndex: Int
     /// Set when the user asks for this goal to be filled in from Apple
     /// Health. Nil — the default, and the only value most goals ever have —
     /// means Patch never looks at Health for it.
@@ -64,6 +71,7 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
         cumulativeDeadline: Date? = nil,
         createdAt: Date = .now,
         targetHistory: [TargetChange] = [],
+        sortIndex: Int = 0,
         healthSource: HealthSource? = nil,
         archivedAt: Date? = nil
     ) {
@@ -78,6 +86,7 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
         self.cumulativeDeadline = cumulativeDeadline
         self.createdAt = createdAt
         self.targetHistory = targetHistory
+        self.sortIndex = sortIndex
         self.healthSource = healthSource
         self.archivedAt = archivedAt
     }

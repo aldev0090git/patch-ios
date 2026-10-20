@@ -34,6 +34,9 @@ public final class StoredGoal {
     /// JSON rather than parallel arrays: CloudKit takes `Data` happily, and
     /// two arrays that must stay the same length is a bug waiting to happen.
     public var targetHistoryData: Data?
+    /// Zero until the user arranges the list; `GoalOrder` breaks the tie on
+    /// `createdAt`, so a store full of zeroes reads in creation order.
+    public var sortIndex: Int = 0
     /// Raw so an unfamiliar source synced from a newer build degrades to
     /// "not linked to Health" instead of failing to decode the whole goal.
     public var healthSourceRaw: String?
@@ -72,6 +75,7 @@ public final class StoredGoal {
         targetHistoryData = goal.targetHistory.isEmpty
             ? nil
             : try? JSONEncoder().encode(goal.targetHistory)
+        sortIndex = goal.sortIndex
         healthSourceRaw = goal.healthSource?.rawValue
         archivedAt = goal.archivedAt
     }
@@ -114,6 +118,7 @@ public final class StoredGoal {
             cumulativeDeadline: cumulativeDeadline,
             createdAt: createdAt,
             targetHistory: targetHistory,
+            sortIndex: sortIndex,
             healthSource: healthSourceRaw.flatMap(HealthSource.init(rawValue:)),
             archivedAt: archivedAt
         )
