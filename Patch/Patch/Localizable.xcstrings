@@ -1,197 +1,132 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "%@ a day to make it": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ в день, чтобы успеть"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ a day to make it" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ в день, чтобы успеть"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ на день, щоб устигнути"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ на день, щоб устигнути"
           }
         }
       }
     },
-    "%@ every day": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ каждый день"
+    "%@ every day" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ каждый день"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ щодня"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ щодня"
           }
         }
       }
     },
-    "%@ of %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ из %@"
+    "%@ of %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ из %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ з %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ з %@"
           }
         }
       }
     },
-    "%@ on %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ по %@"
+    "%@ on %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ по %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ у %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ у %@"
           }
         }
       }
     },
-    "%lld day streak": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "variations": {
-            "plural": {
-              "few": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld дня подряд"
+    "%lld day streak" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld дня подряд"
                 }
               },
-              "many": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld дней подряд"
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld дней подряд"
                 }
               },
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld день подряд"
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld день подряд"
                 }
               },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld дня подряд"
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld дня подряд"
                 }
               }
             }
           }
         },
-        "uk": {
-          "variations": {
-            "plural": {
-              "few": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld дні поспіль"
+        "uk" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld дні поспіль"
                 }
               },
-              "many": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld днів поспіль"
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld днів поспіль"
                 }
               },
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld день поспіль"
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld день поспіль"
                 }
               },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld днів поспіль"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "%lld days left": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "variations": {
-            "plural": {
-              "few": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "осталось %lld дня"
-                }
-              },
-              "many": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "осталось %lld дней"
-                }
-              },
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "остался %lld день"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "осталось %lld дней"
-                }
-              }
-            }
-          }
-        },
-        "uk": {
-          "variations": {
-            "plural": {
-              "few": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld дні лишилося"
-                }
-              },
-              "many": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld днів лишилося"
-                }
-              },
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld день лишився"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld днів лишилося"
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld днів поспіль"
                 }
               }
             }
@@ -199,3400 +134,3468 @@
         }
       }
     },
-    "%lld done": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld выполнено"
+    "%lld days left" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "осталось %lld дня"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "осталось %lld дней"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "остался %lld день"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "осталось %lld дней"
+                }
+              }
+            }
+          }
+        },
+        "uk" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld дні лишилося"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld днів лишилося"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld день лишився"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld днів лишилося"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld выполнено"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld виконано"
+          }
+        }
+      }
+    },
+    "%lld done, %lld missed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld выполнено, %lld пропущено"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld виконано"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld виконано, %lld пропущено"
           }
         }
       }
     },
-    "%lld done, %lld missed": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld выполнено, %lld пропущено"
+    "%lld missed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld пропущено"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld виконано, %lld пропущено"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld пропущено"
           }
         }
       }
     },
-    "%lld missed": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld пропущено"
+    "%lld of %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld из %lld"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld пропущено"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld з %lld"
           }
         }
       }
     },
-    "%lld of %lld": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld из %lld"
+    "%lld of %lld goals done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld из %lld целей выполнено"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld з %lld"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld з %lld цілей виконано"
           }
         }
       }
     },
-    "%lld of %lld goals done": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld из %lld целей выполнено"
+    "A date the month doesn't have falls on its last day." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Число, которого нет в месяце, приходится на его последний день."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld з %lld цілей виконано"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Число, якого немає в місяці, припадає на його останній день."
           }
         }
       }
     },
-    "A date the month doesn't have falls on its last day.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Число, которого нет в месяце, приходится на его последний день."
+    "A limit. Log each one and the day stays good while you are under it, like at most 2 coffees." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Лимит. Отмечайте каждый раз; день удачный, пока вы его не превысили — например, не больше 2 кофе."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Число, якого немає в місяці, припадає на його останній день."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ліміт. Відмічайте кожен раз; день вдалий, доки ви не перевищили його — наприклад, не більше 2 кав."
           }
         }
       }
     },
-    "A limit. Log each one and the day stays good while you are under it, like at most 2 coffees.": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ліміт. Відмічайте кожен раз; день вдалий, доки ви не перевищили його — наприклад, не більше 2 кав."
+    "A nudge to open Patch and tick off your day — not one per goal." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Напоминание открыть Patch и отметить свой день — одно на приложение, а не на каждую цель."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Лимит. Отмечайте каждый раз; день удачный, пока вы его не превысили — например, не больше 2 кофе."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нагадування відкрити Patch і відмітити свій день — одне на застосунок, а не на кожну ціль."
           }
         }
       }
     },
-    "A nudge to open Patch and tick off your day — not one per goal.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Напоминание открыть Patch и отметить свой день — одно на приложение, а не на каждую цель."
+    "A short tap when you log something, and a longer one when you finish the day." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Короткая вибрация, когда вы что-то записываете, и подлиннее, когда завершаете день."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нагадування відкрити Patch і відмітити свій день — одне на застосунок, а не на кожну ціль."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Коротка вібрація, коли ви щось записуєте, і довша, коли завершуєте день."
           }
         }
       }
     },
-    "A short tap when you log something, and a longer one when you finish the day.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Короткая вибрация, когда вы что-то записываете, и подлиннее, когда завершаете день."
+    "Accent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Акцент"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Коротка вібрація, коли ви щось записуєте, і довша, коли завершуєте день."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Акцент"
           }
         }
       }
     },
-    "Accent": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Акцент"
+    "Add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Акцент"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Додати"
           }
         }
       }
     },
-    "Add": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Добавить"
+    "Add a time" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить время"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Додати"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Додати час"
           }
         }
       }
     },
-    "Add a time": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Добавить время"
+    "Add goal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить цель"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Додати час"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Додати ціль"
           }
         }
       }
     },
-    "Add goal": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Добавить цель"
+    "Add more" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить ещё"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Додати ціль"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Додати ще"
           }
         }
       }
     },
-    "Add more": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Добавить ещё"
+    "Add up to a target" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Накапливать до цели"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Додати ще"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Накопичувати до цілі"
           }
         }
       }
     },
-    "Add up to a target": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Накопичувати до цілі"
+    "Adds an amount to this day" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавляет значение к этому дню"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Накапливать до цели"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Додає значення до цього дня"
           }
         }
       }
     },
-    "Adds an amount to this day": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Добавляет значение к этому дню"
+    "Aim to" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Задача"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Додає значення до цього дня"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мета"
           }
         }
       }
     },
-    "Aim to": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Задача"
+    "All currencies" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Все валюты"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мета"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Усі валюти"
           }
         }
       }
     },
-    "All currencies": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Все валюты"
+    "All done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всё выполнено"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Усі валюти"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Усе виконано"
           }
         }
       }
     },
-    "All done": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Всё выполнено"
+    "Amount" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Количество"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Усе виконано"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кількість"
           }
         }
       }
     },
-    "Amount": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Количество"
+    "Amounts add up until you reach the target, like reading 20 minutes." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Значения складываются, пока вы не достигнете цели — например, читать 20 минут."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кількість"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Значення додаються, доки ви не досягнете цілі — наприклад, читати 20 хвилин."
           }
         }
       }
     },
-    "Amounts add up until you reach the target, like reading 20 minutes.": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Значення додаються, доки ви не досягнете цілі — наприклад, читати 20 хвилин."
+    "Appearance" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оформление"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Значения складываются, пока вы не достигнете цели — например, читать 20 минут."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оформлення"
           }
         }
       }
     },
-    "Appearance": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Оформление"
+    "Apple Health" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Health"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Оформлення"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Health"
           }
         }
       }
     },
-    "Apple Health": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apple Health"
+    "Archive" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В архив"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apple Health"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Архівувати"
           }
         }
       }
     },
-    "Archive": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "В архив"
+    "Bed" : {
+      "comment" : "Name of the icon for a bed.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кровать"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Архівувати"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ліжко"
           }
         }
       }
     },
-    "Bed": {
-      "comment": "Name of the icon for a bed.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кровать"
+    "Blue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Синий"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ліжко"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Синій"
           }
         }
       }
     },
-    "Blue": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Синий"
+    "Book" : {
+      "comment" : "Human-readable name for a book icon.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Книга"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Синій"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Книга"
           }
         }
       }
     },
-    "Book": {
-      "comment": "Human-readable name for a book icon.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Книга"
+    "By a date" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "К дате"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Книга"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "До дати"
           }
         }
       }
     },
-    "By a date": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "К дате"
+    "Calendar" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Календарь"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "До дати"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Календар"
           }
         }
       }
     },
-    "Calendar": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Календарь"
+    "Cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отменить"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Календар"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скасувати"
           }
         }
       }
     },
-    "Cancel": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Отменить"
+    "Certain dates" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Числа"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Скасувати"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Числа"
           }
         }
       }
     },
-    "Certain dates": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Числа"
+    "Certain days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дни недели"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Числа"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дні тижня"
           }
         }
       }
     },
-    "Certain days": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Дни недели"
+    "Change the target or the days at any time. Past days keep the target they had." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Меняйте цель или дни когда угодно. Прошлые дни сохраняют свою цель."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Дні тижня"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Змінюйте ціль або дні будь-коли. Минулі дні зберігають свою ціль."
           }
         }
       }
     },
-    "Change the target or the days at any time. Past days keep the target they had.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Меняйте цель или дни когда угодно. Прошлые дни сохраняют свою цель."
+    "Clear this day" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очистить этот день"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Змінюйте ціль або дні будь-коли. Минулі дні зберігають свою ціль."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очистити цей день"
           }
         }
       }
     },
-    "Clear this day": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Очистить этот день"
+    "Clears this day" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очищает этот день"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Очистити цей день"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очищає цей день"
           }
         }
       }
     },
-    "Clears this day": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Очищает этот день"
+    "Close" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрыть"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Очищає цей день"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрити"
           }
         }
       }
     },
-    "Close": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Закрыть"
+    "Coffee" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кофе"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Закрити"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кава"
           }
         }
       }
     },
-    "Coffee": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кава"
+    "Common" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Основные"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кофе"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Основні"
           }
         }
       }
     },
-    "Common": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Основные"
+    "Continue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Далее"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Основні"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Далі"
           }
         }
       }
     },
-    "Continue": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Далее"
+    "Couldn't create your goals. %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось создать цели. %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Далі"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося створити цілі. %@"
           }
         }
       }
     },
-    "Couldn't create your goals. %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось создать цели. %@"
+    "Couldn't load your calendar. %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось загрузить календарь. %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося створити цілі. %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося завантажити календар. %@"
           }
         }
       }
     },
-    "Couldn't load your calendar. %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось загрузить календарь. %@"
+    "Couldn't load your goals. %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось загрузить цели. %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося завантажити календар. %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося завантажити цілі. %@"
           }
         }
       }
     },
-    "Couldn't load your goals. %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось загрузить цели. %@"
+    "Couldn't load your statistics. %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось загрузить статистику. %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося завантажити цілі. %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося завантажити статистику. %@"
           }
         }
       }
     },
-    "Couldn't load your statistics. %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось загрузить статистику. %@"
+    "Couldn't reset that. %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сбросить. %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося завантажити статистику. %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося скинути. %@"
           }
         }
       }
     },
-    "Couldn't reset that. %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось сбросить. %@"
+    "Couldn't save that. %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить. %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося скинути. %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося зберегти. %@"
           }
         }
       }
     },
-    "Couldn't save that. %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось сохранить. %@"
+    "Couldn't save your Health data. %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить данные из Health. %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося зберегти. %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося зберегти дані з Health. %@"
           }
         }
       }
     },
-    "Couldn't save your Health data. %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось сохранить данные из Health. %@"
+    "Couldn't set up your first goals. %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось создать первые цели. %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося зберегти дані з Health. %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося створити перші цілі. %@"
           }
         }
       }
     },
-    "Couldn't set up your first goals. %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось создать первые цели. %@"
+    "Count" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Количество"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося створити перші цілі. %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кількість"
           }
         }
       }
     },
-    "Count": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Количество"
+    "Cup" : {
+      "comment" : "Name of the icon for a cup.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чашка"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кількість"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чашка"
           }
         }
       }
     },
-    "Cup": {
-      "comment": "Name of the icon for a cup.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Чашка"
+    "Currency" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Валюта"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Чашка"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Валюта"
           }
         }
       }
     },
-    "Currency": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Валюта"
+    "Custom" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Произвольный"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Валюта"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Довільний"
           }
         }
       }
     },
-    "Custom": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Произвольный"
+    "Daily reminders" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ежедневные напоминания"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Довільний"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Щоденні нагадування"
           }
         }
       }
     },
-    "Daily reminders": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ежедневные напоминания"
+    "Dark" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тёмное"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Щоденні нагадування"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Темне"
           }
         }
       }
     },
-    "Dark": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Тёмное"
+    "Date" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дата"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Темне"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дата"
           }
         }
       }
     },
-    "Date": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Дата"
+    "Day" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "День"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Дата"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "День"
           }
         }
       }
     },
-    "Day": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "День"
+    "Days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дни"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "День"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дні"
           }
         }
       }
     },
-    "Days": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Дни"
+    "demo.coffee" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coffee"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Дні"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кофе"
           }
-        }
-      }
-    },
-    "Distance": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Расстояние"
-          }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Відстань"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кава"
           }
         }
       }
     },
-    "Done": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Готово"
+    "Distance" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Расстояние"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Готово"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відстань"
           }
         }
       }
     },
-    "Done for today": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "На сегодня выполнено"
+    "Done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "На сьогодні виконано"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово"
           }
         }
       }
     },
-    "Done today": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Выполнено сегодня"
+    "Done for today" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На сегодня выполнено"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Виконано сьогодні"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На сьогодні виконано"
           }
         }
       }
     },
-    "Dumbbell": {
-      "comment": "Name of the icon for a dumbbell.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Гантель"
+    "Done today" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выполнено сегодня"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Гантель"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Виконано сьогодні"
           }
         }
       }
     },
-    "Edit": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Изменить"
+    "Dumbbell" : {
+      "comment" : "Name of the icon for a dumbbell.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гантель"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Редагувати"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гантель"
           }
         }
       }
     },
-    "Edit Goal": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Изменить"
+    "Edit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменить"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Змінити"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Редагувати"
           }
         }
       }
     },
-    "End": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Конец"
+    "Edit Goal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменить"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кінець"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Змінити"
           }
         }
       }
     },
-    "Every day": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Каждый день"
+    "End" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Конец"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Щодня"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кінець"
           }
         }
       }
     },
-    "Everything, as a file you keep. The first is a complete backup; the second opens in a spreadsheet.": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Усе, у вигляді файлу, який лишається у вас. Перший — повна резервна копія, другий відкривається в таблиці."
+    "Every day" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Каждый день"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Всё, в виде файла, который остаётся у вас. Первый — полная резервная копия, второй открывается в таблице."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Щодня"
           }
         }
       }
     },
-    "Export as a spreadsheet": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Експортувати таблицею"
+    "Everything, as a file you keep. The first is a complete backup; the second opens in a spreadsheet." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всё, в виде файла, который остаётся у вас. Первый — полная резервная копия, второй открывается в таблице."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Экспортировать таблицей"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Усе, у вигляді файлу, який лишається у вас. Перший — повна резервна копія, другий відкривається в таблиці."
           }
         }
       }
     },
-    "Export everything": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Експортувати все"
+    "Export as a spreadsheet" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Экспортировать таблицей"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Экспортировать всё"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Експортувати таблицею"
           }
         }
       }
     },
-    "Fill in from Apple Health": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Заполнять из Apple Health"
+    "Export everything" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Экспортировать всё"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Заповнювати з Apple Health"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Експортувати все"
           }
         }
       }
     },
-    "Food": {
-      "comment": "Name of the icon for a food goal.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Еда"
+    "Fill in from Apple Health" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заполнять из Apple Health"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Їжа"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заповнювати з Apple Health"
           }
         }
       }
     },
-    "Get started": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Начать"
+    "Food" : {
+      "comment" : "Name of the icon for a food goal.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Еда"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Почати"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Їжа"
           }
         }
       }
     },
-    "Graduation cap": {
-      "comment": "Name of the icon for a goal that is a graduation cap.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Выпускная шапочка"
+    "Get started" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начать"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Академічна шапочка"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Почати"
           }
         }
       }
     },
-    "Graphite": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Графит"
+    "goals done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "целей выполнено"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Графіт"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "цілей виконано"
           }
         }
       }
     },
-    "Green means a day you finished, orange a day you missed — whichever accent you pick.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Зелёный всегда означает завершённый день, а оранжевый — пропущенный, при любом акценте."
+    "Graduation cap" : {
+      "comment" : "Name of the icon for a goal that is a graduation cap.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выпускная шапочка"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Зелений завжди означає завершений день, а помаранчевий — пропущений, хоч який акцент."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Академічна шапочка"
           }
         }
       }
     },
-    "Heart": {
-      "comment": "Name of the heart icon.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сердце"
+    "Graphite" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Графит"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Серце"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Графіт"
           }
         }
       }
     },
-    "How it works": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Как это работает"
+    "Green means a day you finished, orange a day you missed — whichever accent you pick." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зелёный всегда означает завершённый день, а оранжевый — пропущенный, при любом акценте."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Як це працює"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зелений завжди означає завершений день, а помаранчевий — пропущений, хоч який акцент."
           }
         }
       }
     },
-    "How's today going?": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Как проходит день?"
+    "Heart" : {
+      "comment" : "Name of the heart icon.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сердце"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Як минає день?"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Серце"
           }
         }
       }
     },
-    "Icon": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Значок"
+    "How it works" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Как это работает"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Іконка"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Як це працює"
           }
         }
       }
     },
-    "Indigo": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Индиго"
+    "How's today going?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Как проходит день?"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Індиго"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Як минає день?"
           }
         }
       }
     },
-    "Leaf": {
-      "comment": "Name of a health and wellness icon.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Листок"
+    "Icon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Значок"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Листок"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Іконка"
           }
         }
       }
     },
-    "Light": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Светлое"
+    "Indigo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Индиго"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Світле"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Індиго"
           }
         }
       }
     },
-    "Log each one. The day stays good while you are inside the limit.": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Відмічайте кожен раз. День вдалий, доки ви не перевищили ліміт."
+    "Leaf" : {
+      "comment" : "Name of a health and wellness icon.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Листок"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Отмечайте каждый раз. День удачный, пока вы не превысили лимит."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Листок"
           }
         }
       }
     },
-    "Manual": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вручную"
+    "Light" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Светлое"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вручну"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Світле"
           }
         }
       }
     },
-    "Marks this day done": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Отмечает этот день выполненным"
+    "Log each one. The day stays good while you are inside the limit." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отмечайте каждый раз. День удачный, пока вы не превысили лимит."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Позначає цей день виконаним"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відмічайте кожен раз. День вдалий, доки ви не перевищили ліміт."
           }
         }
       }
     },
-    "Measure": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Единица"
+    "Manual" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вручную"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Одиниця"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вручну"
           }
         }
       }
     },
-    "Mind": {
-      "comment": "Name of the icon for the \"Mind\" goal.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Разум"
+    "Marks this day done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отмечает этот день выполненным"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Розум"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Позначає цей день виконаним"
           }
         }
       }
     },
-    "Missed": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пропущено"
+    "Measure" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Единица"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пропущено"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Одиниця"
           }
         }
       }
     },
-    "Missed a day? Fix it later": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пропустили день? Виправте пізніше"
+    "metres" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "метров"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пропустили день? Исправьте позже"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "метрів"
           }
         }
       }
     },
-    "Money": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Деньги"
+    "Mind" : {
+      "comment" : "Name of the icon for the \"Mind\" goal.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разум"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Гроші"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Розум"
           }
         }
       }
     },
-    "Month": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Месяц"
+    "minutes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "минут"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Місяць"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "хвилин"
           }
         }
       }
     },
-    "Music": {
-      "comment": "Human-readable name for a music note.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Музыка"
+    "Missed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пропущено"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Музика"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пропущено"
           }
         }
       }
     },
-    "Name": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Название"
+    "Missed a day? Fix it later" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пропустили день? Исправьте позже"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Назва"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пропустили день? Виправте пізніше"
           }
         }
       }
     },
-    "New Goal": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Новая цель"
+    "ml" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "мл"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нова ціль"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "мл"
           }
         }
       }
     },
-    "Next month": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Следующий месяц"
+    "Money" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Деньги"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Наступний місяць"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гроші"
           }
         }
       }
     },
-    "Next period": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Следующий период"
+    "Month" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Месяц"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Наступний період"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Місяць"
           }
         }
       }
     },
-    "Night": {
-      "comment": "Name of the icon for the \"night\" goal.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ночь"
+    "Music" : {
+      "comment" : "Human-readable name for a music note.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Музыка"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ніч"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Музика"
           }
         }
       }
     },
-    "No entry": {
-      "comment": "Name of the icon for a goal that is not allowed to be created.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Знак запрета"
+    "Name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Название"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Знак заборони"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Назва"
           }
         }
       }
     },
-    "Not yet": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ещё нет"
+    "New Goal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новая цель"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ще ні"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нова ціль"
           }
         }
       }
     },
-    "Nothing to report yet": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пока нет данных"
+    "Next month" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Следующий месяц"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Поки немає даних"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Наступний місяць"
           }
         }
       }
     },
-    "Nothing was scheduled.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ничего не было запланировано."
+    "Next period" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Следующий период"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нічого не було заплановано."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Наступний період"
           }
         }
       }
     },
-    "Notifications are off for Patch. Turn them on in Settings.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Уведомления для Patch отключены. Включите их в Настройках."
+    "Night" : {
+      "comment" : "Name of the icon for the \"night\" goal.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ночь"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сповіщення для Patch вимкнено. Увімкніть їх у Налаштуваннях."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ніч"
           }
         }
       }
     },
-    "OK": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ОК"
+    "No entry" : {
+      "comment" : "Name of the icon for a goal that is not allowed to be created.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Знак запрета"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Гаразд"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Знак заборони"
           }
         }
       }
     },
-    "Once a day": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Раз на день"
+    "Not yet" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ещё нет"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Раз в день"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ще ні"
           }
         }
       }
     },
-    "Once you have tracked a goal for a day or two, its numbers show up here.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Как только вы последите за целью день-другой, здесь появятся её показатели."
+    "Nothing to report yet" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пока нет данных"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Щойно ви відстежите ціль день-другий, тут з’являться її показники."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поки немає даних"
           }
         }
       }
     },
-    "One tap. For the things you either did or you didn't.": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Один дотик. Для того, що ви або зробили, або ні."
+    "Nothing was scheduled." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ничего не было запланировано."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Одно нажатие. Для того, что вы либо сделали, либо нет."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нічого не було заплановано."
           }
         }
       }
     },
-    "Open the day in the Calendar and log it there. Nothing stops you going back.": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Відкрийте цей день у календарі й відмітьте там. Повернутися назад можна будь-коли."
+    "Notifications are off for Patch. Turn them on in Settings." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уведомления для Patch отключены. Включите их в Настройках."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Откройте этот день в календаре и отметьте там. Вернуться назад можно когда угодно."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сповіщення для Patch вимкнено. Увімкніть їх у Налаштуваннях."
           }
         }
       }
     },
-    "Or use Manual for anything else. The ring fills as the day goes.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Или используйте «Вручную» для любого другого. Кольцо заполняется в течение дня."
+    "OK" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ОК"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Або скористайтеся «Вручну» для будь-якого іншого. Кільце заповнюється протягом дня."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гаразд"
           }
         }
       }
     },
-    "Over the limit": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Лимит превышен"
+    "Once a day" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Раз в день"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ліміт перевищено"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Раз на день"
           }
         }
       }
     },
-    "Overall goal": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Общая цель"
+    "Once you have tracked a goal for a day or two, its numbers show up here." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Как только вы последите за целью день-другой, здесь появятся её показатели."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Загальна ціль"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Щойно ви відстежите ціль день-другий, тут з’являться її показники."
           }
         }
       }
     },
-    "Past its date": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Срок прошёл"
+    "One tap. For the things you either did or you didn't." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Одно нажатие. Для того, что вы либо сделали, либо нет."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Термін минув"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Один дотик. Для того, що ви або зробили, або ні."
           }
         }
       }
     },
-    "Patch": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Patch"
+    "Open the day in the Calendar and log it there. Nothing stops you going back." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Откройте этот день в календаре и отметьте там. Вернуться назад можно когда угодно."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Patch"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкрийте цей день у календарі й відмітьте там. Повернутися назад можна будь-коли."
           }
         }
       }
     },
-    "Patch reads how far you walked and ran each day and keeps this goal up to date.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Patch ежедневно считывает, сколько вы прошли и пробежали, и обновляет эту цель."
+    "Or use Manual for anything else. The ring fills as the day goes." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Или используйте «Вручную» для любого другого. Кольцо заполняется в течение дня."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Patch щодня зчитує, скільки ви пройшли та пробігли, і оновлює цю ціль."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Або скористайтеся «Вручну» для будь-якого іншого. Кільце заповнюється протягом дня."
           }
         }
       }
     },
-    "Patch reads your exercise minutes each day and keeps this goal up to date.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Patch ежедневно считывает ваши минуты тренировок и обновляет эту цель."
+    "Over the limit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Лимит превышен"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Patch щодня зчитує ваші хвилини тренувань і оновлює цю ціль."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ліміт перевищено"
           }
         }
       }
     },
-    "Patch reads your step count each day and keeps this goal up to date.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Patch ежедневно считывает количество ваших шагов и обновляет эту цель."
+    "Overall goal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Общая цель"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Patch щодня зчитує кількість ваших кроків і оновлює цю ціль."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Загальна ціль"
           }
         }
       }
     },
-    "Pencil": {
-      "comment": "Human-readable name for the pencil icon.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Карандаш"
+    "Past its date" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Срок прошёл"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Олівець"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Термін минув"
           }
         }
       }
     },
-    "Period": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Период"
+    "Patch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patch"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Період"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patch"
           }
         }
       }
     },
-    "Pick as many as you like. You can change all of this later.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Выбирайте сколько угодно. Всё это можно изменить позже."
+    "Patch reads how far you walked and ran each day and keeps this goal up to date." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patch ежедневно считывает, сколько вы прошли и пробежали, и обновляет эту цель."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Обирайте скільки завгодно. Усе це можна змінити пізніше."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patch щодня зчитує, скільки ви пройшли та пробігли, і оновлює цю ціль."
           }
         }
       }
     },
-    "Pills": {
-      "comment": "Name of a health and wellness goal that is a pill.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Таблетки"
+    "Patch reads your exercise minutes each day and keeps this goal up to date." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patch ежедневно считывает ваши минуты тренировок и обновляет эту цель."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Таблетки"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patch щодня зчитує ваші хвилини тренувань і оновлює цю ціль."
           }
         }
       }
     },
-    "Previous month": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Предыдущий месяц"
+    "Patch reads your step count each day and keeps this goal up to date." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patch ежедневно считывает количество ваших шагов и обновляет эту цель."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Попередній місяць"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patch щодня зчитує кількість ваших кроків і оновлює цю ціль."
           }
         }
       }
     },
-    "Previous period": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Предыдущий период"
+    "Pencil" : {
+      "comment" : "Human-readable name for the pencil icon.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Карандаш"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Попередній період"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Олівець"
           }
         }
       }
     },
-    "Reach the target": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Достичь цели"
+    "per day" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "в день"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Досягти цілі"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "на день"
           }
         }
       }
     },
-    "Reached": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Достигнуто"
+    "Period" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Период"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Досягнуто"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Період"
           }
         }
       }
     },
-    "Reminders": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Напоминания"
+    "Pick as many as you like. You can change all of this later." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбирайте сколько угодно. Всё это можно изменить позже."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нагадування"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обирайте скільки завгодно. Усе це можна змінити пізніше."
           }
         }
       }
     },
-    "Repeat": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Повтор"
+    "Pills" : {
+      "comment" : "Name of a health and wellness goal that is a pill.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Таблетки"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Повтор"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Таблетки"
           }
         }
       }
     },
-    "Reset": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сбросить"
+    "Previous month" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Предыдущий месяц"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Скинути"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Попередній місяць"
           }
         }
       }
     },
-    "Reset clears today's entries for that goal. Archiving hides it but keeps its history.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "«Сбросить» убирает сегодняшние записи этой цели. Архивирование скрывает цель, но сохраняет историю."
+    "Previous period" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Предыдущий период"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "«Скинути» прибирає сьогоднішні записи цієї цілі. Архівування приховує ціль, але зберігає історію."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Попередній період"
           }
         }
       }
     },
-    "Reset today's progress for %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сбросить сегодняшний прогресс: %@"
+    "Reach the target" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Достичь цели"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Скинути сьогоднішній прогрес: %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Досягти цілі"
           }
         }
       }
     },
-    "Rose": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Розовый"
+    "Reached" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Достигнуто"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Рожевий"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Досягнуто"
           }
         }
       }
     },
-    "Running": {
-      "comment": "Name of the icon for the running goal.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бег"
+    "Reminders" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Напоминания"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Біг"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нагадування"
           }
         }
       }
+    },
+    "Reorder" : {
+
     },
-    "Save": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сохранить"
+    "Repeat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повтор"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Зберегти"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повтор"
           }
         }
       }
     },
-    "Settings": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Настройки"
+    "Reset" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сбросить"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Налаштування"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скинути"
           }
         }
       }
     },
-    "Small things, kept up. Track what you do each day and watch the days add up.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Маленькие дела, сделанные регулярно. Отслеживайте, что делаете каждый день, и смотрите, как дни складываются."
+    "Reset clears today's entries for that goal. Archiving hides it but keeps its history." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«Сбросить» убирает сегодняшние записи этой цели. Архивирование скрывает цель, но сохраняет историю."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Маленькі справи, зроблені регулярно. Відстежуйте, що робите щодня, і дивіться, як дні складаються."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«Скинути» прибирає сьогоднішні записи цієї цілі. Архівування приховує ціль, але зберігає історію."
           }
         }
       }
     },
-    "Some done": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Частично"
+    "Reset today's progress for %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сбросить сегодняшний прогресс: %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Частково"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скинути сьогоднішній прогрес: %@"
           }
         }
       }
     },
-    "Something went wrong": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Что-то пошло не так"
+    "Rose" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Розовый"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Щось пішло не так"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Рожевий"
           }
         }
       }
     },
-    "Start": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Начало"
+    "Running" : {
+      "comment" : "Name of the icon for the running goal.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бег"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Початок"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Біг"
           }
         }
       }
     },
-    "Start with none": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Начать без целей"
+    "Save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохранить"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Почати без цілей"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зберегти"
           }
         }
       }
     },
-    "Statistics": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Статистика"
+    "Settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настройки"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Статистика"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Налаштування"
           }
         }
       }
     },
-    "Stay under a limit": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не перевищувати ліміт"
+    "Small things, kept up. Track what you do each day and watch the days add up." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Маленькие дела, сделанные регулярно. Отслеживайте, что делаете каждый день, и смотрите, как дни складываются."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не превышать лимит"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Маленькі справи, зроблені регулярно. Відстежуйте, що робите щодня, і дивіться, як дні складаються."
           }
         }
       }
     },
-    "Stay under it": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не превышать"
+    "Some done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Частично"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не перевищувати"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Частково"
           }
         }
       }
     },
-    "Still going today": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ещё идёт сегодня"
+    "Something went wrong" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Что-то пошло не так"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ще триває сьогодні"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Щось пішло не так"
           }
         }
       }
     },
-    "Sun": {
-      "comment": "Name of the sun icon.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Солнце"
+    "Start" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начало"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сонце"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Початок"
           }
         }
       }
     },
-    "Swipe a goal left to reset or archive it": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Проведите по цели влево, чтобы сбросить или архивировать"
+    "Start with none" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Начать без целей"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Проведіть по цілі ліворуч, щоб скинути або архівувати"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Почати без цілей"
           }
         }
       }
     },
-    "Swipe right to edit": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Проведите вправо, чтобы редактировать"
+    "Statistics" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Статистика"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Проведіть праворуч, щоб редагувати"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Статистика"
           }
         }
       }
     },
-    "System": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Системное"
+    "Stay under a limit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не превышать лимит"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Системне"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не перевищувати ліміт"
           }
         }
       }
     },
-    "Tap a goal to log it for this day.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нажмите на цель, чтобы отметить её за этот день."
+    "Stay under it" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не превышать"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Торкніться цілі, щоб відмітити її за цей день."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не перевищувати"
           }
         }
       }
     },
-    "Tap an amount and it adds up through the day until you reach it.": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Торкайтеся значень — вони додаються протягом дня, доки ви не досягнете цілі."
+    "Still going today" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ещё идёт сегодня"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нажимайте на значения — они складываются в течение дня, пока вы не достигнете цели."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ще триває сьогодні"
           }
         }
       }
     },
-    "Tap an amount to log it": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нажмите на значение, чтобы записать его"
+    "Sun" : {
+      "comment" : "Name of the sun icon.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Солнце"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Торкніться значення, щоб записати його"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сонце"
           }
         }
       }
     },
-    "Target": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Цель"
+    "Swipe a goal left to reset or archive it" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проведите по цели влево, чтобы сбросить или архивировать"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ціль"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проведіть по цілі ліворуч, щоб скинути або архівувати"
           }
         }
       }
     },
-    "Teal": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бирюзовый"
+    "Swipe right to edit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проведите вправо, чтобы редактировать"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бірюзовий"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проведіть праворуч, щоб редагувати"
           }
         }
       }
     },
-    "The gestures from the welcome screen, in case you tapped past them.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Жесты с экрана приветствия — если вы их пролистнули."
+    "System" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Системное"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Жести з екрана привітання — якщо ви їх проґавили."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Системне"
           }
         }
       }
     },
-    "This month": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Этот месяц"
+    "Tap a goal to log it for this day." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите на цель, чтобы отметить её за этот день."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Цей місяць"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Торкніться цілі, щоб відмітити її за цей день."
           }
         }
       }
     },
-    "This week": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Эта неделя"
+    "Tap an amount and it adds up through the day until you reach it." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажимайте на значения — они складываются в течение дня, пока вы не достигнете цели."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Цей тиждень"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Торкайтеся значень — вони додаються протягом дня, доки ви не досягнете цілі."
           }
         }
       }
     },
-    "This year": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Этот год"
+    "Tap an amount to log it" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите на значение, чтобы записать его"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Цей рік"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Торкніться значення, щоб записати його"
           }
         }
       }
     },
-    "Three shapes cover everything Patch tracks. The examples below are real — tap them.": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Три форми охоплюють усе, що відстежує Patch. Приклади нижче справжні — торкніться їх."
+    "Target" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цель"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Три формы охватывают всё, что отслеживает Patch. Примеры ниже настоящие — нажмите на них."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ціль"
           }
         }
       }
     },
-    "Three shapes cover everything. Tap the examples — they really work.": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Три форми охоплюють усе. Торкніться прикладів — вони справжні."
+    "Teal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бирюзовый"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Три формы охватывают всё. Нажмите на примеры — они настоящие."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бірюзовий"
           }
         }
       }
     },
-    "Three things worth knowing before you start.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Три вещи, которые стоит знать перед началом."
+    "template.gym" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gym"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Три речі, які варто знати перед початком."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спортзал"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спортзал"
+          }
         }
       }
     },
-    "Tick off what you've done today.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Отметьте, что вы сделали сегодня."
+    "template.meditate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meditate"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Відмітьте, що ви зробили сьогодні."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Медитация"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Медитація"
+          }
         }
       }
     },
-    "Time": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Время"
+    "template.pushUps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Push-ups"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отжимания"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Час"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відтискання"
           }
         }
       }
     },
-    "Today": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сегодня"
+    "template.quitSmoking" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Don't smoke"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не курить"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сьогодні"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не курити"
           }
         }
       }
     },
-    "Today's progress": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Прогресс за сегодня"
+    "template.read" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Читать"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Прогрес за сьогодні"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Читати"
           }
         }
       }
     },
-    "Total": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сколько всего"
+    "template.run" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Run"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Скільки всього"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бег"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Біг"
+          }
         }
       }
     },
-    "Track %lld": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Отслеживать %lld"
+    "template.saveMoney" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save money"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копить деньги"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Відстежувати %lld"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заощаджувати"
           }
         }
       }
     },
-    "Version": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Версия"
+    "template.steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steps"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Шаги"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Версія"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кроки"
           }
         }
       }
     },
-    "Vibration": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вибрация"
+    "template.water" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Water"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вібрація"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вода"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вода"
+          }
         }
       }
     },
-    "Violet": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Фиолетовый"
+    "The gestures from the welcome screen, in case you tapped past them." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жесты с экрана приветствия — если вы их пролистнули."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Фіолетовий"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жести з екрана привітання — якщо ви їх проґавили."
           }
         }
       }
     },
-    "Volume": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Объём"
+    "This month" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Этот месяц"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Об'єм"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цей місяць"
           }
         }
       }
     },
-    "Walking": {
-      "comment": "Name of the icon for a walking goal.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ходьба"
+    "This week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Эта неделя"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ходьба"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цей тиждень"
           }
         }
       }
     },
-    "Water drop": {
-      "comment": "Name of a health and wellness goal that is a water bottle.",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Капля воды"
+    "This year" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Этот год"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Крапля води"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цей рік"
           }
         }
       }
     },
-    "Week": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Неделя"
+    "Three shapes cover everything Patch tracks. The examples below are real — tap them." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Три формы охватывают всё, что отслеживает Patch. Примеры ниже настоящие — нажмите на них."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Тиждень"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Три форми охоплюють усе, що відстежує Patch. Приклади нижче справжні — торкніться їх."
           }
         }
       }
     },
-    "What a goal can be": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Якою може бути ціль"
+    "Three shapes cover everything. Tap the examples — they really work." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Три формы охватывают всё. Нажмите на примеры — они настоящие."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Какой может быть цель"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Три форми охоплюють усе. Торкніться прикладів — вони справжні."
           }
         }
       }
     },
-    "What do you want to keep up?": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Что хотите делать регулярно?"
+    "Three things worth knowing before you start." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Три вещи, которые стоит знать перед началом."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Що хочете робити регулярно?"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Три речі, які варто знати перед початком."
           }
         }
       }
     },
-    "Within limit": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "В пределах лимита"
+    "Tick off what you've done today." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отметьте, что вы сделали сегодня."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "У межах ліміту"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відмітьте, що ви зробили сьогодні."
           }
         }
       }
     },
-    "Work toward a total": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Идти к общей цели"
+    "Time" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Время"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Іти до загальної цілі"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Час"
           }
         }
       }
     },
-    "Working with a goal": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Як працювати з ціллю"
+    "times" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "раз"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Как работать с целью"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "разів"
           }
         }
       }
     },
-    "Workout": {
-      "comment": "Human-readable name for the SF Symbol \"figure.strengthtraining.functional\".",
-      "isCommentAutoGenerated": true,
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Тренировка"
+    "Today" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сегодня"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Тренування"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сьогодні"
           }
         }
       }
     },
-    "Year": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Год"
+    "Today's progress" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прогресс за сегодня"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Рік"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прогрес за сьогодні"
           }
         }
       }
     },
-    "Yesterday": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вчера"
+    "Total" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сколько всего"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вчора"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скільки всього"
           }
         }
       }
     },
-    "You can still log by hand, and both will count. If nothing appears, check Settings › Privacy & Security › Health.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вы по-прежнему можете записывать вручную — засчитается и то, и другое. Если ничего не появляется, проверьте Настройки › Конфиденциальность и безопасность › Здоровье."
+    "Track %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отслеживать %lld"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ви й далі можете записувати вручну — зарахується і те, і те. Якщо нічого не з’являється, перевірте Налаштування › Конфіденційність і безпека › Здоров’я."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відстежувати %lld"
           }
         }
       }
     },
-    "Your data": {
-      "extractionState": "manual",
-      "localizations": {
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ваші дані"
+    "Version" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Версия"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ваши данные"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Версія"
           }
         }
       }
     },
-    "demo.coffee": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Coffee"
+    "Vibration" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вибрация"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кофе"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вібрація"
           }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кава"
-          }
         }
       }
     },
-    "goals done": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "целей выполнено"
+    "Violet" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Фиолетовый"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "цілей виконано"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Фіолетовий"
           }
         }
       }
     },
-    "metres": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "метров"
+    "Volume" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Объём"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "метрів"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Об'єм"
           }
         }
       }
     },
-    "minutes": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "минут"
+    "Walking" : {
+      "comment" : "Name of the icon for a walking goal.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ходьба"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "хвилин"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ходьба"
           }
         }
       }
     },
-    "ml": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "мл"
+    "Water drop" : {
+      "comment" : "Name of a health and wellness goal that is a water bottle.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Капля воды"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "мл"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Крапля води"
           }
         }
       }
     },
-    "per day": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "в день"
+    "Week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неделя"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "на день"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тиждень"
           }
         }
       }
     },
-    "template.gym": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gym"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Спортзал"
+    "What a goal can be" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Какой может быть цель"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Спортзал"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Якою може бути ціль"
           }
         }
       }
     },
-    "template.meditate": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meditate"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Медитация"
+    "What do you want to keep up?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Что хотите делать регулярно?"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Медитація"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Що хочете робити регулярно?"
           }
         }
       }
     },
-    "template.pushUps": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Push-ups"
+    "Within limit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В пределах лимита"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Отжимания"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "У межах ліміту"
           }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Відтискання"
-          }
         }
       }
     },
-    "template.quitSmoking": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Don't smoke"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не курить"
+    "Work toward a total" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Идти к общей цели"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не курити"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Іти до загальної цілі"
           }
         }
       }
     },
-    "template.read": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Read"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Читать"
+    "Working with a goal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Как работать с целью"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Читати"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Як працювати з ціллю"
           }
         }
       }
     },
-    "template.run": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Run"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бег"
+    "Workout" : {
+      "comment" : "Human-readable name for the SF Symbol \"figure.strengthtraining.functional\".",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тренировка"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Біг"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тренування"
           }
         }
       }
     },
-    "template.saveMoney": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save money"
+    "Year" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Год"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Копить деньги"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Рік"
           }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Заощаджувати"
-          }
         }
       }
     },
-    "template.steps": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Steps"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Шаги"
+    "Yesterday" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вчера"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кроки"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вчора"
           }
         }
       }
     },
-    "template.water": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Water"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вода"
+    "You can still log by hand, and both will count. If nothing appears, check Settings › Privacy & Security › Health." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы по-прежнему можете записывать вручную — засчитается и то, и другое. Если ничего не появляется, проверьте Настройки › Конфиденциальность и безопасность › Здоровье."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вода"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ви й далі можете записувати вручну — зарахується і те, і те. Якщо нічого не з’являється, перевірте Налаштування › Конфіденційність і безпека › Здоров’я."
           }
         }
       }
     },
-    "times": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "раз"
+    "Your data" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ваши данные"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "разів"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ваші дані"
           }
         }
       }
     }
   },
-  "version": "1.1"
+  "version" : "1.1"
 }

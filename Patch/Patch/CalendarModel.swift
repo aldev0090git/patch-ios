@@ -56,7 +56,9 @@ final class CalendarModel {
 
     func load() {
         do {
-            goals = try store.loadGoals()
+            // The same order Today uses. A list the user arranged should
+            // not rearrange itself when they switch tabs.
+            goals = GoalOrder.sorted(try store.loadGoals())
             entries = try store.loadEntries()
         } catch {
             failure = String(localized: "Couldn't load your calendar. \(error.localizedDescription)")

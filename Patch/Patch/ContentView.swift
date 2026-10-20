@@ -11,6 +11,15 @@ struct ContentView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
 
+    /// Reordering needs edit mode, and edit mode has to be asked for.
+    ///
+    /// A long press cannot start a drag here: it already belongs to the
+    /// context menu, and a drag on top of it slides onto a menu item and
+    /// fires it — tested, and it reset a goal. So the menu offers the mode
+    /// instead, which is where someone trying to rearrange the list would
+    /// press anyway.
+    @State private var editMode: EditMode = .inactive
+
     @State var model: TodayModel
     @State private var editing: Editing?
     @State private var isShowingSettings = false
@@ -75,6 +84,11 @@ struct ContentView: View {
                     // The same two actions by long press, because a swipe is
                     // not discoverable on its own.
                     .contextMenu {
+                        Button("Reorder", systemImage: "arrow.up.arrow.down") {
+                            withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
+                                editMode = .active
+                            }
+                        }
                         Button("Edit", systemImage: "pencil") {
                             editing = .existing(goal)
                         }
@@ -100,7 +114,13 @@ struct ContentView: View {
                         .tint(.red)
                     }
                 }
+                // Drag to reorder. Whether this needs edit mode is the whole
+                // question — see the note in `CLAUDE.md`.
+                .onMove { offsets, destination in
+                    model.move(fromOffsets: offsets, toOffset: destination)
+                }
             }
+            .environment(\.editMode, $editMode)
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
             .background(Color(uiColor: .systemGroupedBackground))
@@ -125,9 +145,22 @@ struct ContentView: View {
                         .accessibilityIdentifier("today.settings")
                 }
                 ToolbarItem(placement: .primaryAction) {
-                    Button("Add goal", systemImage: "plus") { editing = .new }
-                        .labelStyle(.iconOnly)
-                        .accessibilityIdentifier("today.add")
+                    if editMode == .active {
+                        // Replaces Add rather than joining it: a third
+                        // control would crowd the bar for a mode that lasts
+                        // a few seconds.
+                        Button("Done") {
+                            withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
+                                editMode = .inactive
+                            }
+                        }
+                        .fontWeight(.semibold)
+                        .accessibilityIdentifier("today.doneReordering")
+                    } else {
+                        Button("Add goal", systemImage: "plus") { editing = .new }
+                            .labelStyle(.iconOnly)
+                            .accessibilityIdentifier("today.add")
+                    }
                 }
             }
             .sheet(isPresented: $isShowingSettings) {

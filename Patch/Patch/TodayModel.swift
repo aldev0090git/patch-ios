@@ -79,7 +79,7 @@ final class TodayModel {
 
     func load() {
         do {
-            goals = try store.loadGoals()
+            goals = GoalOrder.sorted(try store.loadGoals())
             entries = try store.loadEntries()
             publishToWidget()
         } catch {
@@ -124,6 +124,29 @@ final class TodayModel {
         }
     }
 
+    /// Applies a drag on the Today list.
+    ///
+    /// `offsets` and `destination` are positions in *today's* list, which is
+    /// not the whole list — a weekday goal is not on screen at the weekend.
+    /// `GoalOrder` deals the visible goals back into the visible slots and
+    /// leaves the rest alone; see its tests for why that matters.
+    func move(fromOffsets offsets: IndexSet, toOffset destination: Int) {
+        let visible = GoalOrder.moved(todaysGoals, fromOffsets: offsets, toOffset: destination)
+        let changed = GoalOrder.reindexed(all: goals, visibleOrder: visible.map(\.id))
+        guard !changed.isEmpty else { return }
+
+        do {
+            for goal in changed {
+                try store.save(goal)
+            }
+            goals = GoalOrder.sorted(try store.loadGoals())
+            publishToWidget()
+            Haptics.play(.selection)
+        } catch {
+            failure = String(localized: "Couldn't save that. \(error.localizedDescription)")
+        }
+    }
+
     /// Removes everything logged today for this goal.
     func resetToday(for goal: Goal) {
         let doomed = entries.filter {
@@ -145,7 +168,7 @@ final class TodayModel {
     func save(_ goal: Goal) {
         do {
             try store.save(goal)
-            goals = try store.loadGoals()
+            goals = GoalOrder.sorted(try store.loadGoals())
             publishToWidget()
         } catch {
             failure = String(localized: "Couldn't save that. \(error.localizedDescription)")
