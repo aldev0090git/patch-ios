@@ -145,4 +145,44 @@ struct WidgetSnapshotTests {
         // claim the day is blank.
         #expect(WidgetSnapshotStore(directory: directory).read() == nil)
     }
+    // MARK: - What the widget asks it
+
+    @Test("The next thing to do is the first goal not yet finished")
+    func nextUnfinished() {
+        let snapshot = WidgetSnapshot(date: day(2026, 3, 10), items: [
+            item("Read", achieved: true),
+            item("Water", achieved: false),
+            item("Steps", achieved: false)
+        ])
+
+        #expect(snapshot.nextUnfinished?.title == "Water")
+        #expect(snapshot.remaining.map(\.title) == ["Water", "Steps"])
+    }
+
+    @Test("A finished day has nothing next, rather than an empty-looking goal")
+    func nothingLeft() {
+        let snapshot = WidgetSnapshot(date: day(2026, 3, 10), items: [
+            item("Read", achieved: true),
+            item("Water", achieved: true)
+        ])
+
+        #expect(snapshot.nextUnfinished == nil)
+        #expect(snapshot.remaining.isEmpty)
+    }
+
+    @Test("A day with nothing scheduled has nothing next either")
+    func emptyDay() {
+        #expect(WidgetSnapshot(date: day(2026, 3, 10), items: []).nextUnfinished == nil)
+    }
+
+    private func item(_ title: String, achieved: Bool) -> WidgetSnapshot.Item {
+        WidgetSnapshot.Item(
+            id: UUID(),
+            title: title,
+            symbolName: "book",
+            fraction: achieved ? 1 : 0.5,
+            isAchieved: achieved
+        )
+    }
+
 }

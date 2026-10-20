@@ -54,6 +54,23 @@ public struct WidgetSnapshot: Codable, Hashable, Sendable {
     /// `TodayModel.isDayComplete` for why that distinction is worth keeping.
     public var isComplete: Bool { !items.isEmpty && completed == scheduled }
 
+    /// What to do next: the first goal still unfinished, in the order the
+    /// app lists them.
+    ///
+    /// Nil when the day is done or empty — the two cases a widget has to tell
+    /// apart from "there is something left", and which it must not render as
+    /// a goal with a blank name.
+    public var nextUnfinished: Item? {
+        items.first { !$0.isAchieved }
+    }
+
+    /// Goals still to do. Drives "+2 more" rather than silently hiding them:
+    /// a widget that shows four of eight goals and says nothing is lying by
+    /// omission, and the owner of the other four has no way to know.
+    public var remaining: [Item] {
+        items.filter { !$0.isAchieved }
+    }
+
     public static let empty = WidgetSnapshot(date: .distantPast, items: [])
 }
 
