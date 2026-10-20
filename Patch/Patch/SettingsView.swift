@@ -77,6 +77,10 @@ struct SettingsView: View {
                     } label: {
                         Label("How it works", systemImage: "hand.tap")
                     }
+                    // The sheet behind this is almost entirely prose, which
+                    // makes it the single most useful screen to photograph in
+                    // a language. Its label is translated, so it needs an id.
+                    .accessibilityIdentifier("settings.howItWorks")
                 } footer: {
                     Text("The gestures from the welcome screen, in case you tapped past them.")
                 }

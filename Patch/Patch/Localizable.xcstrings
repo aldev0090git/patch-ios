@@ -1263,13 +1263,13 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Редактировать цель"
+            "value": "Изменить"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Редагувати ціль"
+            "value": "Змінити"
           }
         }
       }
