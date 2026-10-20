@@ -154,3 +154,24 @@ All three of the things that could only be judged on hardware have been:
 - **Landscape** works. The header now adapts to a compact height rather than
   taking 40% of the screen.
 - **VoiceOver** works.
+- **Apple Health** works, including the part no test could reach. HealthKit is
+  unavailable to a simulator in any useful sense — the framework is there but
+  there is no data — so the import was verified by hand on 20 October, by
+  typing step samples into the Health app and watching Patch:
+
+  | Health says | Patch shows |
+  | --- | --- |
+  | 1 000 | 1 000 |
+  | 1 500 (+500) | **1 500**, not 2 500 |
+  | 1 500, plus 2 000 logged by hand in Patch | **3 500** |
+  | after backgrounding, and after a full relaunch | **3 500** |
+
+  The second row is the one that matters: the import added only the 500 that
+  was new. The fourth is the other half — a hand-logged entry is not absorbed
+  by the next refresh. Health stayed at 1 500 throughout, because Patch never
+  writes.
+
+  Two things behaved as designed and look like bugs if you do not expect them:
+  a goal created today does **not** backfill earlier days, even where Health
+  has them, and a day Health knows nothing about imports nothing rather than
+  importing a zero.
