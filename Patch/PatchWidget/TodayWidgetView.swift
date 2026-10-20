@@ -14,6 +14,16 @@ struct TodayWidgetView: View {
     @Environment(\.widgetFamily) private var family
 
     var body: some View {
+        switch family {
+        case .accessoryCircular, .accessoryRectangular, .accessoryInline:
+            AccessoryWidgetView(snapshot: snapshot)
+        default:
+            homeScreen
+        }
+    }
+
+    @ViewBuilder
+    private var homeScreen: some View {
         if let snapshot, !snapshot.items.isEmpty {
             day(snapshot)
         } else {
@@ -44,33 +54,15 @@ struct TodayWidgetView: View {
                 }
             }
 
-            if family != .systemSmall {
-                Spacer(minLength: 0)
-                goalList(snapshot)
-            }
-
             Spacer(minLength: 0)
+
+            if family == .systemSmall {
+                NextUpView(snapshot: snapshot)
+            } else {
+                GoalListView(snapshot: snapshot)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    /// Only on the medium size. Four rows is what fits without shrinking the
-    /// text below the size the reader asked for.
-    private func goalList(_ snapshot: WidgetSnapshot) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            ForEach(snapshot.items.prefix(4)) { item in
-                HStack(spacing: 6) {
-                    Image(systemName: item.isAchieved ? "checkmark.circle.fill" : item.symbolName)
-                        .font(.caption2)
-                        .foregroundStyle(item.isAchieved ? Color.goalDone : .secondary)
-                        .frame(width: 14)
-                    Text(verbatim: item.title)
-                        .font(.caption2)
-                        .lineLimit(1)
-                        .foregroundStyle(item.isAchieved ? .secondary : .primary)
-                }
-            }
-        }
     }
 
     /// Nothing written yet, or nothing due. Says which rather than drawing a
@@ -90,6 +82,121 @@ struct TodayWidgetView: View {
     }
 }
 
+/// The small widget's lower half, which used to be empty.
+///
+/// A small widget has room for one idea, and "what is left" beats repeating
+/// the overview the bar above already gives. Underneath it, where there is
+/// room, a strip of the other outstanding goals — enough to see how much is
+/// left without reading anything.
+private struct NextUpView: View {
+    let snapshot: WidgetSnapshot
+
+    var body: some View {
+        if let next = snapshot.nextUnfinished {
+            // Degrades rather than clips: at large Dynamic Type sizes the
+            // strip is dropped and the goal keeps its full name.
+            ViewThatFits(in: .vertical) {
+                VStack(alignment: .leading, spacing: 6) {
+                    row(next)
+                    strip(excluding: next)
+                }
+                row(next)
+            }
+        } else {
+            Label("All done", systemImage: "checkmark.circle.fill")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(Color.goalDone)
+                .lineLimit(1)
+        }
+    }
+
+    private func row(_ next: WidgetSnapshot.Item) -> some View {
+        VStack(alignment: .leading, spacing: 1) {
+            Text("Next")
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(.secondary)
+                .textCase(.uppercase)
+            Label {
+                Text(verbatim: next.title).lineLimit(1)
+            } icon: {
+                Image(systemName: next.symbolName)
+            }
+            .font(.caption.weight(.medium))
+        }
+    }
+
+    /// Icons only — names would not fit, and the point here is "three left",
+    /// not "which three".
+    @ViewBuilder
+    private func strip(excluding next: WidgetSnapshot.Item) -> some View {
+        let others = snapshot.remaining.filter { $0.id != next.id }.prefix(5)
+        if !others.isEmpty {
+            HStack(spacing: 5) {
+                ForEach(others) { item in
+                    Image(systemName: item.symbolName)
+                        .font(.system(size: 11))
+                        .foregroundStyle(.tertiary)
+                }
+            }
+        }
+    }
+}
+
+/// The medium widget's list of goals.
+///
+/// The count is not fixed. It was `prefix(4)` with a comment claiming four was
+/// what fitted; on a real phone it left visible empty space, and the fifth
+/// goal simply vanished. `ViewThatFits` asks the layout instead of guessing,
+/// which also means it shrinks correctly at large Dynamic Type sizes rather
+/// than overflowing.
+///
+/// Anything that still does not fit is **counted, not hidden**. A widget
+/// showing four of eight goals and saying nothing is lying by omission.
+private struct GoalListView: View {
+    let snapshot: WidgetSnapshot
+
+    /// Written out rather than looped. `ViewThatFits` picks between its
+    /// *children*, and whether a `ForEach` counts as one child or as many is
+    /// not something to leave to inference when the failure mode is a widget
+    /// that silently overflows its box.
+    var body: some View {
+        ViewThatFits(in: .vertical) {
+            list(limit: 7)
+            list(limit: 6)
+            list(limit: 5)
+            list(limit: 4)
+            list(limit: 3)
+            list(limit: 2)
+            list(limit: 1)
+        }
+    }
+
+    private func list(limit: Int) -> some View {
+        let shown = snapshot.items.prefix(limit)
+        let hidden = snapshot.items.count - shown.count
+        return VStack(alignment: .leading, spacing: 4) {
+            ForEach(shown) { item in
+                HStack(spacing: 6) {
+                    Image(systemName: item.isAchieved ? "checkmark.circle.fill" : item.symbolName)
+                        .font(.caption2)
+                        .foregroundStyle(item.isAchieved ? Color.goalDone : .secondary)
+                        .frame(width: 14)
+                    Text(verbatim: item.title)
+                        .font(.caption2)
+                        .lineLimit(1)
+                        .foregroundStyle(item.isAchieved ? .secondary : .primary)
+                }
+            }
+            if hidden > 0 {
+                Text("+\(hidden) more")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(.tertiary)
+                    .padding(.leading, 20)
+            }
+        }
+    }
+}
+
 extension Color {
     /// The widget cannot see the app's theme — it is a separate process with
     /// no access to its `UserDefaults` beyond the shared group, and the accent
@@ -104,4 +211,10 @@ extension Color {
 } timeline: {
     TodayEntry(date: .now, snapshot: .placeholder)
     TodayEntry(date: .now, snapshot: nil)
+}
+
+#Preview(as: .systemMedium) {
+    TodayWidget()
+} timeline: {
+    TodayEntry(date: .now, snapshot: .placeholder)
 }

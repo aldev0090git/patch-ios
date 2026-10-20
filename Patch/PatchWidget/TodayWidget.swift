@@ -16,7 +16,12 @@ struct TodayWidget: Widget {
         }
         .configurationDisplayName("Today")
         .description("How today is going, at a glance.")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        // Lock Screen families read the same snapshot and cost nothing
+        // extra: no database, no migration, no additional work for the app.
+        .supportedFamilies([
+            .systemSmall, .systemMedium,
+            .accessoryCircular, .accessoryRectangular, .accessoryInline
+        ])
     }
 }
 

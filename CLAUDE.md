@@ -272,6 +272,38 @@ Pick the event by comparing state **before and after** the write, never from the
 amount: finishing is a transition. `Haptics.isEnabled` reads `UserDefaults`
 directly so no call site has to carry the setting; absent means on.
 
+## A widget cannot be checked on the simulator
+
+On the **iOS 26.5 runtime** the widget gallery is **empty** — not missing
+Patch, missing everything, including the widgets of Apple's own installed
+apps. Confirmed with `chronod` healthy (`launchctl list` showing exit 0), on a
+freshly booted device, after 45 seconds of settling. There is nothing in the
+app to fix.
+
+Two things wasted time getting to that answer, both worth not repeating:
+
+- **`Simulator.app` does not exist in Xcode 27.** It is `DeviceHub.app`, under
+  `Xcode.app/Contents/Applications/` — *not* `Contents/Developer/Applications/`,
+  which is also gone. `open -a Simulator` fails with a Launch Services error
+  that reads like a sandbox problem and is not one.
+- **Do not `launchctl stop` or `kickstart -k` `chronod`.** Killing it leaves it
+  at exit −9 and serving nothing, which looks exactly like the bug above and
+  is self-inflicted. Only a device reboot clears it.
+
+The SpringBoard flow, for anyone who wants to try on a newer runtime: long
+press empty space → **Edit** (top left) → an **Add Widget** item in the menu
+that opens → gallery. One tap is not enough; "Edit" alone only opens the menu.
+
+The extension is fine in that state — it installs into `Patch.app/PlugIns/`
+and registers as `com.apple.widgetkit-extension`, both checkable with
+`simctl get_app_container` and `PlistBuddy`. What cannot be checked is how it
+**looks**, which is the only reason to want it on screen.
+
+So widget layout is a device-only check, like the haptics. What *can* be done
+from here is feeding it data: write a `today.json` of any shape straight into
+the App Group container and the widget will draw it, which is how the "+N
+more" case was set up without creating eight real goals.
+
 ## Running the simulator from the command line
 
 - The simulator wedges into `Busy ("Application failed preflight checks")`
