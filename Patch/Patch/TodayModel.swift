@@ -14,6 +14,12 @@ final class TodayModel {
     private let calendar: Calendar
     private let calculator: ProgressCalculator
     private let streaks: StreakCalculator
+    private let healthImporter: HealthImporter
+
+    /// Guards against two imports overlapping. Launch fires one and the first
+    /// `scenePhase` change can fire another; both would read the same entries
+    /// before either had written, and log the same delta twice.
+    private var isImporting = false
 
     private(set) var goals: [Goal] = []
     private(set) var entries: [Entry] = []
@@ -27,6 +33,7 @@ final class TodayModel {
         self.calendar = calendar
         self.calculator = ProgressCalculator(calendar: calendar)
         self.streaks = StreakCalculator(calendar: calendar)
+        self.healthImporter = HealthImporter(reader: HealthKitReader.shared, calendar: calendar)
     }
 
     // MARK: - Reading
@@ -88,6 +95,32 @@ final class TodayModel {
             publishToWidget()
         } catch {
             failure = String(localized: "Couldn't save that. \(error.localizedDescription)")
+        }
+    }
+
+    /// Brings every Health-linked goal up to date with Apple Health.
+    ///
+    /// Silent in both directions: it writes nothing when there is nothing to
+    /// write, and it says nothing when Health is unreadable. A permission the
+    /// user declined, or a phone with no Health at all, is not an error worth
+    /// an alert on the Today screen — the goal simply stays where the user
+    /// left it, and can still be logged by hand.
+    func importFromHealth() async {
+        guard !isImporting else { return }
+        isImporting = true
+        defer { isImporting = false }
+
+        let pending = await healthImporter.pendingEntries(goals: goals, entries: entries)
+        guard !pending.isEmpty else { return }
+
+        do {
+            for entry in pending {
+                try store.log(entry)
+            }
+            entries.append(contentsOf: pending)
+            publishToWidget()
+        } catch {
+            failure = String(localized: "Couldn't save your Health data. \(error.localizedDescription)")
         }
     }
 

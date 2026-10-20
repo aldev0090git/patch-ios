@@ -33,6 +33,13 @@ struct GoalEditor: View {
     @State private var target: Decimal
     @State private var direction: Direction
     @State private var weekdays: Set<Weekday>
+    @State private var healthSource: HealthSource?
+
+    /// The shared store, not a new one: this type is a struct that SwiftUI
+    /// rebuilds on every render. It is here only to put the permission sheet
+    /// up at the moment the user asks for it, which is the one moment the
+    /// request makes sense to them.
+    private var health: HealthKitReader { .shared }
 
     /// A short, deliberately curated list. A full symbol browser is thousands
     /// of icons deep and makes a two-second decision feel like a chore.
@@ -58,6 +65,7 @@ struct GoalEditor: View {
             initialValue: MeasureInput.fromCanonical(measure.dailyTarget, kind: measure.kind)
         )
         _direction = State(initialValue: goal?.direction ?? .atLeast)
+        _healthSource = State(initialValue: goal?.healthSource)
         // The phone's own currency unless the goal already names one, so the
         // common case needs no decision at all.
         _hasOverall = State(initialValue: goal?.cumulativeTarget != nil)
@@ -109,6 +117,10 @@ struct GoalEditor: View {
                             Text(MeasureInput.kindLabel(for: kind)).tag(kind)
                         }
                     }
+                    // Identified as well as labelled: the label is localised,
+                    // and a menu picker's element carries its current value in
+                    // the label too, so "Measure" alone never matches.
+                    .accessibilityIdentifier("editor.measure")
 
                     HStack {
                         TextField("Amount", value: $target, format: .number)
@@ -155,6 +167,11 @@ struct GoalEditor: View {
                     aimExplanation
                 }
 
+                if HealthKitReader.isAvailable,
+                   let option = HealthSource.compatible(with: kind).first {
+                    HealthLinkSection(option: option, source: $healthSource)
+                }
+
                 Section("Overall goal") {
                     Toggle("Work toward a total", isOn: $hasOverall)
                     if hasOverall {
@@ -198,6 +215,20 @@ struct GoalEditor: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+            }
+            // Changing the measure makes the old source nonsense — metres
+            // cannot fill a goal counting repetitions — so the link goes with
+            // it rather than being silently ignored later.
+            .onChange(of: kind) { _, newKind in
+                if healthSource?.measureKind != newKind { healthSource = nil }
+            }
+            // Asked for at the moment the user turns it on, which is the one
+            // moment the system's permission sheet makes sense to them.
+            // Ignoring the result is deliberate: iOS does not report whether
+            // a read was granted, so there is nothing truthful to show.
+            .task(id: healthSource) {
+                guard healthSource != nil else { return }
+                try? await health.requestAuthorization()
             }
             .navigationTitle(existing == nil ? Text("New Goal") : Text("Edit Goal"))
             .navigationBarTitleDisplayMode(.inline)
@@ -309,6 +340,7 @@ struct GoalEditor: View {
             // would quietly erase the goal's history.
             createdAt: existing?.createdAt ?? .now,
             targetHistory: existing?.targetHistory ?? [],
+            healthSource: healthSource,
             archivedAt: existing?.archivedAt
         )
 

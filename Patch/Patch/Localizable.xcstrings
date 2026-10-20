@@ -573,6 +573,23 @@
         }
       }
     },
+    "Apple Health": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Health"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Health"
+          }
+        }
+      }
+    },
     "Archive": {
       "extractionState": "manual",
       "localizations": {
@@ -921,6 +938,23 @@
         }
       }
     },
+    "Couldn't save your Health data. %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сохранить данные из Health. %@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не вдалося зберегти дані з Health. %@"
+          }
+        }
+      }
+    },
     "Couldn't set up your first goals. %@": {
       "extractionState": "manual",
       "localizations": {
@@ -1265,6 +1299,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Экспортировать всё"
+          }
+        }
+      }
+    },
+    "Fill in from Apple Health": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Заполнять из Apple Health"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Заповнювати з Apple Health"
           }
         }
       }
@@ -1875,6 +1926,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Patch"
+          }
+        }
+      }
+    },
+    "Patch reads how far you walked and ran each day and keeps this goal up to date.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patch ежедневно считывает, сколько вы прошли и пробежали, и обновляет эту цель."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patch щодня зчитує, скільки ви пройшли та пробігли, і оновлює цю ціль."
+          }
+        }
+      }
+    },
+    "Patch reads your exercise minutes each day and keeps this goal up to date.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patch ежедневно считывает ваши минуты тренировок и обновляет эту цель."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patch щодня зчитує ваші хвилини тренувань і оновлює цю ціль."
+          }
+        }
+      }
+    },
+    "Patch reads your step count each day and keeps this goal up to date.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patch ежедневно считывает количество ваших шагов и обновляет эту цель."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patch щодня зчитує кількість ваших кроків і оновлює цю ціль."
           }
         }
       }
@@ -2855,6 +2957,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Вчора"
+          }
+        }
+      }
+    },
+    "You can still log by hand, and both will count. If nothing appears, check Settings › Privacy & Security › Health.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вы по-прежнему можете записывать вручную — засчитается и то, и другое. Если ничего не появляется, проверьте Настройки › Конфиденциальность и безопасность › Здоровье."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ви й далі можете записувати вручну — зарахується і те, і те. Якщо нічого не з’являється, перевірте Налаштування › Конфіденційність і безпека › Здоров’я."
           }
         }
       }

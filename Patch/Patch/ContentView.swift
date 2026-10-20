@@ -9,6 +9,7 @@ struct ContentView: View {
 
     @Environment(\.themeAccent) private var themeAccent
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
 
     @State var model: TodayModel
     @State private var editing: Editing?
@@ -128,12 +129,25 @@ struct ContentView: View {
                     withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
                         model.save(goal)
                     }
+                    // A goal just linked to Health should fill in now, not on
+                    // the next launch. The import is a no-op for every other
+                    // kind of edit.
+                    Task { await model.importFromHealth() }
                 }
             }
             // On every appearance, not once. A tab keeps its view alive, so
             // a goal logged on another one stayed invisible here until the
             // app was relaunched — and backdating makes that obvious.
             .onAppear { model.load() }
+            // On appear and again on every return to the foreground: Health's
+            // figure for today keeps climbing while the app is closed, and a
+            // step count that is only right at launch is worse than none.
+            // `onAppear` above is synchronous, so goals are loaded by the time
+            // this runs.
+            .task(id: scenePhase) {
+                guard scenePhase == .active else { return }
+                await model.importFromHealth()
+            }
             // One place for the bad news, so no caller has to remember to
             // report its own failure.
             .onChange(of: model.failure) { _, failure in
