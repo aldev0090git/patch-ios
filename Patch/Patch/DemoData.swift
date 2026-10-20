@@ -27,28 +27,8 @@ enum DemoData {
         let water = GoalTemplateCatalog.water.makeGoal(title: "Water", createdAt: start)
         let pushUps = GoalTemplateCatalog.pushUps.makeGoal(title: "Push-ups", createdAt: start)
         let gym = GoalTemplateCatalog.gym.makeGoal(title: "Gym", createdAt: start)
-        var saving = Goal(
-            title: "Save",
-            titleKey: GoalTemplateCatalog.saveMoney.titleKey,
-            symbolName: "banknote",
-            measure: .money(4000, currencyCode: "UAH"),
-            schedule: .daysOfMonth([1, 15]),
-            cumulativeTarget: 60_000,
-            createdAt: start
-        )
-        saving.cumulativeDeadline = calendar.date(byAdding: .month, value: 4, to: .now)
-
-        // An allowance, which is the one goal shape the other five do not
-        // cover: `atMost`, where being inside the limit is not the same as
-        // being finished for the day. The Today card got that wrong for a
-        // release, and nothing in the demo data would have shown it.
-        let coffee = Goal(
-            title: "Coffee",
-            symbolName: "cup.and.saucer",
-            measure: .times(2),
-            direction: .atMost,
-            createdAt: start
-        )
+        let saving = savingGoal(start: start, calendar: calendar)
+        let coffee = coffeeGoal(start: start)
 
         let goals = [read, water, pushUps, gym, saving]
         for goal in goals + [coffee] { try? store.save(goal) }
@@ -126,5 +106,42 @@ enum DemoData {
             try? store.log(Entry(goalID: goal.id, amount: target, loggedAt: at))
         }
     }
+
+    /// The only goal with a long-run target and a date to reach it by, and the
+    /// only one on a day-of-month schedule — both are shapes no template
+    /// covers, and both show up on the statistics screen.
+    private static func savingGoal(start: Date, calendar: Calendar) -> Goal {
+        var saving = Goal(
+            title: "Save",
+            titleKey: GoalTemplateCatalog.saveMoney.titleKey,
+            symbolName: "banknote",
+            measure: .money(4000, currencyCode: "UAH"),
+            schedule: .daysOfMonth([1, 15]),
+            cumulativeTarget: 60_000,
+            createdAt: start
+        )
+        saving.cumulativeDeadline = calendar.date(byAdding: .month, value: 4, to: .now)
+        return saving
+    }
+
+    /// An allowance, which is the one goal shape the other five do not cover:
+    /// `atMost`, where being inside the limit is not the same as being
+    /// finished for the day. The Today card got that wrong for a release, and
+    /// nothing in the demo data would have shown it.
+    private static func coffeeGoal(start: Date) -> Goal {
+        Goal(
+            title: "Coffee",
+            // Every other seeded goal carries a key so it follows the phone's
+            // language; this one did not, and sat in English on an otherwise
+            // fully translated screen. It is demo-only, hence `demo.` rather
+            // than `template.` — there is no coffee template.
+            titleKey: "demo.coffee",
+            symbolName: "cup.and.saucer",
+            measure: .times(2),
+            direction: .atMost,
+            createdAt: start
+        )
+    }
+
 }
 #endif
