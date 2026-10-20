@@ -573,6 +573,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Patch reads your steps, walking distance and exercise minutes so goals you have linked to Health keep themselves up to date. Nothing is sent anywhere — it stays on your phone.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Patch never adds anything to Apple Health. It only reads the steps, distance and exercise minutes you have linked to a goal.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -619,6 +620,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Patch reads your steps, walking distance and exercise minutes so goals you have linked to Health keep themselves up to date. Nothing is sent anywhere — it stays on your phone.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Patch never adds anything to Apple Health. It only reads the steps, distance and exercise minutes you have linked to a goal.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

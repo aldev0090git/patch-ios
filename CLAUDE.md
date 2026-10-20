@@ -237,6 +237,20 @@ signed build for a device does. So after touching `Patch.entitlements`, a
 green simulator build and a green CI run mean nothing: the check is Xcode's
 Signing & Capabilities tab with a real device selected.
 
+**And the device build is still not the last gate.** App Store upload
+validation rejected the next archive for a missing
+`NSHealthUpdateUsageDescription` — the *write* purpose string — in an app that
+never writes. Apple's check looks at the entitlement, not at which APIs the
+code calls, so both Health strings are required as soon as
+`com.apple.developer.healthkit` is present. The string is never shown to
+anyone, because authorization is only ever requested with `toShare: []`; it
+exists to satisfy the validator, and says so truthfully rather than inventing
+a use.
+
+Three gates, each catching what the one before cannot: simulator build →
+signed device build → upload validation. Budget for all three after any change
+to entitlements or usage strings.
+
 ### The simulator does have HealthKit
 
 `Health.app`, `HealthKit.framework` and `HealthKitUI.framework` all ship in the
