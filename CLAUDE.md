@@ -376,6 +376,16 @@ compatibility, but Xcode silently rewrites the format every time the project is
 opened, which broke CI repeatedly. Fighting the IDE on every save cost more than
 the compatibility was worth. Let Xcode manage this field.
 
+**Check the deployment target of every new target, not just the app's.** The
+widget extension shipped at **27.0** while the app was at 26.0, because
+Xcode's template defaults a new target to the newest OS and nothing warns you.
+iOS then silently ignores an extension whose minimum exceeds the device: the
+app installs and runs, and the widget simply never appears in the gallery. It
+took a tester on iOS 26.6 to find it — every device involved in developing it
+was on 27. Verify with
+`PlistBuddy -c "Print :MinimumOSVersion" Patch.app/PlugIns/*.appex/Info.plist`
+on the archive, not the project file.
+
 **Do not "select the newest Xcode" on a runner.** The `xcode-27` image ships
 betas alongside the release, and picking the highest version selects a beta,
 so builds can fail on beta bugs instead of on this code. Use the image default.
