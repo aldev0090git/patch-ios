@@ -223,6 +223,20 @@ invites them to do.
   `TodayModel.isImporting`: launch and the first `scenePhase` change would
   otherwise both read the same entries before either had written.
 
+### Entitlements are not checked by a simulator build
+
+HealthKit needs exactly one entitlement: `com.apple.developer.healthkit`.
+`com.apple.developer.healthkit-access` is for **clinical health records** only,
+and an empty `<array/>` for it fails provisioning outright — *"Entitlement
+com.apple.developer.healthkit-access not found and could not be included in
+profile"*. It was added here by mistake and had to come out.
+
+Nothing caught it, because **a simulator build does not validate entitlements
+against a provisioning profile** — it builds and runs regardless. Only a
+signed build for a device does. So after touching `Patch.entitlements`, a
+green simulator build and a green CI run mean nothing: the check is Xcode's
+Signing & Capabilities tab with a real device selected.
+
 ### The simulator does have HealthKit
 
 `Health.app`, `HealthKit.framework` and `HealthKitUI.framework` all ship in the
