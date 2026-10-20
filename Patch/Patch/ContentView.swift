@@ -86,9 +86,18 @@ struct ContentView: View {
                                 reset(goal)
                             }
                         }
-                        Button("Archive", systemImage: "archivebox", role: .destructive) {
+                        // The destructive role reddens the title but not
+                        // the icon: the app sets `.tint` at the root of
+                        // `RootView`, that tint propagates into the menu, and
+                        // the image takes it. Rebuilding the `Label` by hand
+                        // does *not* fix it — only overriding the tint here
+                        // does.
+                        Button(role: .destructive) {
                             archive(goal)
+                        } label: {
+                            Label("Archive", systemImage: "archivebox")
                         }
+                        .tint(.red)
                     }
                 }
             }

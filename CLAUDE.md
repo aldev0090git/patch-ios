@@ -171,6 +171,15 @@ Both go **outside** the presentation modifiers. A sheet inherits the environment
 of the view its modifier is attached to, so a tint applied further in stops at
 the onboarding cover.
 
+**A destructive context-menu item needs `.tint(.red)`.** The root `.tint`
+reaches inside a context menu and claims the item's *icon*, which beats the
+destructive role — so `Button(role: .destructive)` renders a red title next to
+an accent-coloured icon and reads half-broken. Rebuilding the `Label` by hand
+does **not** help; only overriding the tint on the button does. This is a
+side effect of having themes at all, so every destructive menu item added
+from now on starts out wrong. See Archive in `ContentView` and "Clear this
+day" in `SelectedDayCard`.
+
 **`Color.goalDone` and `Color.goalMissed` are not themed, deliberately.** Done
 and missed are states, not decoration; if they followed the accent, the same
 card would read green-for-finished under one theme and green-for-in-progress

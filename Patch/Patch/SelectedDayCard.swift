@@ -87,9 +87,15 @@ struct SelectedDayCard: View {
             // on the How it works page instead.
             .contextMenu {
                 if model.hasLogged(row.goal, on: day) {
-                    Button("Clear this day", systemImage: "arrow.uturn.backward", role: .destructive) {
+                    // See the note on Archive in `ContentView`: the app's
+                    // root tint reaches the menu and keeps the icon from
+                    // going red with the title.
+                    Button(role: .destructive) {
                         clear(row.goal)
+                    } label: {
+                        Label("Clear this day", systemImage: "arrow.uturn.backward")
                     }
+                    .tint(.red)
                 }
             }
             .accessibilityElement(children: .ignore)
