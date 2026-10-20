@@ -33,6 +33,33 @@ struct SwiftDataGoalStoreTests {
         return SwiftDataGoalStore(context: context)
     }
 
+    @Test("A goal's Health link and an entry's source survive a round trip")
+    @MainActor
+    func healthFieldsRoundTrip() throws {
+        let store = try makeStore()
+        let goal = Goal(title: "Steps", measure: .steps(10_000), healthSource: .steps)
+        try store.save(goal)
+        try store.log(Entry(goalID: goal.id, amount: 4000, source: .health))
+        try store.log(Entry(goalID: goal.id, amount: 1000, source: .manual))
+
+        #expect(try store.loadGoals().first?.healthSource == .steps)
+        #expect(try store.loadEntries().map(\.source) == [.health, .manual])
+    }
+
+    @Test("A goal with no Health link comes back with none, not a default")
+    @MainActor
+    func absentHealthLinkStaysAbsent() throws {
+        // The failure this guards against is a row written before the field
+        // existed reading back as linked, which would start importing into a
+        // goal the user never pointed at Health.
+        let store = try makeStore()
+        try store.save(Goal(title: "Push-ups", measure: .times(20)))
+        try store.log(Entry(goalID: UUID(), amount: 5))
+
+        #expect(try store.loadGoals().first?.healthSource == nil)
+        #expect(try store.loadEntries().first?.source == .manual)
+    }
+
     @Test("A goal survives a round trip with every field intact")
     @MainActor
     func goalRoundTrip() throws {

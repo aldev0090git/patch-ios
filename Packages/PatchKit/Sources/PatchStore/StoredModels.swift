@@ -34,6 +34,9 @@ public final class StoredGoal {
     /// JSON rather than parallel arrays: CloudKit takes `Data` happily, and
     /// two arrays that must stay the same length is a bug waiting to happen.
     public var targetHistoryData: Data?
+    /// Raw so an unfamiliar source synced from a newer build degrades to
+    /// "not linked to Health" instead of failing to decode the whole goal.
+    public var healthSourceRaw: String?
     public var archivedAt: Date?
 
     public init(_ goal: Goal) {
@@ -69,6 +72,7 @@ public final class StoredGoal {
         targetHistoryData = goal.targetHistory.isEmpty
             ? nil
             : try? JSONEncoder().encode(goal.targetHistory)
+        healthSourceRaw = goal.healthSource?.rawValue
         archivedAt = goal.archivedAt
     }
 
@@ -110,6 +114,7 @@ public final class StoredGoal {
             cumulativeDeadline: cumulativeDeadline,
             createdAt: createdAt,
             targetHistory: targetHistory,
+            healthSource: healthSourceRaw.flatMap(HealthSource.init(rawValue:)),
             archivedAt: archivedAt
         )
     }
@@ -122,6 +127,9 @@ public final class StoredEntry {
     public var amount: Decimal = Decimal.zero
     public var loggedAt: Date = Date()
     public var note: String?
+    /// Nil on every row written before Health import existed, which is
+    /// exactly what ``EntrySource/manual`` means.
+    public var sourceRaw: String?
 
     public init(_ entry: Entry) {
         id = entry.id
@@ -129,9 +137,17 @@ public final class StoredEntry {
         amount = entry.amount
         loggedAt = entry.loggedAt
         note = entry.note
+        sourceRaw = entry.source.rawValue
     }
 
     public var domain: Entry {
-        Entry(id: id, goalID: goalID, amount: amount, loggedAt: loggedAt, note: note)
+        Entry(
+            id: id,
+            goalID: goalID,
+            amount: amount,
+            loggedAt: loggedAt,
+            note: note,
+            source: sourceRaw.flatMap(EntrySource.init(rawValue:)) ?? .manual
+        )
     }
 }

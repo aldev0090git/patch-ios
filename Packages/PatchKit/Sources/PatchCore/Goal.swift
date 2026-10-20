@@ -44,6 +44,10 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
     /// Past daily targets, oldest first. Empty while the target has never
     /// changed — see ``dailyTarget(on:calendar:)``.
     public var targetHistory: [TargetChange]
+    /// Set when the user asks for this goal to be filled in from Apple
+    /// Health. Nil — the default, and the only value most goals ever have —
+    /// means Patch never looks at Health for it.
+    public var healthSource: HealthSource?
     /// Archived goals stop appearing in Today but keep their history.
     /// Soft deletion also avoids destructive CloudKit sync surprises.
     public var archivedAt: Date?
@@ -60,6 +64,7 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
         cumulativeDeadline: Date? = nil,
         createdAt: Date = .now,
         targetHistory: [TargetChange] = [],
+        healthSource: HealthSource? = nil,
         archivedAt: Date? = nil
     ) {
         self.id = id
@@ -73,6 +78,7 @@ public struct Goal: Identifiable, Hashable, Sendable, Codable {
         self.cumulativeDeadline = cumulativeDeadline
         self.createdAt = createdAt
         self.targetHistory = targetHistory
+        self.healthSource = healthSource
         self.archivedAt = archivedAt
     }
 

@@ -37,7 +37,13 @@ public struct ExportDocument: Hashable, Sendable {
 public enum GoalExport {
     /// Bumped when the shape changes, so a future import can tell what it is
     /// reading. Costs one line now and makes the file self-describing for ever.
-    public static let schemaVersion = 1
+    ///
+    /// - 1: the original.
+    /// - 2: entries gained ``Entry/source``, to tell a tap from an amount read
+    ///   out of Apple Health. Version 1 files still read back — an entry with
+    ///   no recorded source decodes as ``EntrySource/manual``, which is what
+    ///   every entry written before the field existed was.
+    public static let schemaVersion = 2
 
     // MARK: - JSON
 
