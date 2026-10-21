@@ -95,6 +95,31 @@ nonisolated enum AccentTheme: String, CaseIterable, Identifiable, Hashable {
 }
 
 extension Color {
+    /// The page behind the cards.
+    ///
+    /// Not `systemGroupedBackground` in light mode, which is **#F2F2F7**
+    /// against cards of pure white — about three percent apart. Dark mode
+    /// gets away with the same pairing because a card that is *lighter* than
+    /// near-black separates instantly; in light mode the card has nowhere
+    /// left to go, so it stops reading as an object and the screen flattens
+    /// into one white field.
+    ///
+    /// A few percent deeper is all it takes. Dark mode keeps the system
+    /// colour, where nothing was wrong.
+    static let page = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? .systemGroupedBackground
+            : UIColor(white: 0.915, alpha: 1)
+    })
+
+    /// What a card casts onto the page, in light mode only.
+    ///
+    /// A black shadow under a dark-mode card is either invisible or dirt, so
+    /// it is switched off there rather than tuned down.
+    static func cardShadow(_ scheme: ColorScheme) -> Color {
+        scheme == .dark ? .clear : .black.opacity(0.09)
+    }
+
     /// A scheduled day that was met. Deliberately **not** part of the theme.
     ///
     /// Done and missed are states, not decoration. Letting them follow the

@@ -32,7 +32,7 @@ struct OnboardingView: View {
 
             footer
         }
-        .background(Color(uiColor: .systemGroupedBackground))
+        .background(Color.page)
         .task {
             // A beat after the view lands, so the entrance is visible rather
             // than already finished by the time the screen appears.

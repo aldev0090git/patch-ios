@@ -16,6 +16,7 @@ struct GoalCard: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
 
     @Environment(\.themeAccent) private var themeAccent
 
@@ -59,7 +60,13 @@ struct GoalCard: View {
             ZStack {
                 Color(uiColor: .secondarySystemGroupedBackground)
                 if progress.isAchieved || progress.isFailed {
-                    accent.opacity(0.22)
+                    // Quiet. At 0.22 a finished goal was a solid block of
+                    // colour and an unfinished one was plain white, so the
+                    // eye landed on the thing that needed nothing — backwards
+                    // for a screen whose job is what is left today. The ring
+                    // and the tick already say "done" at a glance; the fill
+                    // only has to tint.
+                    accent.opacity(0.09)
                 }
             }
             // Scoped to the background. Animating the whole card instead meant
@@ -71,6 +78,9 @@ struct GoalCard: View {
                        value: progress.isFailed)
         }
         .clipShape(.rect(cornerRadius: 22, style: .continuous))
+        // After the clip, not before — a shadow inside it is clipped away
+        // with the corners. Light mode only; see `Color.cardShadow`.
+        .shadow(color: Color.cardShadow(colorScheme), radius: 5, x: 0, y: 2)
         .sheet(isPresented: $isEnteringManually) {
             ManualEntrySheet(goal: goal) { amount in
                 withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {

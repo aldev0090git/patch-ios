@@ -124,7 +124,7 @@ struct ContentView: View {
             .environment(\.editMode, $editMode)
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
-            .background(Color(uiColor: .systemGroupedBackground))
+            .background(Color.page)
             .navigationTitle("Today")
             // Inline, because the progress header below is the hero of this
             // screen. A large title competes with it for the same space and
