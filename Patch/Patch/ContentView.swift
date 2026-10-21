@@ -10,6 +10,7 @@ struct ContentView: View {
     @Environment(\.themeAccent) private var themeAccent
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
+    @State private var isShowingAllGoals = false
 
     /// Reordering needs edit mode, and edit mode has to be asked for.
     ///
@@ -145,6 +146,17 @@ struct ContentView: View {
                         .accessibilityIdentifier("today.settings")
                 }
                 ToolbarItem(placement: .primaryAction) {
+                    // Beside Add, not buried in Settings: these are goals,
+                    // and this is the goals screen. Settings keeps a link
+                    // too — it costs nothing and is where some people look
+                    // first for a goal they cannot find.
+                    Button("All Goals", systemImage: "list.bullet") {
+                        isShowingAllGoals = true
+                    }
+                    .labelStyle(.iconOnly)
+                    .accessibilityIdentifier("today.allGoals")
+                }
+                ToolbarItem(placement: .primaryAction) {
                     if editMode == .active {
                         // Replaces Add rather than joining it: a third
                         // control would crowd the bar for a mode that lasts
@@ -161,6 +173,16 @@ struct ContentView: View {
                             .labelStyle(.iconOnly)
                             .accessibilityIdentifier("today.add")
                     }
+                }
+            }
+            .sheet(isPresented: $isShowingAllGoals) {
+                NavigationStack {
+                    AllGoalsView(store: store)
+                        .toolbar {
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("Done") { isShowingAllGoals = false }
+                            }
+                        }
                 }
             }
             .sheet(isPresented: $isShowingSettings) {

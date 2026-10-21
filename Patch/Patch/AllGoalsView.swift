@@ -15,7 +15,6 @@ struct AllGoalsView: View {
     let store: GoalStore
 
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var goals: [Goal] = []
     @State private var editing: Goal?
@@ -38,9 +37,10 @@ struct AllGoalsView: View {
                 Section(header: Text("Active")) {
                     ForEach(active) { goal in
                         row(goal)
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            .swipeActions(edge: .leading, allowsFullSwipe: false) {
                                 Button("Archive", role: .destructive) { archive(goal) }
                             }
+                            .contextMenu { menu(for: goal) }
                     }
                 }
             }
@@ -49,10 +49,11 @@ struct AllGoalsView: View {
                 Section {
                     ForEach(archived) { goal in
                         row(goal)
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            .swipeActions(edge: .leading, allowsFullSwipe: false) {
                                 Button("Restore") { restore(goal) }
                                     .tint(.green)
                             }
+                            .contextMenu { menu(for: goal) }
                     }
                 } header: {
                     Text("Archived")
@@ -76,6 +77,23 @@ struct AllGoalsView: View {
             Button("OK", role: .cancel) { failure = nil }
         } message: {
             Text(verbatim: failure ?? "")
+        }
+    }
+
+    @ViewBuilder
+    private func menu(for goal: Goal) -> some View {
+        Button("Edit", systemImage: "pencil") { editing = goal }
+        if goal.isArchived {
+            Button("Restore", systemImage: "arrow.uturn.backward") { restore(goal) }
+        } else {
+            // `.tint(.red)` because the root tint reaches inside a context
+            // menu and claims the icon — see the note in `CLAUDE.md`.
+            Button(role: .destructive) {
+                archive(goal)
+            } label: {
+                Label("Archive", systemImage: "archivebox")
+            }
+            .tint(.red)
         }
     }
 
@@ -135,7 +153,7 @@ struct AllGoalsView: View {
     private func save(_ goal: Goal) {
         do {
             try store.save(goal)
-            withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) { load() }
+            load()
             Haptics.play(.selection)
         } catch {
             failure = String(localized: "Couldn't save that. \(error.localizedDescription)")
