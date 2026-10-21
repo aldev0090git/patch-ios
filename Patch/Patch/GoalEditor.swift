@@ -86,7 +86,13 @@ struct GoalEditor: View {
         switch goal?.schedule ?? .daily {
         case .daily:
             _repeatMode = State(initialValue: .daily)
-            _weekdays = State(initialValue: Set(Weekday.allCases))
+            // Empty, not every weekday. A full set is indistinguishable from
+            // "Every day", and worse, it inverts the gesture: the first tap
+            // on a day *removes* it, so choosing Tuesday and Thursday leaves
+            // you with the other five. `isValid` already refuses an empty
+            // set, so Save stays disabled until a real choice is made —
+            // exactly how "Certain dates" already behaved.
+            _weekdays = State(initialValue: [])
             _monthDays = State(initialValue: [])
         case .daysOfWeek(let days):
             _repeatMode = State(initialValue: .certainWeekdays)
@@ -94,7 +100,7 @@ struct GoalEditor: View {
             _monthDays = State(initialValue: [])
         case .daysOfMonth(let dates):
             _repeatMode = State(initialValue: .certainDates)
-            _weekdays = State(initialValue: Set(Weekday.allCases))
+            _weekdays = State(initialValue: [])
             _monthDays = State(initialValue: dates)
         }
     }
@@ -168,8 +174,8 @@ struct GoalEditor: View {
                 }
 
                 if HealthKitReader.isAvailable,
-                   let option = HealthSource.compatible(with: kind).first {
-                    HealthLinkSection(option: option, source: $healthSource)
+                   !HealthSource.compatible(with: kind).isEmpty {
+                    HealthLinkSection(kind: kind, source: $healthSource)
                 }
 
                 Section("Overall goal") {
