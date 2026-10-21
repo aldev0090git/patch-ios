@@ -19,6 +19,7 @@ struct RootView: View {
     /// what the theme is.
     @AppStorage(SettingsKey.appearance) private var appearance = Appearance.system
     @AppStorage(SettingsKey.accent) private var accent = AccentTheme.blue
+    @AppStorage(SettingsKey.pageTheme) private var pageTheme = PageTheme.standard
 
     @AppStorage(SettingsKey.remindersEnabled) private var remindersEnabled = false
     @AppStorage(SettingsKey.reminderTimes) private var reminderTimesRaw
@@ -61,6 +62,7 @@ struct RootView: View {
             // catalog and ignores `.tint` entirely.
             .tint(accent.color)
             .environment(\.themeAccent, accent.color)
+            .environment(\.pageTheme, pageTheme)
             .preferredColorScheme(appearance.colorScheme)
     }
 

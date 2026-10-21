@@ -102,7 +102,7 @@ struct HowItWorksSheet: View {
                 }
                 .padding(20)
             }
-            .background(Color.page)
+            .background(PageBackground())
             .navigationTitle("How it works")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

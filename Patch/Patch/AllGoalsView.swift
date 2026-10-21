@@ -100,7 +100,7 @@ struct AllGoalsView: View {
         .animation(nil, value: goals)
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
-        .background(Color.page)
+        .background(PageBackground())
         .navigationTitle("All Goals")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: load)

@@ -1,3 +1,4 @@
+import PatchCore
 import SwiftUI
 
 /// The keys the look-and-feel settings are stored under.
@@ -7,6 +8,7 @@ import SwiftUI
 nonisolated enum SettingsKey {
     static let appearance = "appearance"
     static let accent = "accentTheme"
+    static let pageTheme = "pageTheme"
     static let haptics = "hapticsEnabled"
     static let remindersEnabled = "remindersEnabled"
     static let reminderTimes = "reminderTimes"
@@ -142,4 +144,63 @@ extension EnvironmentValues {
     /// blue while the rest of the app changed colour. `.tint` still handles
     /// controls; this covers the rest.
     @Entry var themeAccent: Color = .blue
+
+    /// The wash behind the cards. Read by ``PageBackground`` and by nothing
+    /// else — screens ask for the background, not for the theme.
+    @Entry var pageTheme: PageTheme = .plain
+}
+
+extension Color {
+    /// `PatchCore` carries the stops as plain numbers, because it is
+    /// Foundation-only and the widget is a different process. This is the
+    /// whole of the conversion; the widget has the same eight lines, and the
+    /// numbers they both read live in ``PageTheme``.
+    init(_ stop: ThemeStop) {
+        self.init(red: stop.red, green: stop.green, blue: stop.blue)
+    }
+}
+
+extension PageTheme {
+    func gradient(_ scheme: ColorScheme) -> LinearGradient? {
+        guard let stops = stops(dark: scheme == .dark) else { return nil }
+        return LinearGradient(
+            colors: stops.map(Color.init),
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+
+    var title: String {
+        switch self {
+        case .paper: String(localized: "Paper")
+        case .plain: String(localized: "Grey")
+        case .gold: String(localized: "Gold")
+        case .roseGold: String(localized: "Rose Gold")
+        case .platinum: String(localized: "Platinum")
+        }
+    }
+}
+
+/// What every screen paints behind itself.
+///
+/// A view rather than a `Color`, because a gradient is not a colour and the
+/// screens should not have to know which they are getting. It ignores the
+/// safe area so the wash runs under the navigation bar and the tab bar —
+/// stopping at either would draw a line across the gradient exactly where
+/// the eye expects it to continue.
+struct PageBackground: View {
+    @Environment(\.pageTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        Group {
+            if let gradient = theme.gradient(colorScheme) {
+                gradient
+            } else {
+                Color.page
+            }
+        }
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+    }
 }

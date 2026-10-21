@@ -12,9 +12,11 @@ struct SettingsView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
 
     @AppStorage(SettingsKey.appearance) private var appearance = Appearance.system
     @AppStorage(SettingsKey.accent) private var accent = AccentTheme.blue
+    @AppStorage(SettingsKey.pageTheme) private var pageTheme = PageTheme.standard
     @AppStorage(SettingsKey.haptics) private var hapticsEnabled = true
 
     /// Off until asked for. Turning it on is what triggers iOS's permission
@@ -65,6 +67,25 @@ struct SettingsView: View {
                     Text("Accent")
                 } footer: {
                     Text("Green means a day you finished, orange a day you missed — whichever accent you pick.")
+                }
+
+                Section {
+                    ThemePicker(selection: $pageTheme)
+                } header: {
+                    // The name of what is chosen, beside the heading. Five
+                    // swatches with no words between them is fine for the
+                    // gold and the rose, and useless for telling the plain
+                    // grey from the near-white — they are four percent apart
+                    // and sit side by side.
+                    HStack {
+                        Text("Theme")
+                        Spacer()
+                        Text(verbatim: pageTheme.title)
+                            .textCase(nil)
+                            .accessibilityIdentifier("theme.current")
+                    }
+                } footer: {
+                    Text("A wash behind your goals, on every screen and on the home screen widget.")
                 }
 
                 Section {
