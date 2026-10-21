@@ -19,20 +19,17 @@ final class ExportUITests: XCTestCase {
         XCTAssertTrue(app.buttons["today.add"].waitForExistence(timeout: 15), "No Today screen")
         app.buttons["today.settings"].tap()
 
-        let export = app.descendants(matching: .any)
-            .matching(identifier: "settings.exportJSON").firstMatch
-        XCTAssertTrue(export.waitForExistence(timeout: 10), "No way to export your data")
+        // Both scrolled to, not assumed on screen. A List does not build
+        // the rows below the fold, so an off-screen row is simply absent —
+        // and Settings keeps growing, so anything near the bottom of it
+        // will eventually slide under. Last time this test was fixed only
+        // the CSV row was made to scroll; the next section added pushed the
+        // JSON row under too.
+        let export = scrollTo("settings.exportJSON", in: app)
+        XCTAssertTrue(export.exists, "No way to export your data")
 
         // The CSV route is a separate control, not a mode of the first one.
-        // Scrolled to rather than assumed on screen: Settings has grown a
-        // row since this was written, and a List does not build the rows
-        // below the fold, so an off-screen row is simply absent.
-        let csv = app.descendants(matching: .any)
-            .matching(identifier: "settings.exportCSV").firstMatch
-        for _ in 0..<6 where !csv.exists {
-            app.swipeUp()
-        }
-        XCTAssertTrue(csv.exists, "No spreadsheet export")
+        XCTAssertTrue(scrollTo("settings.exportCSV", in: app).exists, "No spreadsheet export")
 
         export.tap()
 
@@ -45,6 +42,19 @@ final class ExportUITests: XCTestCase {
             "Exporting did not open a share sheet"
         )
         attach(app.screenshot(), named: "export-share-sheet")
+    }
+
+    /// The element with this identifier, scrolled into existence.
+    @MainActor
+    @discardableResult
+    private func scrollTo(_ identifier: String, in app: XCUIApplication) -> XCUIElement {
+        let element = app.descendants(matching: .any)
+            .matching(identifier: identifier).firstMatch
+        guard !element.waitForExistence(timeout: 5) else { return element }
+        for _ in 0..<6 where !element.exists {
+            app.swipeUp()
+        }
+        return element
     }
 
     private func attach(_ screenshot: XCUIScreenshot, named name: String) {

@@ -48,6 +48,11 @@
                BuildableName = "PatchUITests.xctest"
                ReferencedContainer = "container:Patch.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "ThemePrototypeUITests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

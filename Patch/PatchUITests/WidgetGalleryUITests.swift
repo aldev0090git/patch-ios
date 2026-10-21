@@ -24,7 +24,11 @@ final class WidgetGalleryUITests: XCTestCase {
     func testAddTheWidget() throws {
         // Launch once so the app writes its snapshot, then get out of the way.
         let app = XCUIApplication()
-        app.launchArguments = ["-reset-state", "-demo-data"]
+        // `PATCH_UI_THEME=gold` photographs the widget wearing a page theme;
+        // unset it for the plain capture the README uses.
+        let theme = ProcessInfo.processInfo.environment["PATCH_UI_THEME"]
+        app.launchArguments =
+            (theme.map { ["-pageTheme", $0] } ?? []) + ["-reset-state", "-demo-data"]
         app.launch()
         XCTAssertTrue(app.buttons["today.add"].waitForExistence(timeout: 20), "No Today screen")
         sleep(2)
