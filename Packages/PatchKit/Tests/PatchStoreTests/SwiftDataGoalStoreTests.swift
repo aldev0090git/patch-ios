@@ -48,6 +48,36 @@ struct SwiftDataGoalStoreTests {
         #expect(loaded.first { $0.title == "Unarranged" }?.sortIndex == 0)
     }
 
+    @Test("Deleting a goal takes its entries with it")
+    @MainActor
+    func deleteGoalRemovesEntries() throws {
+        // Orphaned entries would be invisible and unreachable: attached to a
+        // goal that no longer exists, counted by nothing, and with no screen
+        // left that could offer to clean them up.
+        let store = try makeStore()
+        let doomed = Goal(title: "Mistake", measure: .times(1))
+        let keep = Goal(title: "Real", measure: .times(1))
+        try store.save(doomed)
+        try store.save(keep)
+        try store.log(Entry(goalID: doomed.id, amount: 1))
+        try store.log(Entry(goalID: doomed.id, amount: 2))
+        try store.log(Entry(goalID: keep.id, amount: 3))
+
+        try store.deleteGoal(id: doomed.id)
+
+        #expect(try store.loadGoals().map(\.title) == ["Real"])
+        #expect(try store.loadEntries().map(\.goalID) == [keep.id])
+    }
+
+    @Test("Deleting a goal that is not there is not an error")
+    @MainActor
+    func deleteMissingGoal() throws {
+        let store = try makeStore()
+        try store.save(Goal(title: "Real", measure: .times(1)))
+        try store.deleteGoal(id: UUID())
+        #expect(try store.loadGoals().count == 1)
+    }
+
     @Test("Tuesday and Thursday come back as Tuesday and Thursday")
     @MainActor
     func weekdayRoundTrip() throws {

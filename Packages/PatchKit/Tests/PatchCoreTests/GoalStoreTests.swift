@@ -90,4 +90,23 @@ struct InMemoryGoalStoreTests {
         #expect(try store.loadGoals().count == 1)
         #expect(try store.loadEntries().count == 1)
     }
+    @Test("Deleting a goal removes it and everything logged against it")
+    @MainActor
+    func deleteGoal() throws {
+        let doomed = Goal(title: "Mistake", measure: .times(1))
+        let keep = Goal(title: "Real", measure: .times(1))
+        let store = InMemoryGoalStore(
+            goals: [doomed, keep],
+            entries: [
+                Entry(goalID: doomed.id, amount: 1),
+                Entry(goalID: keep.id, amount: 2)
+            ]
+        )
+
+        try store.deleteGoal(id: doomed.id)
+
+        #expect(try store.loadGoals().map(\.title) == ["Real"])
+        #expect(try store.loadEntries().map(\.goalID) == [keep.id])
+    }
+
 }

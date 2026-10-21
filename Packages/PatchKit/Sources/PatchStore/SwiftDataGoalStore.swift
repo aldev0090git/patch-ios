@@ -46,6 +46,21 @@ public final class SwiftDataGoalStore: GoalStore {
         try context.save()
     }
 
+    public func deleteGoal(id: Goal.ID) throws {
+        // Entries first. If the goal went and this threw, the rows would be
+        // orphaned: attached to nothing, shown by nothing, and impossible to
+        // reach again in order to clean up.
+        let entries = FetchDescriptor<StoredEntry>(predicate: #Predicate { $0.goalID == id })
+        for stored in try context.fetch(entries) {
+            context.delete(stored)
+        }
+        let goals = FetchDescriptor<StoredGoal>(predicate: #Predicate { $0.id == id })
+        for stored in try context.fetch(goals) {
+            context.delete(stored)
+        }
+        try context.save()
+    }
+
     public func deleteEntries(ids: [Entry.ID]) throws {
         guard !ids.isEmpty else { return }
         let doomed = Set(ids)

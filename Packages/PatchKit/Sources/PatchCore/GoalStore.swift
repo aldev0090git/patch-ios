@@ -24,6 +24,20 @@ public protocol GoalStore: AnyObject {
 
     func log(_ entry: Entry) throws
     func deleteEntries(ids: [Entry.ID]) throws
+
+    /// Removes a goal **and everything logged against it**, for good.
+    ///
+    /// Archiving is the normal way to retire a goal: it keeps the history, so
+    /// last month's statistics do not quietly change, and it is reversible.
+    /// This is for the other case — a goal created by mistake, which has no
+    /// history worth keeping and which would otherwise sit in the list for
+    /// ever.
+    ///
+    /// Entries go too. Leaving them would be worse than either outcome: rows
+    /// pointing at a goal that no longer exists, counted by nothing and
+    /// shown by nothing, growing the file and the eventual sync for no
+    /// reason.
+    func deleteGoal(id: Goal.ID) throws
 }
 
 /// A store that forgets everything when it goes away.
@@ -60,5 +74,10 @@ public final class InMemoryGoalStore: GoalStore {
     public func deleteEntries(ids: [Entry.ID]) throws {
         let doomed = Set(ids)
         entries.removeAll { doomed.contains($0.id) }
+    }
+
+    public func deleteGoal(id: Goal.ID) throws {
+        goals.removeAll { $0.id == id }
+        entries.removeAll { $0.goalID == id }
     }
 }
