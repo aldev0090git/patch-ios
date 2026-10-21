@@ -72,6 +72,19 @@ struct SettingsView: View {
                 yourData
 
                 Section {
+                    NavigationLink {
+                        AllGoalsView(store: store)
+                    } label: {
+                        Label("All Goals", systemImage: "list.bullet")
+                    }
+                    .accessibilityIdentifier("settings.allGoals")
+                } footer: {
+                    // The only route to a goal that is not scheduled today,
+                    // and the only route back from archiving.
+                    Text("Edit, archive or restore any goal, including ones not scheduled for today.")
+                }
+
+                Section {
                     Button {
                         isShowingHowItWorks = true
                     } label: {
