@@ -199,6 +199,10 @@ the footer points at Settings rather than inventing a status.
 
 ## On the home screen and the Lock Screen
 
+| Small | Medium |
+|---|---|
+| ![Small widget](Docs/screenshots/widget-small.png) | ![Medium widget](Docs/screenshots/widget-medium.png) |
+
 Small and medium on the home screen; circular, rectangular and inline on the
 Lock Screen. All of them read a snapshot file the app writes after every
 change — never the database.
@@ -373,9 +377,10 @@ The screenshots above come from `ScreenshotUITests`, which launches the app
 with a `-demo-data` argument and captures every screen in both appearances. The
 seeder behind it is `#if DEBUG` only and cannot reach a release build.
 
-The widgets are the exception: **the simulator's widget gallery is empty** on
-the iOS 26.5 runtime — not missing Patch, missing everything including Apple's
-own. Widget layout can only be checked on a device.
+The widget captures need an **iOS 27 simulator**. On the 26.5 runtime the
+gallery is empty — not missing Patch, missing everything including Apple's
+own — which is a property of that runtime and not of the app. `simctl list
+devices` prints the runtime beside each name.
 
 The theme is set by launch argument rather than by driving the Settings screen,
 because `UserDefaults` reads `-key value` pairs straight off the command line —
