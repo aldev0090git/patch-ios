@@ -60,6 +60,7 @@ final class CalendarModel {
             // not rearrange itself when they switch tabs.
             goals = GoalOrder.sorted(try store.loadGoals())
             entries = try store.loadEntries()
+            selectTodayIfUnset()
         } catch {
             failure = String(localized: "Couldn't load your calendar. \(error.localizedDescription)")
         }
@@ -203,6 +204,20 @@ final class CalendarModel {
     private func timestamp(for date: Date) -> Date {
         calendar.date(bySettingHour: 12, minute: 0, second: 0, of: date)
             ?? calendar.startOfDay(for: date)
+    }
+
+    /// Opens on today, rather than on a grid with nothing chosen.
+    ///
+    /// Arriving at a calendar that shows a month and no detail makes the
+    /// first tap mandatory before the screen says anything. Only when the
+    /// month on screen actually contains today: having paged back to March,
+    /// jumping the selection to October would be worse than no selection.
+    private func selectTodayIfUnset() {
+        guard selectedDay == nil,
+              let interval = calendar.dateInterval(of: .month, for: month),
+              interval.contains(.now)
+        else { return }
+        selectedDay = calendar.startOfDay(for: .now)
     }
 
     // MARK: - Moving between months

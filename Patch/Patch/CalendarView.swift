@@ -12,14 +12,17 @@ struct CalendarScreen: View {
             ScrollView {
                 VStack(spacing: 16) {
                     MonthGrid(model: model)
+                    // Always, not only when no day is chosen. The legend is
+                    // the key to the grid above it, and the grid does not
+                    // stop needing one the moment you tap a day — it used to
+                    // vanish exactly when you had started reading the colours.
+                    legend
                     if model.selectedDay != nil {
                         SelectedDayCard(model: model)
                             .transition(Motion.transition(
                                 .opacity.combined(with: .move(edge: .bottom)),
                                 reduceMotion: reduceMotion
                             ))
-                    } else {
-                        legend
                     }
                 }
                 .padding(.horizontal, 16)
