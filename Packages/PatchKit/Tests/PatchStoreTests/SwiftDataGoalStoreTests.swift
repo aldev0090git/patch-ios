@@ -48,6 +48,25 @@ struct SwiftDataGoalStoreTests {
         #expect(loaded.first { $0.title == "Unarranged" }?.sortIndex == 0)
     }
 
+    @Test("Tuesday and Thursday come back as Tuesday and Thursday")
+    @MainActor
+    func weekdayRoundTrip() throws {
+        // Reported from a device: a goal saved for Tue+Thu reopened showing
+        // Mon/Wed/Fri. Mon/Wed/Fri is exactly the gym template's schedule,
+        // which makes a mix-up at the view layer as likely as a storage bug —
+        // so pin the storage end first.
+        let store = try makeStore()
+        let goal = Goal(
+            title: "Gym",
+            measure: .times(1),
+            schedule: .daysOfWeek([.tuesday, .thursday])
+        )
+        try store.save(goal)
+
+        let loaded = try #require(try store.loadGoals().first)
+        #expect(loaded.schedule == .daysOfWeek([.tuesday, .thursday]))
+    }
+
     @Test("A goal's Health link and an entry's source survive a round trip")
     @MainActor
     func healthFieldsRoundTrip() throws {
