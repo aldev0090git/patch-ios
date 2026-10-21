@@ -44,6 +44,34 @@ final class ScreenshotUITests: XCTestCase {
     @MainActor func testCaptureScreensLight() { captureScreens(.light) }
     @MainActor func testCaptureScreensDark() { captureScreens(.dark) }
     @MainActor func testCaptureEditor() { captureEditor(.light) }
+    @MainActor func testCaptureAllGoals() { captureAllGoals(.light) }
+
+    /// Every goal, scheduled today or not — the screen that exists because a
+    /// goal set to Tuesdays could not be reached on a Wednesday.
+    @MainActor
+    private func captureAllGoals(_ look: Look) {
+        let app = XCUIApplication()
+        app.launchArguments = Look.language + look.arguments + ["-reset-state", "-demo-data"]
+        app.launch()
+
+        let allGoals = app.buttons["today.allGoals"]
+        XCTAssertTrue(allGoals.waitForExistence(timeout: 15), "No Today screen")
+        allGoals.tap()
+        sleep(2)
+
+        // Archive one, so the screenshot shows both states rather than a
+        // list that looks the same as Today's.
+        let coffee = app.cells.containing(.staticText, identifier: "Coffee").firstMatch
+        if coffee.waitForExistence(timeout: 5) {
+            coffee.press(forDuration: 1.2)
+            sleep(2)
+            if app.buttons["Archive"].waitForExistence(timeout: 3) {
+                app.buttons["Archive"].tap()
+                sleep(2)
+            }
+        }
+        attach(app.screenshot(), named: "\(look.rawValue)-14-all-goals")
+    }
 
     /// The goal editor and the reminder settings, which the README set does
     /// not cover and which are the two densest forms in the app — the places
@@ -67,6 +95,22 @@ final class ScreenshotUITests: XCTestCase {
         app.swipeUp()
         sleep(1)
         attach(app.screenshot(), named: "\(look.rawValue)-11-editor-bottom")
+
+        // The Apple Health row, which says what it will read rather than
+        // offering a switch with no subject.
+        let health = app.buttons["editor.health"]
+        for _ in 0..<4 where !health.exists {
+            app.swipeUp()
+            sleep(1)
+        }
+        if health.exists {
+            // Captured in its Off state deliberately. Choosing a source puts
+            // up the system Health permission sheet — correct behaviour, it
+            // asks at the moment you choose — so a capture that picked one
+            // would photograph iOS's sheet instead of this row, and the test
+            // would then be stuck behind it.
+            attach(app.screenshot(), named: "\(look.rawValue)-13-health")
+        }
 
         app.buttons["editor.cancel"].tap()
         sleep(1)
