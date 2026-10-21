@@ -32,6 +32,10 @@ struct WeekdayPicker: View {
                         )
                 }
                 .buttonStyle(.plain)
+                // Identified because the labels are both localised and
+                // ambiguous — "T" is Tuesday and Thursday, "S" is Saturday
+                // and Sunday — so a test cannot name one by what it reads.
+                .accessibilityIdentifier("weekday.\(day.rawValue)")
                 .accessibilityAddTraits(isOn ? [.isButton, .isSelected] : .isButton)
             }
         }
