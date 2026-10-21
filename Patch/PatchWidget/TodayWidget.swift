@@ -12,7 +12,12 @@ struct TodayWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "TodayWidget", provider: TodayProvider()) { entry in
             TodayWidgetView(snapshot: entry.snapshot)
-                .containerBackground(.fill.tertiary, for: .widget)
+                .containerBackground(for: .widget) {
+                    // `.fill.tertiary` before this, which is the system's
+                    // default-looking grey. The theme replaces it on the
+                    // home screen and leaves the Lock Screen alone.
+                    WidgetBackground(theme: entry.snapshot?.theme ?? .plain)
+                }
         }
         .configurationDisplayName("Today")
         .description("How today is going, at a glance.")
@@ -35,14 +40,23 @@ struct TodayProvider: TimelineProvider {
     private let store = WidgetSnapshotStore()
 
     func placeholder(in context: Context) -> TodayEntry {
-        TodayEntry(date: .now, snapshot: .placeholder)
+        TodayEntry(date: .now, snapshot: .placeholder.wearing(theme))
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TodayEntry) -> Void) {
         // The gallery preview gets something plausible; a real install gets
-        // its own data.
-        let snapshot = context.isPreview ? .placeholder : store.read()
+        // its own data. Either way it wears the theme the app is wearing —
+        // picking a widget that looks nothing like what you will get once it
+        // lands on the home screen is a poor way to choose one.
+        let snapshot = context.isPreview ? .placeholder.wearing(theme) : store.read()
         completion(TodayEntry(date: .now, snapshot: snapshot))
+    }
+
+    /// The real snapshot's theme, used to dress the made-up one. Falls back
+    /// to plain before the app has ever written, which is also when there is
+    /// no theme to honour.
+    private var theme: PageTheme {
+        store.read()?.theme ?? .plain
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<TodayEntry>) -> Void) {

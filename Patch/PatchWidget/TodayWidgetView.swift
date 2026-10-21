@@ -198,12 +198,56 @@ private struct GoalListView: View {
 }
 
 extension Color {
-    /// The widget cannot see the app's theme — it is a separate process with
-    /// no access to its `UserDefaults` beyond the shared group, and the accent
-    /// is not worth putting in the snapshot. It uses the system accent and the
-    /// one colour that carries meaning: green is a day you finished, here as
-    /// everywhere else.
+    /// The widget is a separate process with no access to the app's
+    /// `UserDefaults` beyond the shared group, and the accent is not worth
+    /// putting in the snapshot. It uses the system accent and the one colour
+    /// that carries meaning: green is a day you finished, here as everywhere
+    /// else.
     static let goalDone = Color.green
+
+    /// The page theme *is* in the snapshot, because a home screen wearing a
+    /// different theme from the app it belongs to looks broken. These eight
+    /// lines are the same eight in the app's `Theme.swift`; what they must
+    /// not do is disagree, which is why the numbers live in `PageTheme` and
+    /// only the conversion is written twice.
+    init(_ stop: ThemeStop) {
+        self.init(red: stop.red, green: stop.green, blue: stop.blue)
+    }
+}
+
+extension PageTheme {
+    func gradient(_ scheme: ColorScheme) -> LinearGradient? {
+        guard let stops = stops(dark: scheme == .dark) else { return nil }
+        return LinearGradient(
+            colors: stops.map(Color.init),
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+}
+
+/// What a home screen widget paints behind itself.
+///
+/// Only the home screen. Lock Screen families are rendered by the system in
+/// a single vibrant material and ignore colour entirely — a gradient there
+/// is at best wasted and at worst a grey smear over the glyph that matters.
+struct WidgetBackground: View {
+    @Environment(\.widgetFamily) private var family
+    @Environment(\.colorScheme) private var colorScheme
+    let theme: PageTheme
+
+    var body: some View {
+        switch family {
+        case .systemSmall, .systemMedium, .systemLarge, .systemExtraLarge:
+            if let gradient = theme.gradient(colorScheme) {
+                gradient
+            } else {
+                Color(uiColor: .systemBackground)
+            }
+        default:
+            AccessoryWidgetBackground()
+        }
+    }
 }
 
 #Preview(as: .systemSmall) {
