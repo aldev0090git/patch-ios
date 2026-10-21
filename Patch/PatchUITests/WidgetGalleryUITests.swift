@@ -2,12 +2,14 @@ import XCTest
 
 /// Adds the widget to the home screen and photographs it.
 ///
-/// **Needs an iOS 27 runtime.** On 26.5 the gallery is empty — of everything,
-/// including Apple's own widgets — so this fails there for reasons that have
-/// nothing to do with Patch. See the widget note in `CLAUDE.md`.
-///
 /// Run by hand, never in CI: it drives SpringBoard and depends on the home
-/// screen's own layout.
+/// screen's own layout, which changes between iOS versions.
+///
+/// Finds Patch by searching the gallery rather than scrolling to it. The
+/// list is built lazily and ordered differently on each runtime, and an
+/// earlier version of this test read "I scrolled and did not see it" as
+/// "iOS 26 has no widget gallery", which is not true — Patch appears there
+/// perfectly well.
 final class WidgetGalleryUITests: XCTestCase {
     @MainActor
     private var springboard: XCUIApplication {
@@ -49,17 +51,26 @@ final class WidgetGalleryUITests: XCTestCase {
         }
         sleep(5)
 
-        let patch = springboard.staticTexts["Patch"].firstMatch
-        for _ in 0..<6 where !patch.exists {
-            springboard.swipeUp()
-            sleep(1)
+        // The gallery's own search field, rather than swiping and hoping.
+        // The list is long and built lazily, so an app near the bottom is
+        // simply not in the tree yet; the earlier version swiped past Patch
+        // and concluded the runtime was at fault.
+        let search = springboard.searchFields.firstMatch
+        if search.waitForExistence(timeout: 10) {
+            search.tap()
+            search.typeText("Patch")
+            sleep(3)
         }
-        guard patch.waitForExistence(timeout: 5) else {
+
+        let patch = springboard.staticTexts["Patch"].firstMatch
+        guard patch.waitForExistence(timeout: 10) else {
             attach(named: "gallery-without-patch")
-            XCTFail("Patch was not in the widget gallery — is this an iOS 26 runtime?")
+            XCTFail("Patch was not in the widget gallery")
             return
         }
-        patch.tap()
+        // By coordinate: the label is inside a gallery cell and reports
+        // itself as not hittable, though the row it sits in takes the tap.
+        patch.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         sleep(3)
         attach(named: "1-small")
 

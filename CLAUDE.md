@@ -305,22 +305,27 @@ Pick the event by comparing state **before and after** the write, never from the
 amount: finishing is a transition. `Haptics.isEnabled` reads `UserDefaults`
 directly so no call site has to carry the setting; absent means on.
 
-## The widget gallery is empty on iOS 26.5, and fine on 27
+## The widget gallery works on 26.5 and on 27 — search it, do not scroll it
 
-**Check the runtime before concluding anything.** On the **26.5** runtime the
-gallery is empty — not missing Patch, missing everything, including the
-widgets of Apple's own installed apps. Confirmed with `chronod` healthy
-(`launchctl list` showing exit 0), on a freshly booted device, after 45
-seconds of settling.
+Patch's widgets appear in the gallery on **both** runtimes and can be added on
+both. This section previously said the 26.5 gallery was "empty of everything,
+including Apple's own widgets". That was wrong, and it was wrong twice: the
+claim was written after a scroll-and-hope UI test failed to find Patch, and
+then believed again later and nearly shipped as an `XCTSkipUnless`. A
+screenshot of the Patch widget sheet on 26.5 settled it.
 
-On **27.0** it works: Patch's small, medium, circular, rectangular and inline
-widgets all appear and can be added. That was established by someone opening
-DeviceHub and doing it by hand while this file claimed it was impossible.
+**The gallery list is built lazily**, so an app that is not yet rendered is
+not in the accessibility tree at all — indistinguishable, to a test, from an
+app that is not installed. Do not swipe looking for it. Tap the **Search
+Widgets** field and type the name; `WidgetGalleryUITests` does this, and
+passes on 26.5.
 
-The lesson is the generalisation, not the runtime. "It does not work on the
-simulator I happened to boot" became "it cannot be checked on the simulator",
-and a working 27.0 device was sitting in the list the whole time. `simctl list
-devices` prints the runtime next to each name; read it.
+The tappable thing is the row, not the label: the `Patch` static text reports
+`isHittable == false`, so tap it by coordinate.
+
+The lesson is the generalisation, not the runtime. Twice now, "my test did not
+find it" has become "the runtime cannot do it". A negative from an automated
+search is evidence about the search.
 
 Two things wasted time getting to that answer, both worth not repeating:
 
