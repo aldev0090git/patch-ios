@@ -124,18 +124,37 @@ struct ContentView: View {
             .environment(\.editMode, $editMode)
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
-            .background(Color.page)
+            // A background that does not come and go. By default iOS fades
+            // the bar's backing in as content scrolls under it and away
+            // again at the top, so the top of the screen changes colour
+            // while you scroll. `.hard` keeps it there, the same, always.
+            .scrollEdgeEffectStyle(.hard, for: .top)
             .navigationTitle("Today")
             // Inline, because the progress header below is the hero of this
             // screen. A large title competes with it for the same space and
             // loses, leaving the screen looking untitled.
             .navigationBarTitleDisplayMode(.inline)
-            .safeAreaInset(edge: .top, spacing: 0) {
+            // `safeAreaBar`, not `safeAreaInset`. An inset is a plain gap
+            // you have to dress yourself, and every attempt to dress it to
+            // match the navigation bar above failed in a different way —
+            // `.bar` came out too light over a themed page, an opaque page
+            // colour split from the glass above it, and forcing the
+            // navigation bar opaque to match turned the top into a slab.
+            // This tells iOS the content *is* a bar, so it gets the same
+            // treatment the navigation bar gets, by the same code.
+            // 6, not 0. Rows carry a 6-point inset top and bottom, so two
+            // cards sit 12 apart while the first card sat 6 from the bar —
+            // close enough to look like a mistake rather than a rhythm.
+            .safeAreaBar(edge: .top, spacing: 6) {
                 TodayProgressHeader(progress: model.todaysProgress)
                     .padding(.horizontal, 20)
                     .padding(.bottom, 16)
-                    .background(.bar)
             }
+            // After the inset, not before: a background applies to what
+            // is above it in the chain, and the pinned header is added
+            // after. Painted earlier it stopped at the header's edge and
+            // left a seam across the wash.
+            .background(PageBackground())
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Settings", systemImage: "gearshape") { isShowingSettings = true }

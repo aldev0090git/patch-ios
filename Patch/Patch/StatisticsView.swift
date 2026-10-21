@@ -27,15 +27,27 @@ struct StatisticsView: View {
             }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
-            .background(Color.page)
+            // A background that does not come and go. By default iOS fades
+            // the bar's backing in as content scrolls under it and away
+            // again at the top, so the top of the screen changes colour
+            // while you scroll. `.hard` keeps it there, the same, always.
+            .scrollEdgeEffectStyle(.hard, for: .top)
             .navigationTitle("Statistics")
             .navigationBarTitleDisplayMode(.inline)
-            .safeAreaInset(edge: .top, spacing: 0) {
+            // A bar, not an inset — see the note on Today's.
+            // 6, not 0. Rows carry a 6-point inset top and bottom, so two
+            // cards sit 12 apart while the first card sat 6 from the bar —
+            // close enough to look like a mistake rather than a rhythm.
+            .safeAreaBar(edge: .top, spacing: 6) {
                 PeriodBar(model: model)
                     .padding(.horizontal, 16)
                     .padding(.bottom, 12)
-                    .background(.bar)
             }
+            // After the inset, not before: a background applies to what
+            // is above it in the chain, and the pinned header is added
+            // after. Painted earlier it stopped at the header's edge and
+            // left a seam across the wash.
+            .background(PageBackground())
             // On every appearance, not once. A tab keeps its view alive, so
             // a goal logged on another one stayed invisible here until the
             // app was relaunched — and backdating makes that obvious.

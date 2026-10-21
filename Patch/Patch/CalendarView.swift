@@ -32,10 +32,15 @@ struct CalendarScreen: View {
                 .padding(.top, 12)
                 .padding(.bottom, 24)
             }
-            .background(Color.page)
+            .background(PageBackground())
             // The month *is* the title. It used to be a second bar below a
             // navigation bar that said "Calendar" — two stacked headers, one
             // of them repeating what the tab bar already says.
+            // A background that does not come and go. By default iOS fades
+            // the bar's backing in as content scrolls under it and away
+            // again at the top, so the top of the screen changes colour
+            // while you scroll. `.hard` keeps it there, the same, always.
+            .scrollEdgeEffectStyle(.hard, for: .top)
             .navigationTitle(Text(verbatim: model.monthTitle))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
