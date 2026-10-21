@@ -18,6 +18,23 @@
         }
       }
     },
+    "%@ and everything logged against it will be deleted. This can't be undone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "«%@» и всё, что по ней записано, будет удалено. Это нельзя отменить."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "«%@» і все, що за нею записано, буде видалено. Це не можна скасувати."
+          }
+        }
+      }
+    },
     "%@ every day": {
       "extractionState": "manual",
       "localizations": {
@@ -949,6 +966,23 @@
         }
       }
     },
+    "Couldn't delete that. %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось удалить. %@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не вдалося видалити. %@"
+          }
+        }
+      }
+    },
     "Couldn't load your calendar. %@": {
       "extractionState": "manual",
       "localizations": {
@@ -1218,6 +1252,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Дні"
+          }
+        }
+      }
+    },
+    "Delete": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Видалити"
+          }
+        }
+      }
+    },
+    "Delete this goal?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удалить эту цель?"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Видалити цю ціль?"
           }
         }
       }

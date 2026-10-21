@@ -310,4 +310,5 @@ private final class FailingStatisticsStore: GoalStore {
     func save(_ goal: Goal) throws { throw Nope() }
     func log(_ entry: Entry) throws { throw Nope() }
     func deleteEntries(ids: [Entry.ID]) throws { throw Nope() }
+    func deleteGoal(id: Goal.ID) throws { throw Nope() }
 }

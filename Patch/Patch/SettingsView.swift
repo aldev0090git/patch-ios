@@ -32,6 +32,19 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    NavigationLink {
+                        AllGoalsView(store: store)
+                    } label: {
+                        Label("All Goals", systemImage: "list.bullet")
+                    }
+                    .accessibilityIdentifier("settings.allGoals")
+                } footer: {
+                    // The only route to a goal that is not scheduled today,
+                    // and the only route back from archiving.
+                    Text("Edit, archive or restore any goal, including ones not scheduled for today.")
+                }
+
                 Section("Appearance") {
                     // Words, not symbols: a segmented control shows one or
                     // the other, and a sun and a moon leave the third option
@@ -70,19 +83,6 @@ struct SettingsView: View {
                 reminders
 
                 yourData
-
-                Section {
-                    NavigationLink {
-                        AllGoalsView(store: store)
-                    } label: {
-                        Label("All Goals", systemImage: "list.bullet")
-                    }
-                    .accessibilityIdentifier("settings.allGoals")
-                } footer: {
-                    // The only route to a goal that is not scheduled today,
-                    // and the only route back from archiving.
-                    Text("Edit, archive or restore any goal, including ones not scheduled for today.")
-                }
 
                 Section {
                     Button {

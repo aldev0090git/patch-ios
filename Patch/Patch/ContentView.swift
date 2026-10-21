@@ -175,19 +175,29 @@ struct ContentView: View {
                     }
                 }
             }
-            .sheet(isPresented: $isShowingAllGoals) {
-                NavigationStack {
-                    AllGoalsView(store: store)
-                        .toolbar {
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Done") { isShowingAllGoals = false }
+            // `onDismiss` because Today loads on appear, and a sheet
+            // presented over it never makes it appear again. Archiving a goal
+            // from either sheet left this list showing it until the user
+            // switched tabs and came back.
+            .sheet(
+                isPresented: $isShowingAllGoals,
+                onDismiss: { model.load() },
+                content: {
+                    NavigationStack {
+                        AllGoalsView(store: store)
+                            .toolbar {
+                                ToolbarItem(placement: .confirmationAction) {
+                                    Button("Done") { isShowingAllGoals = false }
+                                }
                             }
-                        }
+                    }
                 }
-            }
-            .sheet(isPresented: $isShowingSettings) {
-                SettingsView(store: store)
-            }
+            )
+            .sheet(
+                isPresented: $isShowingSettings,
+                onDismiss: { model.load() },
+                content: { SettingsView(store: store) }
+            )
             .sheet(item: $editing) { editing in
                 GoalEditor(goal: editing.goal) { goal in
                     withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
