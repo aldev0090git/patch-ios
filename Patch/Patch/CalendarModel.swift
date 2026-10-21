@@ -209,15 +209,22 @@ final class CalendarModel {
     /// Opens on today, rather than on a grid with nothing chosen.
     ///
     /// Arriving at a calendar that shows a month and no detail makes the
-    /// first tap mandatory before the screen says anything. Only when the
-    /// month on screen actually contains today: having paged back to March,
-    /// jumping the selection to October would be worse than no selection.
+    /// first tap mandatory before the screen says anything.
     private func selectTodayIfUnset() {
-        guard selectedDay == nil,
-              let interval = calendar.dateInterval(of: .month, for: month),
-              interval.contains(.now)
-        else { return }
-        selectedDay = calendar.startOfDay(for: .now)
+        guard selectedDay == nil else { return }
+        selectedDay = defaultDay(in: month)
+    }
+
+    /// The day to land on when a month arrives with no selection of its own:
+    /// today where the month holds it, otherwise the first of that month.
+    ///
+    /// Something is always chosen. The detail card below the grid is the
+    /// screen's answer to "how did that day go", and an empty selection
+    /// leaves the question unasked.
+    private func defaultDay(in month: Date) -> Date? {
+        guard let interval = calendar.dateInterval(of: .month, for: month) else { return nil }
+        if interval.contains(.now) { return calendar.startOfDay(for: .now) }
+        return calendar.startOfDay(for: interval.start)
     }
 
     // MARK: - Moving between months
@@ -225,9 +232,10 @@ final class CalendarModel {
     func step(by delta: Int) {
         guard let moved = calendar.date(byAdding: .month, value: delta, to: month) else { return }
         month = moved
-        // The selection belongs to the month it was made in; carrying it
-        // forward would highlight an arbitrary day in the new one.
-        selectedDay = nil
+        // The selection belongs to the month it was made in, so it does not
+        // travel — but it is replaced rather than cleared, because the
+        // calendar is never meant to sit with no day chosen.
+        selectedDay = defaultDay(in: moved)
     }
 
     /// False once the month on screen contains today.
@@ -239,8 +247,11 @@ final class CalendarModel {
     var monthTitle: String {
         let sameYear = calendar.component(.year, from: month)
             == calendar.component(.year, from: .now)
-        return month.formatted(
-            sameYear ? .dateTime.month(.wide) : .dateTime.month(.wide).year()
+        return MonthName.standalone(
+            month,
+            includingYear: !sameYear,
+            calendar: calendar,
+            locale: calendar.locale ?? .autoupdatingCurrent
         )
     }
 }

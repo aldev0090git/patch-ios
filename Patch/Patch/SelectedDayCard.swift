@@ -23,21 +23,12 @@ struct SelectedDayCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                Text(day, format: .dateTime.weekday(.wide).day().month(.wide))
-                    .font(.headline)
-                Spacer()
-                Button("Close", systemImage: "xmark") {
-                    withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
-                        model.selectedDay = nil
-                    }
-                }
-                .labelStyle(.iconOnly)
-                .buttonStyle(.plain)
-                .foregroundStyle(.secondary)
-                .frame(width: 44, height: 44)
-                .contentShape(.rect)
-            }
+            // No close button: the card has nowhere to close to. Some day
+            // is always selected, so dismissing this one would only leave a
+            // gap where the day's detail belongs.
+            Text(day, format: .dateTime.weekday(.wide).day().month(.wide))
+                .font(.headline)
+                .accessibilityIdentifier("calendar.selectedDay")
 
             let rows = model.selectedDayProgress
             if rows.isEmpty {

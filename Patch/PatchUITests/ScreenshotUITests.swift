@@ -158,7 +158,7 @@ final class ScreenshotUITests: XCTestCase {
         attach(app.screenshot(), named: "\(look.rawValue)-04-today")
 
         app.tabBars.buttons["Calendar"].tap()
-        XCTAssertTrue(app.staticTexts["Calendar"].waitForExistence(timeout: 10), "No Calendar screen")
+        XCTAssertTrue(app.buttons["calendar.previousMonth"].waitForExistence(timeout: 10), "No Calendar screen")
         sleep(1)
         attach(app.screenshot(), named: "\(look.rawValue)-05-calendar")
 

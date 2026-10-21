@@ -26,16 +26,34 @@ struct CalendarScreen: View {
                     }
                 }
                 .padding(.horizontal, 16)
+                // Clear of the navigation bar. The grid used to start flush
+                // against it, so the first row of dates read as part of the
+                // chrome rather than as the calendar.
+                .padding(.top, 12)
                 .padding(.bottom, 24)
             }
-            .background(Color(uiColor: .systemGroupedBackground))
-            .navigationTitle("Calendar")
+            .background(Color.page)
+            // The month *is* the title. It used to be a second bar below a
+            // navigation bar that said "Calendar" — two stacked headers, one
+            // of them repeating what the tab bar already says.
+            .navigationTitle(Text(verbatim: model.monthTitle))
             .navigationBarTitleDisplayMode(.inline)
-            .safeAreaInset(edge: .top, spacing: 0) {
-                MonthBar(model: model)
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 12)
-                    .background(.bar)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Previous month", systemImage: "chevron.left") {
+                        step(by: -1)
+                    }
+                    .labelStyle(.iconOnly)
+                    .accessibilityIdentifier("calendar.previousMonth")
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Next month", systemImage: "chevron.right") {
+                        step(by: 1)
+                    }
+                    .labelStyle(.iconOnly)
+                    .disabled(!model.canStepForward)
+                    .accessibilityIdentifier("calendar.nextMonth")
+                }
             }
             // On every appearance, not once. A tab keeps its view alive, so
             // a goal logged on another one stayed invisible here until the
@@ -57,6 +75,13 @@ struct CalendarScreen: View {
 
     /// Colour is the only thing carrying meaning in the grid, so it is spelled
     /// out rather than left to be guessed.
+    private func step(by delta: Int) {
+        withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
+            model.step(by: delta)
+        }
+        Haptics.play(.selection)
+    }
+
     private var legend: some View {
         HStack(spacing: 18) {
             ForEach(LegendItem.all(accent: themeAccent)) { item in
@@ -92,51 +117,6 @@ private struct LegendItem: Identifiable {
     }
 }
 
-/// Month name, with an arrow either side.
-private struct MonthBar: View {
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Bindable var model: CalendarModel
-
-    var body: some View {
-        HStack(spacing: 10) {
-            Button { step(-1) } label: {
-                Image(systemName: "chevron.left")
-                    // 44pt is the smallest target iOS expects, and a chevron
-                    // draws at about 9x14. The frame is the hit area; the
-                    // glyph stays the size it was.
-                    .frame(width: 44, height: 44)
-                    .contentShape(.rect)
-            }
-            .accessibilityLabel(Text("Previous month"))
-
-            Spacer(minLength: 0)
-
-            Text(verbatim: model.monthTitle)
-                .font(.headline)
-                .contentTransition(.numericText())
-
-            Spacer(minLength: 0)
-
-            Button { step(1) } label: {
-                Image(systemName: "chevron.right")
-                    .frame(width: 44, height: 44)
-                    .contentShape(.rect)
-            }
-            .accessibilityLabel(Text("Next month"))
-            .disabled(!model.canStepForward)
-        }
-        .buttonStyle(.plain)
-        .font(.headline)
-    }
-
-    private func step(_ delta: Int) {
-        withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
-            model.step(by: delta)
-        }
-        Haptics.play(.selection)
-    }
-}
-
 private struct MonthGrid: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Bindable var model: CalendarModel
@@ -164,7 +144,11 @@ private struct MonthGrid: View {
                             // a tick there would claim something happened.
                             guard day.isInMonth, !day.isFuture else { return }
                             withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
-                                model.selectedDay = isSelected(day) ? nil : day.date
+                                // Never back to nil. A calendar with no day
+                                // chosen has nothing to say, and tapping the
+                                // selected day again to empty the screen is
+                                // not something anybody means to do.
+                                model.selectedDay = day.date
                             }
                             Haptics.play(.selection)
                         }

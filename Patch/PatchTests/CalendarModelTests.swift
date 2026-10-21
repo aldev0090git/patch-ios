@@ -95,16 +95,6 @@ struct CalendarModelTests {
     }
 
     @MainActor
-    @Test("Changing month drops a selection made in the old one")
-    func steppingClearsSelection() {
-        let model = model()
-        model.selectedDay = calendar().startOfDay(for: .now)
-        model.step(by: -1)
-
-        #expect(model.selectedDay == nil)
-    }
-
-    @MainActor
     @Test("A finished day fills, an empty one does not")
     func completedDaysAreMarked() {
         let created = calendar().date(byAdding: .day, value: -10, to: .now) ?? .now

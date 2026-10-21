@@ -19,8 +19,10 @@ final class CalendarScreenUITests: XCTestCase {
 
         XCTAssertTrue(app.buttons["today.add"].waitForExistence(timeout: 15), "No Today screen")
         app.tabBars.buttons["Calendar"].tap()
+        // The month arrows, not a title saying "Calendar": the month is the
+        // title now, so its text changes every month and cannot be waited on.
         XCTAssertTrue(
-            app.staticTexts["Calendar"].waitForExistence(timeout: 10),
+            app.buttons["calendar.previousMonth"].waitForExistence(timeout: 10),
             "The calendar screen did not appear"
         )
         attach(app.screenshot(), named: "Calendar")
@@ -29,12 +31,27 @@ final class CalendarScreenUITests: XCTestCase {
         // By identifier, so it cannot land on a day borrowed from a
         // neighbouring month that happens to carry the same number.
         let today = Calendar.current.component(.day, from: Date())
-        app.descendants(matching: .any)
-            .matching(identifier: "calendar.day.\(today)").firstMatch.tap()
+        let todayCell = app.descendants(matching: .any)
+            .matching(identifier: "calendar.day.\(today)").firstMatch
+        todayCell.tap()
         attach(app.screenshot(), named: "Calendar - day selected")
 
-        app.buttons["Previous month"].tap()
+        // Tapping the chosen day again must leave it chosen. The card below
+        // the grid is the whole point of the screen, and it used to close.
+        todayCell.tap()
+        XCTAssertTrue(
+            app.staticTexts["calendar.selectedDay"].waitForExistence(timeout: 5),
+            "Tapping the selected day cleared the selection"
+        )
+
+        app.buttons["calendar.previousMonth"].tap()
         attach(app.screenshot(), named: "Calendar - previous month")
+
+        // And a month arrived at by paging still has a day open.
+        XCTAssertTrue(
+            app.staticTexts["calendar.selectedDay"].waitForExistence(timeout: 5),
+            "Changing month left the calendar with nothing selected"
+        )
     }
 
     private func attach(_ screenshot: XCUIScreenshot, named name: String) {
