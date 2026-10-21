@@ -45,6 +45,30 @@ the goal's shape, not from a view's preference.
 rather than left in place. A field nobody uses still becomes a column, and once
 CloudKit is on, removing a column is a migration rather than a refactor.
 
+## The store stays in the app's own container
+
+The database is **not** in the App Group, and that is a decision rather than
+an oversight. Moving it there would let an extension write, which is what a
+Control Centre control and buttons inside the widget both need — and it would
+also mean two processes mutating the same SwiftData store.
+
+The call, made 21 October: a read-only widget cannot corrupt anything. The
+worst it can do is show a stale number. For an app whose whole value is
+accumulated history, that guarantee is worth more than one-tap logging from
+the Lock Screen.
+
+So the widget reads a snapshot file and nothing else writes to the store. Do
+not wire an extension into it without revisiting that trade deliberately.
+
+A tested migration was written for this and then **deleted**, since dead code
+invites someone to finish wiring it up. It is in commit `bece057` in full —
+copy rather than move, staged and renamed into place so it cannot half-happen,
+original never deleted, falls back on any failure. Start from there if the
+decision ever reverses.
+
+**CloudKit is not affected by any of this.** Sync works against the app's own
+container; the migration was only ever about extensions.
+
 ## Models must stay CloudKit-compatible
 
 Sync is not switched on yet (it needs the paid Apple Developer Program) but the
