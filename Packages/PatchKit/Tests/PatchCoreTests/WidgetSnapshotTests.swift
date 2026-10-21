@@ -186,3 +186,73 @@ struct WidgetSnapshotTests {
     }
 
 }
+
+/// The file in the shared container outlives any one version of the app.
+@Suite("Snapshot themes")
+struct WidgetSnapshotThemeTests {
+    @Test("A snapshot written before themes existed still reads")
+    func olderSnapshotsStillDecode() throws {
+        // Exactly what the previous build wrote: no `theme` key at all.
+        let json = """
+        {"date":"2026-10-21T00:00:00Z","items":[]}
+        """
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let snapshot = try decoder.decode(WidgetSnapshot.self, from: Data(json.utf8))
+
+        #expect(snapshot.theme == .plain)
+    }
+
+    @Test("A theme this build does not know falls back rather than failing")
+    func unknownThemesFallBack() {
+        #expect(PageTheme.stored("obsidian") == .standard)
+        #expect(PageTheme.stored(nil) == .standard)
+        #expect(PageTheme.stored("gold") == .gold)
+    }
+
+    @Test("A snapshot with no theme is plain, not the default")
+    func olderSnapshotsAreNotRedressed() throws {
+        // `decodeIfPresent ?? .plain`, deliberately: the absent key means a
+        // build that had no themes, and that build's widget was the flat
+        // one. Reading it as the new default would repaint a home screen
+        // nobody asked to repaint, until the app next publishes.
+        let json = #"{"date":"2026-10-21T00:00:00Z","items":[]}"#
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        #expect(try decoder.decode(WidgetSnapshot.self, from: Data(json.utf8)).theme == .plain)
+    }
+
+    @Test("Re-dressing keeps every number")
+    func wearingChangesOnlyTheTheme() {
+        let item = WidgetSnapshot.Item(
+            id: UUID(), title: "Read", symbolName: "book", fraction: 0.5, isAchieved: false
+        )
+        let original = WidgetSnapshot(date: .now, items: [item], theme: .plain)
+        let dressed = original.wearing(.roseGold)
+
+        #expect(dressed.theme == .roseGold)
+        #expect(dressed.items == original.items)
+        #expect(dressed.date == original.date)
+    }
+
+    @Test("Every theme but the plain one has two stops, in both appearances")
+    func themesAreComplete() {
+        for theme in PageTheme.allCases where theme != .plain {
+            #expect(theme.stops(dark: false)?.count == 2, "\(theme) has no light stops")
+            #expect(theme.stops(dark: true)?.count == 2, "\(theme) has no dark stops")
+        }
+        #expect(PageTheme.plain.stops(dark: false) == nil)
+    }
+
+    /// White cards have nowhere to go, so the page has to stay clear of them.
+    @Test("Light themes stay light enough for a white card to sit on")
+    func lightThemesStayLight() throws {
+        for theme in PageTheme.allCases where theme != .plain {
+            let stops = try #require(theme.stops(dark: false))
+            for stop in stops {
+                let darkest = min(stop.red, stop.green, stop.blue)
+                #expect(darkest > 0.70, "\(theme) goes down to \(darkest)")
+            }
+        }
+    }
+}

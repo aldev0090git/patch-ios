@@ -33,10 +33,24 @@ public struct WidgetSnapshot: Codable, Hashable, Sendable {
 
     public let date: Date
     public let items: [Item]
+    /// The page theme the app is wearing, so the home screen can match it.
+    public let theme: PageTheme
 
-    public init(date: Date, items: [Item]) {
+    public init(date: Date, items: [Item], theme: PageTheme = .plain) {
         self.date = date
         self.items = items
+        self.theme = theme
+    }
+
+    /// Hand-written so a snapshot left by an older build still reads. The
+    /// file in the shared container outlives any one version of the app, and
+    /// a widget that fails to decode shows its "nothing yet" state — which
+    /// would look exactly like data loss to whoever is reading it.
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        date = try container.decode(Date.self, forKey: .date)
+        items = try container.decode([Item].self, forKey: .items)
+        theme = try container.decodeIfPresent(PageTheme.self, forKey: .theme) ?? .plain
     }
 
     public var completed: Int { items.count(where: \.isAchieved) }
@@ -72,6 +86,12 @@ public struct WidgetSnapshot: Codable, Hashable, Sendable {
     }
 
     public static let empty = WidgetSnapshot(date: .distantPast, items: [])
+
+    /// The same day, wearing a different theme. Changing the theme does not
+    /// change any of the numbers, so there is no reason to recompute them.
+    public func wearing(_ theme: PageTheme) -> WidgetSnapshot {
+        WidgetSnapshot(date: date, items: items, theme: theme)
+    }
 }
 
 extension WidgetSnapshot {
@@ -83,6 +103,7 @@ extension WidgetSnapshot {
         goals: [Goal],
         entries: [Entry],
         titles: (Goal) -> String,
+        theme: PageTheme = .plain,
         calendar: Calendar = .current,
         now: Date = .now
     ) -> WidgetSnapshot {
@@ -100,7 +121,7 @@ extension WidgetSnapshot {
                     isAchieved: day.isAchieved
                 )
             }
-        return WidgetSnapshot(date: calendar.startOfDay(for: now), items: items)
+        return WidgetSnapshot(date: calendar.startOfDay(for: now), items: items, theme: theme)
     }
 }
 
