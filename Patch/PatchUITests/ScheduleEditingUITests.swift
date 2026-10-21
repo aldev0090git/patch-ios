@@ -34,6 +34,7 @@ final class ScheduleEditingUITests: XCTestCase {
         }
         app.buttons["Certain days"].tap()
         sleep(1)
+        scrollToWeekdays(app)
 
         // Every weekday starts selected; clear them, then pick a set that
         // includes today so the goal is reachable afterwards.
@@ -69,6 +70,7 @@ final class ScheduleEditingUITests: XCTestCase {
         while !app.buttons["Certain days"].exists {
             app.swipeUp()
         }
+        scrollToWeekdays(app)
         sleep(1)
         attach(app.screenshot(), named: "4-reopened")
 
@@ -80,7 +82,23 @@ final class ScheduleEditingUITests: XCTestCase {
 
     @MainActor
     private func selectedWeekdays(_ app: XCUIApplication) -> Set<Int> {
-        Set((1...7).filter { app.buttons["weekday.\($0)"].isSelected })
+        // `exists` first: `isSelected` on an element that is not in the tree
+        // raises rather than returning false, which turns "the chips are
+        // still below the fold" into an unreadable snapshot failure.
+        Set((1...7).filter {
+            let button = app.buttons["weekday.\($0)"]
+            return button.exists && button.isSelected
+        })
+    }
+
+    /// Scrolls until the weekday chips are built. They sit below the Repeat
+    /// picker, so reaching "Certain days" does not mean reaching them.
+    @MainActor
+    private func scrollToWeekdays(_ app: XCUIApplication) {
+        for _ in 0..<4 where !app.buttons["weekday.1"].exists {
+            app.swipeUp()
+            sleep(1)
+        }
     }
 
     private func attach(_ screenshot: XCUIScreenshot, named name: String) {

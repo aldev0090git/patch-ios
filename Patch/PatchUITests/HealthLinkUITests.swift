@@ -26,7 +26,11 @@ final class HealthLinkUITests: XCTestCase {
 
         // A new goal starts as a time goal, which Health can fill from the
         // exercise ring.
-        let healthToggle = app.switches["editor.health"]
+        // Any element type, not `.switches`: this row started as a
+        // toggle and is now a menu picker, because a count goal has to say
+        // *which* count — steps and push-ups are both `.count`.
+        let healthToggle = app.descendants(matching: .any)
+            .matching(identifier: "editor.health").firstMatch
         XCTAssertTrue(
             healthToggle.waitForExistence(timeout: 5),
             "A time goal should offer Apple Health — is HealthKit missing from this runtime?"

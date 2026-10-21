@@ -24,11 +24,15 @@ final class ExportUITests: XCTestCase {
         XCTAssertTrue(export.waitForExistence(timeout: 10), "No way to export your data")
 
         // The CSV route is a separate control, not a mode of the first one.
-        XCTAssertTrue(
-            app.descendants(matching: .any)
-                .matching(identifier: "settings.exportCSV").firstMatch.exists,
-            "No spreadsheet export"
-        )
+        // Scrolled to rather than assumed on screen: Settings has grown a
+        // row since this was written, and a List does not build the rows
+        // below the fold, so an off-screen row is simply absent.
+        let csv = app.descendants(matching: .any)
+            .matching(identifier: "settings.exportCSV").firstMatch
+        for _ in 0..<6 where !csv.exists {
+            app.swipeUp()
+        }
+        XCTAssertTrue(csv.exists, "No spreadsheet export")
 
         export.tap()
 

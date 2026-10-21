@@ -95,7 +95,10 @@ final class LocalisationSweepUITests: XCTestCase {
         // Scroll until the Apple Health section is on screen rather than
         // guessing at a number of swipes: it moved down the form when the
         // currency row appeared, and it will move again.
-        let health = app.switches["editor.health"]
+        // Matched by identifier alone — the row is a menu picker now,
+        // and this sweep cares where it is, not what kind of control it is.
+        let health = app.descendants(matching: .any)
+            .matching(identifier: "editor.health").firstMatch
         for _ in 0..<4 where !health.exists || !health.isHittable {
             app.swipeUp()
             sleep(1)
