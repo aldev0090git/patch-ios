@@ -42,10 +42,13 @@ nonisolated enum PeriodFormatter {
             // better than "March 2026" when 2026 is the only year on screen.
             let sameYear = calendar.component(.year, from: range.lowerBound)
                 == calendar.component(.year, from: today)
-            return range.lowerBound.formatted(
-                sameYear
-                    ? .dateTime.month(.wide).locale(locale)
-                    : .dateTime.month(.wide).year().locale(locale)
+            // A heading, sitting where "This month" sits — so it is
+            // capitalised like one. See ``MonthName``.
+            return MonthName.standalone(
+                range.lowerBound,
+                includingYear: !sameYear,
+                calendar: calendar,
+                locale: locale
             )
 
         case .year:
