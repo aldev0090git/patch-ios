@@ -15,11 +15,17 @@ final class AppStoreShotsUITests: XCTestCase {
         continueAfterFailure = false
     }
 
+    /// English (U.S.), pinned. These are the screenshots on the U.S. listing,
+    /// and the machine making them is set to Ukraine — which formats dollars
+    /// as "US$ 1 500" rather than "$1,500" even with the language in English.
+    /// That is correct for a reader in Kharkiv and wrong on a storefront.
+    private static let locale = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+
     @MainActor
-    private func launch(_ appearance: String) -> XCUIApplication {
+    private func launch(_ appearance: String, theme: String = "paper") -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments = [
-            "-appearance", appearance, "-accentTheme", "blue", "-pageTheme", "paper",
+        app.launchArguments = Self.locale + [
+            "-appearance", appearance, "-accentTheme", "blue", "-pageTheme", theme,
             "-reset-state", "-demo-data"
         ]
         app.launch()
@@ -29,6 +35,20 @@ final class AppStoreShotsUITests: XCTestCase {
 
     @MainActor func testLightSet() { capture("light") }
     @MainActor func testDarkSet() { capture("dark") }
+
+    /// Today wearing each theme, which is the screen the wash shows on best.
+    /// Here rather than in `ThemePrototypeUITests` so the whole store set
+    /// shares one set of launch arguments — a slot in a different locale
+    /// would be obvious in the row.
+    @MainActor
+    func testThemedSet() {
+        for theme in ["gold", "roseGold", "platinum"] {
+            let app = launch("dark", theme: theme)
+            sleep(1)
+            attach(app.screenshot(), named: "theme-\(theme)")
+            app.terminate()
+        }
+    }
 
     @MainActor
     private func capture(_ appearance: String) {
@@ -60,11 +80,15 @@ final class AppStoreShotsUITests: XCTestCase {
     /// The widget, on a home screen, which is the only place it means
     /// anything. Drives SpringBoard, so it is slow and it is fragile — run it
     /// on a freshly booted device.
+    ///
+    /// The *system* appearance decides how the widget renders, not the app's,
+    /// so set it before running:
+    /// `xcrun simctl ui <udid> appearance dark`.
     @MainActor
     func testWidgetOnHomeScreen() throws {
         let app = XCUIApplication()
-        app.launchArguments = [
-            "-appearance", "light", "-accentTheme", "blue", "-pageTheme", "paper",
+        app.launchArguments = Self.locale + [
+            "-appearance", "dark", "-accentTheme", "blue", "-pageTheme", "platinum",
             "-reset-state", "-demo-data"
         ]
         app.launch()
@@ -84,6 +108,12 @@ final class AppStoreShotsUITests: XCTestCase {
         // not hittable, though the row takes the tap.
         patch.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         sleep(3)
+
+        // The sizes are a carousel and it opens on the small one. One swipe
+        // left reaches medium, which is the one worth photographing: it shows
+        // the percentage, what is next and the goals still to do.
+        springboard.swipeLeft()
+        sleep(2)
 
         // "Add Widget" places the selected size on the home screen.
         let add = springboard.buttons.matching(

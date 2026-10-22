@@ -115,9 +115,14 @@ enum DemoData {
             title: "Save",
             titleKey: GoalTemplateCatalog.saveMoney.titleKey,
             symbolName: "banknote",
-            measure: .money(4000, currencyCode: "UAH"),
+            // Dollars, not hryvnia. The demo data is what the README and the
+            // App Store screenshots are made from, and those are read by
+            // people who have no idea what 4 000 UAH is worth. A real goal
+            // still carries whichever of the 150-odd currencies its owner
+            // picked — this is only the sample.
+            measure: .money(200, currencyCode: "USD"),
             schedule: .daysOfMonth([1, 15]),
-            cumulativeTarget: 60_000,
+            cumulativeTarget: 1500,
             createdAt: start
         )
         saving.cumulativeDeadline = calendar.date(byAdding: .month, value: 4, to: .now)

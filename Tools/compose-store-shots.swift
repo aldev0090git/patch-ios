@@ -39,16 +39,21 @@ let paper = rgb(236, 237, 242), ink = rgb(28, 28, 30)
 let night = rgb(11, 11, 13), chalk = rgb(245, 245, 247)
 
 let slots: [Slot] = [
-    Slot(file: "light-1-today", caption: "Today, at a glance", bg: paper, ink: ink),
-    Slot(file: "light-2-calendar", caption: "Forgot a day?\nLog it whenever", bg: paper, ink: ink),
-    Slot(file: "light-3-statistics", caption: "Watch the pattern build", bg: paper, ink: ink),
-    Slot(file: "light-4-overall-goal", caption: "Work toward\na bigger total", bg: paper, ink: ink),
-    Slot(file: "gold-1-today", caption: "Five themes\nto choose from", bg: rgb(243, 233, 210), ink: ink),
-    Slot(file: "roseGold-1-today", caption: "Every screen wears it", bg: rgb(246, 229, 225), ink: ink),
-    Slot(file: "platinum-1-today", caption: "Warm or cool,\nyour call", bg: rgb(228, 236, 243), ink: ink),
-    Slot(file: "dark-1-today", caption: "At home in the dark", bg: night, ink: chalk),
+    Slot(file: "dark-1-today", caption: "Today, at a glance", bg: night, ink: chalk),
+    Slot(file: "dark-2-calendar", caption: "Forgot a day?\nLog it whenever", bg: night, ink: chalk),
+    Slot(file: "dark-3-statistics", caption: "Watch the pattern build", bg: night, ink: chalk),
+    Slot(file: "dark-4-overall-goal", caption: "Work toward\na bigger total", bg: night, ink: chalk),
+    Slot(file: "theme-gold", caption: "Five themes\nto choose from",
+         bg: rgb(42, 32, 21), ink: chalk),
+    Slot(file: "theme-roseGold", caption: "Every screen wears it",
+         bg: rgb(43, 26, 26), ink: chalk),
+    Slot(file: "theme-platinum", caption: "Warm or cool,\nyour call",
+         bg: rgb(24, 32, 40), ink: chalk),
+    Slot(file: "light-1-today", caption: "Or keep it bright", bg: paper, ink: ink),
+    // Cropped above the test runner's icon, which has no business on a
+    // product page. 1540 keeps both widgets and the two rows under them.
     Slot(file: "widget-home-screen", caption: "Progress on\nyour Home Screen",
-         bg: paper, ink: ink, cropTop: 930)
+         bg: night, ink: chalk, cropTop: 1540)
 ]
 
 let W: CGFloat = 1320, H: CGFloat = 2868
