@@ -65,4 +65,4 @@ date above will change with it.
 
 ## Contact
 
-Questions about this policy: <!-- TODO: contact address before submission -->
+Questions about this policy: <aldev0090@gmail.com>

@@ -10,7 +10,7 @@ the same thing, and that single idea shapes the whole codebase.
 
 | Today | Calendar | Statistics |
 |---|---|---|
-| ![Today](Docs/screenshots/today.png) | ![Calendar](Docs/screenshots/calendar.png) | ![Statistics](Docs/screenshots/statistics.png) |
+| ![Today](docs/screenshots/today.png) | ![Calendar](docs/screenshots/calendar.png) | ![Statistics](docs/screenshots/statistics.png) |
 
 ---
 
@@ -157,7 +157,7 @@ A daily target answers "what should I do today". Some goals also need "where am
 I heading" — save 60 000 by March, read a hundred hours this year. Those are
 tracked separately from the daily rhythm, with an optional date.
 
-![Long-run goal](Docs/screenshots/long-run-goal.png)
+![Long-run goal](docs/screenshots/long-run-goal.png)
 
 Reaching the target early and then letting the date pass is a success, not a
 failure. Once a date has gone, no per-day figure is offered, because none of
@@ -165,7 +165,7 @@ them rescues it.
 
 ## Apple Health fills goals in; it does not own them
 
-![Choosing what Health reads](Docs/screenshots/health.png)
+![Choosing what Health reads](docs/screenshots/health.png)
 
 A count goal can read your step count, a distance goal your walking distance, a
 time goal your exercise minutes. Patch tops the goal up as the day goes and you
@@ -201,7 +201,7 @@ the footer points at Settings rather than inventing a status.
 
 | Small | Medium |
 |---|---|
-| ![Small widget](Docs/screenshots/widget-small.png) | ![Medium widget](Docs/screenshots/widget-medium.png) |
+| ![Small widget](docs/screenshots/widget-small.png) | ![Medium widget](docs/screenshots/widget-medium.png) |
 
 Small and medium on the home screen; circular, rectangular and inline on the
 Lock Screen. All of them read a snapshot file the app writes after every
@@ -224,7 +224,7 @@ app in greyscale.
 
 | All goals | |
 |---|---|
-| ![All goals](Docs/screenshots/all-goals.png) | Today shows what is scheduled for today, which is right for Today and left a hole: a goal set to Tuesdays and Thursdays was, on a Wednesday, **completely unreachable** — not visible, not editable, not archivable. Archived goals had the same problem permanently, because archiving was a one-way door with no unarchive anywhere in the app. |
+| ![All goals](docs/screenshots/all-goals.png) | Today shows what is scheduled for today, which is right for Today and left a hole: a goal set to Tuesdays and Thursdays was, on a Wednesday, **completely unreachable** — not visible, not editable, not archivable. Archived goals had the same problem permanently, because archiving was a one-way door with no unarchive anywhere in the app. |
 
 Reached from Today's toolbar or from Settings. Long press any row to edit,
 archive, restore, or — once archived — delete for good. Deleting is the only
@@ -260,7 +260,7 @@ answer Apple gives on the Home screen.
 
 | Choose what to track | How it works |
 |---|---|
-| ![Choosing goals](Docs/screenshots/onboarding.png) | ![How it works](Docs/screenshots/how-it-works.png) |
+| ![Choosing goals](docs/screenshots/onboarding.png) | ![How it works](docs/screenshots/how-it-works.png) |
 
 Three preselected, because an empty list asks someone who has just opened the
 app to invent their own habits before they know what it does. Picking none is
@@ -272,7 +272,7 @@ looking: tap to log, swipe left to reset or archive, swipe right to edit.
 
 | Today | The same day, themed | Where you change it |
 |---|---|---|
-| ![Today](Docs/screenshots/today.png) | ![Today in dark and violet](Docs/screenshots/today-dark.png) | ![Settings](Docs/screenshots/settings.png) |
+| ![Today](docs/screenshots/today.png) | ![Today in dark and violet](docs/screenshots/today-dark.png) | ![Settings](docs/screenshots/settings.png) |
 
 Light, dark or follow the phone, and six accent colours.
 

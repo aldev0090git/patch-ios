@@ -1,0 +1,5 @@
+title: Patch
+description: A goal and habit tracker for iPhone
+theme: jekyll-theme-minimal
+exclude:
+  - testflight.md

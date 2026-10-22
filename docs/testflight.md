@@ -110,7 +110,7 @@ its own local store and sends it nowhere. It stays "Data Not Collected".
 
 It does, however, require a **privacy policy URL** — App Review guideline 5.1.3
 makes one mandatory for any app that accesses HealthKit. TestFlight does not
-check for it; submission does. The text is in `Docs/privacy-policy.md` and
+check for it; submission does. The text is in `docs/privacy-policy.md` and
 needs to be served somewhere public, with a contact address filled in, before
 the app is submitted.
 
