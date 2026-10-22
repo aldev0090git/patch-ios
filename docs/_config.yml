@@ -3,3 +3,4 @@ description: A goal and habit tracker for iPhone
 theme: jekyll-theme-minimal
 exclude:
   - testflight.md
+  - app-store-listing.md
