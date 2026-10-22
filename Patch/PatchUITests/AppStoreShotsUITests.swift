@@ -33,38 +33,39 @@ final class AppStoreShotsUITests: XCTestCase {
         return app
     }
 
-    @MainActor func testLightSet() { capture("light") }
-    @MainActor func testDarkSet() { capture("dark") }
+    @MainActor func testLightSet() { capture("light", theme: "paper") }
+    @MainActor func testDarkSet() { capture("dark", theme: "paper") }
 
-    /// Today wearing each theme, which is the screen the wash shows on best.
+    /// Every screen in every theme, dark. More than the listing uses — the
+    /// compositor picks — but capturing is the slow part and choosing later
+    /// is free.
+    ///
     /// Here rather than in `ThemePrototypeUITests` so the whole store set
-    /// shares one set of launch arguments — a slot in a different locale
+    /// shares one set of launch arguments; a slot in a different locale
     /// would be obvious in the row.
     @MainActor
     func testThemedSet() {
         for theme in ["gold", "roseGold", "platinum"] {
-            let app = launch("dark", theme: theme)
-            sleep(1)
-            attach(app.screenshot(), named: "theme-\(theme)")
-            app.terminate()
+            capture("dark", theme: theme)
         }
     }
 
     @MainActor
-    private func capture(_ appearance: String) {
-        let app = launch(appearance)
+    private func capture(_ appearance: String, theme: String) {
+        let prefix = "\(appearance)-\(theme)"
+        let app = launch(appearance, theme: theme)
         sleep(1)
-        attach(app.screenshot(), named: "\(appearance)-1-today")
+        attach(app.screenshot(), named: "\(prefix)-1-today")
 
         // By position: the tab titles are translated.
         let tabs = app.tabBars.buttons
         tabs.element(boundBy: 1).tap()
         sleep(2)
-        attach(app.screenshot(), named: "\(appearance)-2-calendar")
+        attach(app.screenshot(), named: "\(prefix)-2-calendar")
 
         tabs.element(boundBy: 2).tap()
         sleep(2)
-        attach(app.screenshot(), named: "\(appearance)-3-statistics")
+        attach(app.screenshot(), named: "\(prefix)-3-statistics")
 
         // A month window is what shows the long-run target and its deadline;
         // the saving goal carrying them sits at the bottom.
@@ -74,7 +75,7 @@ final class AppStoreShotsUITests: XCTestCase {
         sleep(2)
         app.swipeUp()
         sleep(1)
-        attach(app.screenshot(), named: "\(appearance)-4-overall-goal")
+        attach(app.screenshot(), named: "\(prefix)-4-overall-goal")
     }
 
     /// The widget, on a home screen, which is the only place it means
@@ -108,14 +109,28 @@ final class AppStoreShotsUITests: XCTestCase {
         // not hittable, though the row takes the tap.
         patch.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         sleep(3)
+        try place(in: springboard, swipes: 0)   // small
 
-        // The sizes are a carousel and it opens on the small one. One swipe
-        // left reaches medium, which is the one worth photographing: it shows
-        // the percentage, what is next and the goals still to do.
-        springboard.swipeLeft()
-        sleep(2)
+        openGallery(in: springboard)
+        let again = springboard.staticTexts["Patch"].firstMatch
+        guard again.waitForExistence(timeout: 10) else {
+            return XCTFail("Patch left the gallery between placements")
+        }
+        again.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        sleep(3)
+        try place(in: springboard, swipes: 1)   // medium
 
-        // "Add Widget" places the selected size on the home screen.
+        attach(springboard.screenshot(), named: "widget-home-screen")
+    }
+
+    /// Places one widget. The sizes are a carousel opening on the small one,
+    /// so `swipes` chooses which: 0 small, 1 medium.
+    @MainActor
+    private func place(in springboard: XCUIApplication, swipes: Int) throws {
+        for _ in 0..<swipes {
+            springboard.swipeLeft()
+            sleep(2)
+        }
         let add = springboard.buttons.matching(
             NSPredicate(format: "label CONTAINS[c] 'add widget'")
         ).firstMatch
@@ -135,7 +150,6 @@ final class AppStoreShotsUITests: XCTestCase {
             springboard.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95)).tap()
         }
         sleep(4)
-        attach(springboard.screenshot(), named: "widget-home-screen")
     }
 
     /// Long-press the home screen, Edit, then the Add Widget item inside the

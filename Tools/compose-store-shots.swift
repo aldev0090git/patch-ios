@@ -39,19 +39,26 @@ let paper = rgb(236, 237, 242), ink = rgb(28, 28, 30)
 let night = rgb(11, 11, 13), chalk = rgb(245, 245, 247)
 
 let slots: [Slot] = [
-    Slot(file: "dark-1-today", caption: "Today, at a glance", bg: night, ink: chalk),
-    Slot(file: "dark-2-calendar", caption: "Forgot a day?\nLog it whenever", bg: night, ink: chalk),
-    Slot(file: "dark-3-statistics", caption: "Watch the pattern build", bg: night, ink: chalk),
-    Slot(file: "dark-4-overall-goal", caption: "Work toward\na bigger total", bg: night, ink: chalk),
-    Slot(file: "theme-gold", caption: "Five themes\nto choose from",
+    // Four light, four dark, and nothing shown twice: the dark half wears a
+    // different theme on each screen, so the set covers both appearances and
+    // all three themes without repeating a screen.
+    Slot(file: "light-paper-1-today", caption: "Today, at a glance", bg: paper, ink: ink),
+    Slot(file: "light-paper-2-calendar", caption: "Forgot a day?\nLog it whenever",
+         bg: paper, ink: ink),
+    Slot(file: "light-paper-3-statistics", caption: "Watch the pattern build",
+         bg: paper, ink: ink),
+    Slot(file: "light-paper-4-overall-goal", caption: "Work toward\na bigger total",
+         bg: paper, ink: ink),
+    Slot(file: "dark-gold-1-today", caption: "Five themes\nto choose from",
          bg: rgb(42, 32, 21), ink: chalk),
-    Slot(file: "theme-roseGold", caption: "Every screen wears it",
+    Slot(file: "dark-roseGold-2-calendar", caption: "Every screen wears it",
          bg: rgb(43, 26, 26), ink: chalk),
-    Slot(file: "theme-platinum", caption: "Warm or cool,\nyour call",
+    Slot(file: "dark-platinum-3-statistics", caption: "Warm or cool,\nyour call",
          bg: rgb(24, 32, 40), ink: chalk),
-    Slot(file: "light-1-today", caption: "Or keep it bright", bg: paper, ink: ink),
+    Slot(file: "dark-paper-4-overall-goal", caption: "At home in the dark",
+         bg: night, ink: chalk),
     // Cropped above the test runner's icon, which has no business on a
-    // product page. 1540 keeps both widgets and the two rows under them.
+    // product page. 1540 keeps both widgets and the rows under them.
     Slot(file: "widget-home-screen", caption: "Progress on\nyour Home Screen",
          bg: night, ink: chalk, cropTop: 1540)
 ]
