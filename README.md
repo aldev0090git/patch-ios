@@ -2,7 +2,8 @@
 
 A goal and habit tracker for iPhone, built in SwiftUI.
 
-**On TestFlight:** [testflight.apple.com/join/W2KmuhsA](https://testflight.apple.com/join/W2KmuhsA)
+**Submitted to the App Store** — 1.0, awaiting review.
+**On TestFlight meanwhile:** [testflight.apple.com/join/W2KmuhsA](https://testflight.apple.com/join/W2KmuhsA)
 
 Reading twenty minutes a day, a hundred push-ups, two litres of water, money put
 aside when the salary lands, a day without smoking — Patch treats all of these as
@@ -220,6 +221,13 @@ overview. Lock Screen widgets render monochrome, so none of them leans on green
 to mean "done"; the tick carries it, exactly as it does for anyone using the
 app in greyscale.
 
+The widget wears the page theme too, and the gallery preview wears it before
+you have added anything — choosing a widget that looks nothing like what lands
+on your home screen is a poor way to choose one. Lock Screen families are
+deliberately left alone: the system renders those in one vibrant material and
+ignores colour, so a gradient there is at best wasted and at worst a grey
+smear over the glyph that matters.
+
 ## Every goal, including the ones today has no use for
 
 | All goals | |
@@ -274,7 +282,28 @@ looking: tap to log, swipe left to reset or archive, swipe right to edit.
 |---|---|---|
 | ![Today](docs/screenshots/today.png) | ![Today in dark and violet](docs/screenshots/today-dark.png) | ![Settings](docs/screenshots/settings.png) |
 
-Light, dark or follow the phone, and six accent colours.
+Light, dark or follow the phone; six accent colours; and five page themes —
+Paper, Grey, Gold, Rose Gold and Platinum.
+
+The themes are gradients rather than photographs, and that was a decision
+rather than a shortcut. Patch is white cards on a page and the cards cover
+most of the screen, so a photograph would show as slivers between them — not
+enough to be beautiful, quite enough to make the cards look like they are
+floating on somebody else's screenshot. Statistics settles it: a chart needs
+its gridlines, and they are the first thing a busy background eats.
+
+**The colours live in `PatchCore` as plain numbers**, which is the one
+structural thing worth knowing about them. The widget is a separate process
+and cannot see the app's types; if the stops lived in both places they would
+drift, and a home screen wearing a different gold from the app it belongs to
+looks broken. Each side converts, neither side decides. The theme itself
+travels in the widget snapshot, so changing it in Settings re-dresses the home
+screen without recomputing a thing.
+
+Light-mode stops stay above about 0.72 at their darkest, because a white card
+has nowhere to go. Dark mode needed a second pass for the opposite reason:
+dark cards are `#1C1C1E`, and the first attempt put the page at the same
+brightness, so every theme read as plain black with a hint of something.
 
 **Green and orange are not part of the theme.** Green means *a day you
 finished* and orange *a day you missed*; letting them follow the accent would
@@ -410,7 +439,41 @@ swatch it launched with comes back selected.
 - [x] Lock Screen widgets — circular, rectangular and inline
 - [x] Apple Health — steps, walking distance and exercise minutes
 - [x] Reordering goals, and a screen that lists every one of them
+- [x] Five page themes, worn by the app and by the widget
+- [x] Submitted to the App Store
+- [ ] Product page in Ukrainian and Russian — drafted, awaiting a native read
 - [ ] iCloud sync via SwiftData + CloudKit
+
+## Shipping it
+
+Four things were required to submit that no amount of building the app would
+have surfaced, and all four were found the week of submission rather than the
+week of writing the code:
+
+**A privacy manifest.** `PrivacyInfo.xcprivacy` declaring every "required
+reason" API — `UserDefaults` is one, and this app stores every setting in it.
+Without the manifest App Review returns ITMS-91053. **TestFlight does not
+check**, so six builds went up perfectly clean before anyone looked. One entry
+is justified here, checked rather than assumed: there is no file-timestamp,
+disk-space, boot-time or active-keyboard use anywhere in the project, and the
+widget's only mention of `UserDefaults` is in a comment.
+
+**The screenshot size is whatever App Store Connect's device tab says**, not
+the largest iPhone. A set shot at 1320×2868 was rejected outright as "File
+dimensions are invalid"; the tab wanted "iPhone with Dynamic Island (medium
+display)", 1206×2622. `AppStoreShotsUITests` and
+`Tools/compose-store-shots.swift` make the set reproducible, and the
+compositor takes its size from the captures rather than hardcoding one.
+
+**A privacy policy and a support page**, both required, both served from this
+repo by GitHub Pages — the Support URL has to be a web page rather than a
+`mailto:`.
+
+**Declarations that are easy to miss**: EU trader status under the Digital
+Services Act, and, because the app is in Health & Fitness, a declaration that
+it is *not* a regulated medical device. Skipping the second restricts
+availability in some regions rather than blocking submission, which is the
+sort of thing nobody notices.
 
 ## Localisation
 
@@ -431,12 +494,31 @@ under them would be wrong.
 > The Ukrainian and Russian strings were written without a native reviewer and
 > are worth a second pair of eyes.
 
+The App Store listing is English only so far. Ukrainian and Russian versions
+are drafted in `docs/app-store-listing.md`, quoting the settings exactly as
+the app renders them — «Заполнять из Health», «Заповнювати з Health» — so the
+product page and the screen cannot describe the same switch differently.
+
 ## Tooling
 
 Swift 6.2 · SwiftUI · SwiftData · WidgetKit · HealthKit · Swift Testing ·
 SwiftLint (`--strict` in CI) · GitHub Actions
 
-343 tests in all — 192 in the domain package, which need no simulator and run
-in about 40 ms, and 151 in the app. UI tests sit outside CI and exist to catch
+373 tests in all — 189 in the domain package, which need no simulator and run
+in about 40 ms, and 184 in the app. UI tests sit outside CI and exist to catch
 what the others structurally cannot: a screen that renders empty, a row that
-draws across its neighbour, a confirmation whose only button is Delete.
+draws across its neighbour, a confirmation whose only button is Delete, a
+background that swallows every tap on the screen beneath it.
+
+That last one is the clearest argument for them. A page theme made Today
+impossible to scroll or tap — `.clipped()` clips drawing but not hit testing —
+and the whole suite stayed green, because the only things it touched were the
+toolbar and the tab bar, both outside the broken area. `ThemedInteractionUITests`
+now taps a quick-add pill in the middle of the list, and was verified by
+removing the fix and watching it fail.
+
+Two UI suites are skipped in the shared scheme because they produce pictures
+rather than assertions: `ScreenshotUITests` for this README, and
+`AppStoreShotsUITests` for the listing. Run them by name. Note that
+`-only-testing` does **not** override a scheme's `<SkippedTests>` — lift the
+entry for the run.

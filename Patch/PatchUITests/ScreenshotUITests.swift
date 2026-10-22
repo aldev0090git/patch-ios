@@ -25,11 +25,15 @@ final class ScreenshotUITests: XCTestCase {
             ["-appearance", rawValue, "-accentTheme", accent]
         }
 
-        /// Set `PATCH_UI_LANGUAGE` to check a translation in place. Unset for
-        /// the README captures, which are English.
+        /// Set `PATCH_UI_LANGUAGE` to check a translation in place.
+        ///
+        /// Unset, these pin **en_US** rather than inheriting the machine's
+        /// region. The Mac making them is set to Ukraine, which renders
+        /// dollars as "US$ 1 500" even with the language in English — right
+        /// for a reader in Kharkiv, wrong in a README written in English.
         static var language: [String] {
             guard let code = ProcessInfo.processInfo.environment["PATCH_UI_LANGUAGE"] else {
-                return []
+                return ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
             }
             return ["-AppleLanguages", "(\(code))", "-AppleLocale", code]
         }
