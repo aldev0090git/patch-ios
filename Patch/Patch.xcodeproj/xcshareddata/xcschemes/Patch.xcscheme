@@ -50,6 +50,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "AppStoreShotsUITests">
+               </Test>
+               <Test
                   Identifier = "ThemePrototypeUITests">
                </Test>
             </SkippedTests>
