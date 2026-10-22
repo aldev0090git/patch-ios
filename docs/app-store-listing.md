@@ -7,14 +7,25 @@ Working copy for App Store Connect. Not published; see `_config.yml`.
 **Marketing URL:** (leave blank — the support page is the whole site)
 
 **Category:** Primary *Health & Fitness*, Secondary *Productivity*
+**EU trader status:** DONE, 22 Oct 2026 — declared *non-trader* under the
+DSA. The app is free with no in-app purchases, so distribution is not for
+commercial purposes; and a non-trader declaration keeps a home address off a
+public product page. Active in 27 countries. **Charging for anything later
+makes you a trader** and this has to be changed first.
 **Age rating:** 4+ — no objectionable content, no user-generated content, no web views
 **Copyright:** 2026 Oleksandr Berezhnyi
 
 ---
 
+**App name:** Patch: Habit Tracker (already set in App Store Connect)
+
 ## Subtitle (30 max)
 
-One tracker for every habit
+Goals, streaks and statistics
+
+*The name already carries "habit" and "tracker", and Apple indexes name +
+subtitle + keywords as one pool — repeating them would spend the only 30
+characters here on words that are already covered.*
 
 ## Promotional text (170 max — editable without review)
 
@@ -22,7 +33,7 @@ Five page themes, on every screen and on the home screen widget. Pick Gold, Rose
 
 ## Keywords (100 max, comma-separated, no spaces)
 
-habit,streak,daily,routine,goal,water,steps,reading,gym,saving,checklist,progress,log,calendar
+daily,routine,water,steps,reading,gym,saving,checklist,progress,log,calendar,target,widget,health
 
 ## Description (4000 max)
 
