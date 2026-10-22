@@ -305,6 +305,26 @@ Pick the event by comparing state **before and after** the write, never from the
 amount: finishing is a transition. `Haptics.isEnabled` reads `UserDefaults`
 directly so no call site has to carry the setting; absent means on.
 
+## A privacy manifest is required, and TestFlight will not tell you
+
+`PrivacyInfo.xcprivacy` lives at `Patch/Patch/`. Apps using a "required
+reason" API have to declare it, and **UserDefaults is one** — which this app
+uses for every setting. Without the manifest, App Review returns ITMS-91053;
+TestFlight accepts the build regardless, so five builds went up clean before
+anyone looked.
+
+Exactly one entry is justified: `NSPrivacyAccessedAPICategoryUserDefaults`
+with reason `CA92.1`, access to the app's own information. Checked rather
+than assumed — there is no file-timestamp, disk-space, boot-time or
+active-keyboard use anywhere, and the widget's only mention of UserDefaults
+is in a comment, so the extension needs no manifest of its own.
+
+Collection and tracking are empty arrays because the answer is none, not
+because nobody filled them in.
+
+Verify it reaches the bundle, not just the repo:
+`ls <built>.app/PrivacyInfo.xcprivacy`.
+
 ## The widget gallery works on 26.5 and on 27 — search it, do not scroll it
 
 Patch's widgets appear in the gallery on **both** runtimes and can be added on
