@@ -13,6 +13,18 @@ struct GoalEditor: View {
     private let existing: Goal?
     private let onSave: (Goal) -> Void
 
+    /// Which field holds the keyboard, so it can be given back.
+    ///
+    /// A decimal pad has **no return key**. Without this there is no way to
+    /// dismiss it at all: it covered the lower half of the form until the
+    /// sheet itself was closed, so the schedule and the overall-goal rows
+    /// below could not be reached while a target was being typed.
+    enum Field: Hashable {
+        case name, target, overall
+    }
+
+    @FocusState private var focused: Field?
+
     @State private var title: String
     @State private var hasOverall: Bool
     @State private var overallTarget: Decimal
@@ -110,6 +122,7 @@ struct GoalEditor: View {
             Form {
                 Section {
                     TextField("Name", text: $title)
+                        .focused($focused, equals: .name)
                         .textInputAutocapitalization(.sentences)
                 }
 
@@ -131,6 +144,7 @@ struct GoalEditor: View {
                     HStack {
                         TextField("Amount", value: $target, format: .number)
                             .keyboardType(.decimalPad)
+                            .focused($focused, equals: .target)
                         Text(verbatim: unitTrailing)
                             .foregroundStyle(.secondary)
                     }
@@ -178,26 +192,14 @@ struct GoalEditor: View {
                     HealthLinkSection(kind: kind, source: $healthSource)
                 }
 
-                Section("Overall goal") {
-                    Toggle("Work toward a total", isOn: $hasOverall)
-                    if hasOverall {
-                        HStack {
-                            TextField("Total", value: $overallTarget, format: .number)
-                                .keyboardType(.decimalPad)
-                            Text(verbatim: unitTrailing)
-                                .foregroundStyle(.secondary)
-                        }
-                        Toggle("By a date", isOn: $hasDeadline)
-                        if hasDeadline {
-                            DatePicker(
-                                "Date",
-                                selection: $deadline,
-                                in: Date.now...,
-                                displayedComponents: .date
-                            )
-                        }
-                    }
-                }
+                OverallGoalSection(
+                    hasOverall: $hasOverall,
+                    target: $overallTarget,
+                    hasDeadline: $hasDeadline,
+                    deadline: $deadline,
+                    focused: $focused,
+                    unit: unitTrailing
+                )
 
                 Section("Repeat") {
                     Picker("Days", selection: $repeatMode) {
@@ -238,7 +240,46 @@ struct GoalEditor: View {
             }
             .navigationTitle(existing == nil ? Text("New Goal") : Text("Edit Goal"))
             .navigationBarTitleDisplayMode(.inline)
+            // Room for the Done button, which iOS draws as a pill floating
+            // *over* the content rather than as a bar that insets it.
+            // Keyboard avoidance accounts for the keyboard and not for the
+            // pill, so a field that settles at that boundary ends up
+            // underneath it — the first tap on a freshly opened form looked
+            // right, and later ones often did not.
+            //
+            // Reserving the height is all that is needed: avoidance then
+            // scrolls that much further and the field clears the pill. No
+            // scrolling by hand — that was tried, and it sent the form to
+            // the top with the focused field off screen.
+            // Always, not only while a field is focused.
+            //
+            // The height is for the Done button, which iOS draws as a pill
+            // floating *over* the content: keyboard avoidance accounts for
+            // the keyboard and not for the pill, so without this a field
+            // could settle underneath it.
+            //
+            // Making it constant is what stops the list hitching. Tying it
+            // to focus meant it collapsed as the keyboard slid away — two
+            // movements at once, one of them a step — and animating it only
+            // made the step smoother, not absent. A value that never changes
+            // cannot contribute to the settle at all. The cost is 52 points
+            // of space after the last section, at the end of a form that
+            // scrolls anyway.
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                Color.clear.frame(height: 52)
+            }
+            // Dragging the form puts the keyboard away, which is what
+            // people try before looking for a button.
+            .scrollDismissesKeyboard(.interactively)
             .toolbar {
+                // The only way off a decimal pad. Shown for the name field
+                // too, which has a return key but sits above the same
+                // keyboard — one consistent control beats two behaviours.
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { focused = nil }
+                        .accessibilityIdentifier("editor.dismissKeyboard")
+                }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
                         .accessibilityIdentifier("editor.cancel")

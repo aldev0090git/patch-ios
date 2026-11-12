@@ -27,11 +27,10 @@ final class ScheduleEditingUITests: XCTestCase {
 
         app.textFields.firstMatch.tap()
         app.textFields.firstMatch.typeText("Weekday test")
+        dismissKeyboard(app)
 
         // Scroll to the Repeat section and switch to specific weekdays.
-        while !app.buttons["Certain days"].exists {
-            app.swipeUp()
-        }
+        scrollTo("Certain days", in: app)
         app.buttons["Certain days"].tap()
         sleep(1)
         scrollToWeekdays(app)
@@ -67,9 +66,7 @@ final class ScheduleEditingUITests: XCTestCase {
         sleep(2)
         app.buttons["Edit"].tap()
         XCTAssertTrue(app.buttons["editor.save"].waitForExistence(timeout: 10), "No editor")
-        while !app.buttons["Certain days"].exists {
-            app.swipeUp()
-        }
+        scrollTo("Certain days", in: app)
         scrollToWeekdays(app)
         sleep(1)
         attach(app.screenshot(), named: "4-reopened")
@@ -89,6 +86,39 @@ final class ScheduleEditingUITests: XCTestCase {
             let button = app.buttons["weekday.\($0)"]
             return button.exists && button.isSelected
         })
+    }
+
+    /// Puts the keyboard away before scrolling.
+    ///
+    /// With it up it covers half the form *and* carries a Done bar, so a
+    /// swipe has very little form left to grab and the scroll barely moves.
+    /// The editor gained that bar when the decimal pad turned out to have no
+    /// way off it; this test used to scroll with the keyboard still up and
+    /// took 152 seconds to find its way down.
+    @MainActor
+    private func dismissKeyboard(_ app: XCUIApplication) {
+        let done = app.buttons["editor.dismissKeyboard"]
+        if done.waitForExistence(timeout: 3) {
+            done.tap()
+            sleep(1)
+        }
+    }
+
+    /// Scrolls until a button appears, or gives up.
+    ///
+    /// Bounded, deliberately. This was `while !exists { swipeUp() }`, which
+    /// can only ever hang: when the element never arrives the test swipes
+    /// until the whole run is killed, and the report says "crashed with
+    /// signal term" rather than naming what was missing.
+    @MainActor
+    @discardableResult
+    private func scrollTo(_ label: String, in app: XCUIApplication) -> XCUIElement {
+        let element = app.buttons[label]
+        for _ in 0..<10 where !element.exists {
+            app.swipeUp()
+        }
+        XCTAssertTrue(element.exists, "Never found \(label) after scrolling")
+        return element
     }
 
     /// Scrolls until the weekday chips are built. They sit below the Repeat
