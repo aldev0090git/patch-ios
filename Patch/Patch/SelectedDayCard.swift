@@ -167,7 +167,7 @@ struct SelectedDayCard: View {
     /// and the tick, which is the whole answer, is the least obvious of them.
     private func accessibilityLabel(_ row: DayGoalProgress) -> String {
         let state = row.progress.isAchieved
-            ? String(localized: "Done")
+            ? String(localized: "goal.done")
             : String(localized: "Not yet")
         let detail = amount(row)
         return detail.isEmpty

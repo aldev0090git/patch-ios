@@ -490,21 +490,57 @@
           }
         },
         "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld hechos"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld hecho"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld hechos"
+                }
+              }
+            }
           }
         },
         "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld faits"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld fait"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld faits"
+                }
+              }
+            }
           }
         },
         "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld fatti"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld fatto"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld fatti"
+                }
+              }
+            }
           }
         },
         "ru": {
@@ -533,19 +569,145 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld hechos, %lld fallados"
+            "value": "%#@done@, %#@missed@"
+          },
+          "substitutions": {
+            "done": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg hecho"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg hechos"
+                    }
+                  }
+                }
+              }
+            },
+            "missed": {
+              "argNum": 2,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg fallado"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg fallados"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld faits, %lld manqués"
+            "value": "%#@done@, %#@missed@"
+          },
+          "substitutions": {
+            "done": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg fait"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg faits"
+                    }
+                  }
+                }
+              }
+            },
+            "missed": {
+              "argNum": 2,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg manqué"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg manqués"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld fatti, %lld mancati"
+            "value": "%#@done@, %#@missed@"
+          },
+          "substitutions": {
+            "done": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg fatto"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg fatti"
+                    }
+                  }
+                }
+              }
+            },
+            "missed": {
+              "argNum": 2,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg mancato"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg mancati"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "ru": {
@@ -572,21 +734,57 @@
           }
         },
         "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld fallados"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld fallado"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld fallados"
+                }
+              }
+            }
           }
         },
         "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld manqués"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld manqué"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld manqués"
+                }
+              }
+            }
           }
         },
         "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld mancati"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld mancato"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld mancati"
+                }
+              }
+            }
           }
         },
         "ru": {
@@ -656,31 +854,165 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld de %lld objetivos hechos"
+            "value": "%1$lld de %#@total@"
+          },
+          "substitutions": {
+            "total": {
+              "argNum": 2,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg objetivo hecho"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg objetivos hechos"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld objectifs sur %lld faits"
+            "value": "%#@done@ sur %2$lld"
+          },
+          "substitutions": {
+            "done": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg objectif fait"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg objectifs faits"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld obiettivi su %lld fatti"
+            "value": "%#@done@ su %2$lld"
+          },
+          "substitutions": {
+            "done": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg obiettivo fatto"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg obiettivi fatti"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld из %lld целей выполнено"
+            "value": "%1$lld из %#@total@ выполнено"
+          },
+          "substitutions": {
+            "total": {
+              "argNum": 2,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg цели"
+                    }
+                  },
+                  "few": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg целей"
+                    }
+                  },
+                  "many": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg целей"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg целей"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld з %lld цілей виконано"
+            "value": "%1$lld з %#@total@ виконано"
+          },
+          "substitutions": {
+            "total": {
+              "argNum": 2,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg цілі"
+                    }
+                  },
+                  "few": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg цілей"
+                    }
+                  },
+                  "many": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg цілей"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg цілей"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1154,13 +1486,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cumuler jusqu'à un objectif"
+            "value": "Cumuler jusqu'à une cible"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Somma fino a un obiettivo"
+            "value": "Somma fino a un traguardo"
           }
         },
         "ru": {
@@ -1230,7 +1562,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Objetivo"
+            "value": "Tipo"
           }
         },
         "fr": {
@@ -1441,13 +1773,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les quantités s'additionnent jusqu'à l'objectif, comme lire 20 minutes."
+            "value": "Les quantités s'additionnent jusqu'à la cible, comme lire 20 minutes."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le quantità si sommano fino a raggiungere l'obiettivo, come leggere 20 minuti."
+            "value": "Le quantità si sommano fino a raggiungere il traguardo, come leggere 20 minuti."
           }
         },
         "ru": {
@@ -2017,13 +2349,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Modifiez l'objectif ou les jours quand vous voulez. Les jours passés gardent l'objectif qu'ils avaient."
+            "value": "Modifiez la cible ou les jours quand vous voulez. Les jours passés gardent la cible qu'ils avaient."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cambia l'obiettivo o i giorni quando vuoi. I giorni passati mantengono l'obiettivo che avevano."
+            "value": "Cambia il traguardo o i giorni quando vuoi. I giorni passati mantengono il traguardo che avevano."
           }
         },
         "ru": {
@@ -3160,7 +3492,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hecho"
+            "value": "Listo"
           }
         },
         "fr": {
@@ -6211,13 +6543,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Atteindre l'objectif"
+            "value": "Atteindre la cible"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Raggiungi l'obiettivo"
+            "value": "Raggiungere il traguardo"
           }
         },
         "ru": {
@@ -7078,7 +7410,7 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Restaci sotto"
+            "value": "Restare sotto"
           }
         },
         "ru": {
@@ -7401,7 +7733,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Touchez une quantité : elle s'additionne au fil de la journée jusqu'à l'objectif."
+            "value": "Touchez une quantité : elle s'additionne au fil de la journée jusqu'à l'atteindre."
           }
         },
         "it": {
@@ -7483,13 +7815,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Objectif"
+            "value": "Cible"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Obiettivo"
+            "value": "Traguardo"
           }
         },
         "ru": {
@@ -8905,6 +9237,53 @@
           "stringUnit": {
             "state": "translated",
             "value": "Кава"
+          }
+        }
+      }
+    },
+    "goal.done": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geschafft"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hecho"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fait"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fatto"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Готово"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Готово"
           }
         }
       }

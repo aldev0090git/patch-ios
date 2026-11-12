@@ -132,7 +132,7 @@ struct GoalCard: View {
                 // Labelled, because the subtitle now carries numbers rather
                 // than a verdict, and this mark is where the verdict lives.
                 .accessibilityLabel(goal.direction == .atMost
-                                    ? Text("Within limit") : Text("Done"))
+                                    ? Text("Within limit") : Text("goal.done"))
                 .transition(Motion.transition(.scale.combined(with: .opacity),
                                               reduceMotion: reduceMotion))
         } else if progress.isFailed {
@@ -258,7 +258,11 @@ struct GoalCard: View {
                     actionButton(Text("Manual")) { isEnteringManually = true }
 
                 case .single:
-                    actionButton(Text("Done")) {
+                    // `goal.done`, not "Done": the same English word closes a
+                    // sheet elsewhere, and the two part company in half the
+                    // languages — Spanish wants "Listo" for the button and
+                    // "Hecho" here, French "OK" and "Fait".
+                    actionButton(Text("goal.done")) {
                         withAnimation(Motion.animation(.snappy, reduceMotion: reduceMotion)) {
                             onLog(1)
                         }
