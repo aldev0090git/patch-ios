@@ -125,6 +125,51 @@ extension WidgetSnapshot {
     }
 }
 
+/// What the app leaves for the widget: today, and the days after it.
+///
+/// More than one day because a widget cannot refresh itself on time. The
+/// timeline used to carry a single day and ask WidgetKit for a new one after
+/// midnight — but that request is budgeted, not guaranteed, so the widget
+/// went on showing yesterday until the system got round to it or the app was
+/// opened. Given tomorrow up front, it turns over at midnight on its own.
+///
+/// Future days are honest: nothing is logged yet, so every goal scheduled
+/// for that day reads zero, and goals not scheduled do not appear at all.
+public struct WidgetFeed: Codable, Hashable, Sendable {
+    public let days: [WidgetSnapshot]
+
+    public init(days: [WidgetSnapshot]) {
+        self.days = days
+    }
+
+    /// Today and the next `ahead` days.
+    public static func upcoming(
+        goals: [Goal],
+        entries: [Entry],
+        titles: (Goal) -> String,
+        theme: PageTheme = .plain,
+        calendar: Calendar = .current,
+        now: Date = .now,
+        // A week. The widget turns over at midnight from whichever day it
+        // holds, so this is only the margin for a phone nobody has opened:
+        // run out and WidgetKit keeps showing the last day it was given,
+        // whose goal list may belong to the wrong weekday. Seven days is a
+        // few hundred bytes and covers anyone still using the app.
+        ahead: Int = 6
+    ) -> WidgetFeed {
+        let days = (0...ahead).compactMap { offset -> WidgetSnapshot? in
+            guard let day = calendar.date(byAdding: .day, value: offset, to: now) else {
+                return nil
+            }
+            return WidgetSnapshot.today(
+                goals: goals, entries: entries, titles: titles,
+                theme: theme, calendar: calendar, now: day
+            )
+        }
+        return WidgetFeed(days: days)
+    }
+}
+
 /// Where the app leaves the snapshot and the widget picks it up.
 ///
 /// A file in the shared container rather than `UserDefaults`: a snapshot is a
@@ -149,11 +194,11 @@ public struct WidgetSnapshotStore: Sendable {
 
     private var url: URL? { container?.appending(path: Self.filename) }
 
-    public func write(_ snapshot: WidgetSnapshot) {
+    public func write(_ feed: WidgetFeed) {
         guard let url else { return }
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
-        guard let data = try? encoder.encode(snapshot) else { return }
+        guard let data = try? encoder.encode(feed) else { return }
         // Atomic: the widget must never see half a file.
         try? data.write(to: url, options: .atomic)
     }
@@ -161,10 +206,20 @@ public struct WidgetSnapshotStore: Sendable {
     /// `nil` when there is nothing to read — a fresh install, or an app that
     /// has not been opened since the group existed. The widget shows its own
     /// empty state rather than pretending the day is blank.
-    public func read() -> WidgetSnapshot? {
+    public func read() -> WidgetFeed? {
         guard let url, let data = try? Data(contentsOf: url) else { return nil }
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        return try? decoder.decode(WidgetSnapshot.self, from: data)
+        if let feed = try? decoder.decode(WidgetFeed.self, from: data) {
+            return feed
+        }
+        // A file written before the feed existed holds a bare snapshot. It
+        // is on disk until the updated app runs once, and the widget may
+        // well draw before that — reading it as a single day is better than
+        // showing the "nothing yet" state to someone who has data.
+        guard let single = try? decoder.decode(WidgetSnapshot.self, from: data) else {
+            return nil
+        }
+        return WidgetFeed(days: [single])
     }
 }

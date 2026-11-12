@@ -18,7 +18,7 @@ enum WidgetPublisher {
 
     static func publish(goals: [Goal], entries: [Entry], calendar: Calendar = .current) {
         store.write(
-            WidgetSnapshot.today(
+            WidgetFeed.upcoming(
                 goals: goals,
                 entries: entries,
                 // Resolved here because only the app layer knows the reader's
@@ -38,8 +38,8 @@ enum WidgetPublisher {
     /// repaint a background. If no snapshot exists yet there is no widget
     /// showing anything, and the next real write will carry the theme.
     static func republish(wearing theme: PageTheme) {
-        guard let snapshot = store.read() else { return }
-        store.write(snapshot.wearing(theme))
+        guard let feed = store.read() else { return }
+        store.write(WidgetFeed(days: feed.days.map { $0.wearing(theme) }))
         WidgetCenter.shared.reloadAllTimelines()
     }
 

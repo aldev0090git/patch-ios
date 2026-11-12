@@ -133,9 +133,9 @@ struct WidgetSnapshotTests {
             Entry(goalID: read.id, amount: 600, loggedAt: today)
         ])
 
-        store.write(written)
+        store.write(WidgetFeed(days: [written]))
 
-        #expect(store.read() == written)
+        #expect(store.read()?.days == [written])
     }
 
     @Test("Nothing written yet reads as nothing, not as an empty day")
@@ -254,5 +254,103 @@ struct WidgetSnapshotThemeTests {
                 #expect(darkest > 0.70, "\(theme) goes down to \(darkest)")
             }
         }
+    }
+}
+
+/// The widget cannot refresh itself on time, so the app hands it the next
+/// days in advance.
+@Suite("Widget feed")
+struct WidgetFeedTests {
+    private func calendar() -> Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .gmt
+        return calendar
+    }
+
+    private func goal(_ schedule: Schedule = .daily) -> Goal {
+        Goal(
+            title: "Read",
+            symbolName: "book",
+            measure: .minutes(20),
+            schedule: schedule,
+            createdAt: day(2026, 1, 1)
+        )
+    }
+
+    @Test("Today and the six days after it")
+    func carriesAWeek() {
+        let feed = WidgetFeed.upcoming(
+            goals: [goal()], entries: [], titles: \.title,
+            calendar: calendar(), now: day(2026, 6, 10)
+        )
+
+        // Stamped at the start of each day; `day()` hands back midday.
+        let starts = [day(2026, 6, 10), day(2026, 6, 11), day(2026, 6, 12)]
+            .map { calendar().startOfDay(for: $0) }
+        #expect(feed.days.count == 7)
+        #expect(feed.days.prefix(3).map(\.date) == starts)
+    }
+
+    @Test("Tomorrow starts from zero, however today went")
+    func futureDaysAreUnlogged() {
+        let today = day(2026, 6, 10)
+        // One goal, used for both the entry and the feed: calling `goal()`
+        // twice makes two different ids, and the entry matches neither.
+        let read = goal()
+        let entries = [Entry(goalID: read.id, amount: 1200, loggedAt: today)]
+        let feed = WidgetFeed.upcoming(
+            goals: [read], entries: entries, titles: \.title,
+            calendar: calendar(), now: today
+        )
+
+        #expect(feed.days[0].fraction == 1)
+        #expect(feed.days[1].fraction == 0)
+        #expect(feed.days[1].completed == 0)
+    }
+
+    @Test("A day the goal is not scheduled for carries nothing")
+    func unscheduledDaysAreEmpty() {
+        // 10 June 2026 is a Wednesday; this goal runs Wednesdays only.
+        let feed = WidgetFeed.upcoming(
+            goals: [goal(.daysOfWeek([.wednesday]))], entries: [], titles: \.title,
+            calendar: calendar(), now: day(2026, 6, 10)
+        )
+
+        #expect(feed.days[0].scheduled == 1)
+        #expect(feed.days[1].scheduled == 0)
+    }
+
+    @Test("A file written before feeds existed still reads")
+    func singleSnapshotFilesStillRead() throws {
+        let directory = URL.temporaryDirectory.appending(path: UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        // Exactly what the shipped version wrote: a bare snapshot.
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let old = WidgetSnapshot(date: day(2026, 6, 10), items: [], theme: .gold)
+        try encoder.encode(old).write(to: directory.appending(path: "today.json"))
+
+        let feed = WidgetSnapshotStore(directory: directory).read()
+
+        #expect(feed?.days.count == 1)
+        #expect(feed?.days.first?.theme == .gold)
+    }
+
+    @Test("A feed round-trips through the store")
+    func feedsRoundTrip() {
+        let directory = URL.temporaryDirectory.appending(path: UUID().uuidString)
+        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        let store = WidgetSnapshotStore(directory: directory)
+        let written = WidgetFeed.upcoming(
+            goals: [goal()], entries: [], titles: \.title,
+            calendar: calendar(), now: day(2026, 6, 10)
+        )
+        store.write(written)
+
+        #expect(store.read()?.days.map(\.date) == written.days.map(\.date))
     }
 }

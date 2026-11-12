@@ -48,7 +48,9 @@ struct TodayProvider: TimelineProvider {
         // its own data. Either way it wears the theme the app is wearing —
         // picking a widget that looks nothing like what you will get once it
         // lands on the home screen is a poor way to choose one.
-        let snapshot = context.isPreview ? .placeholder.wearing(theme) : store.read()
+        let snapshot = context.isPreview
+            ? .placeholder.wearing(theme)
+            : store.read()?.days.first
         completion(TodayEntry(date: .now, snapshot: snapshot))
     }
 
@@ -56,17 +58,35 @@ struct TodayProvider: TimelineProvider {
     /// to plain before the app has ever written, which is also when there is
     /// no theme to honour.
     private var theme: PageTheme {
-        store.read()?.theme ?? .plain
+        store.read()?.days.first?.theme ?? .plain
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<TodayEntry>) -> Void) {
-        let entry = TodayEntry(date: .now, snapshot: store.read())
-        // Refreshed when the app writes, not on a schedule — the app calls
-        // `reloadAllTimelines` the moment anything changes, which is both
-        // faster and cheaper than waking up to re-read an unchanged file.
-        // Midnight is the one change the app cannot announce, because it may
-        // not be running, so the timeline ends there.
-        completion(Timeline(entries: [entry], policy: .after(.nextMidnight)))
+        // One entry per day the app left behind. The first renders now; each
+        // later one is dated at that day's midnight, so the widget turns over
+        // on its own rather than waiting for a refresh it does not control.
+        //
+        // It used to send a single entry with `.after(.nextMidnight)`, which
+        // only *asks* for a new timeline after midnight. WidgetKit grants
+        // those on a budget, so the widget could sit on yesterday's numbers
+        // for hours until the app was opened.
+        let calendar = Calendar.current
+        let days = store.read()?.days ?? []
+        guard !days.isEmpty else {
+            let entry = TodayEntry(date: .now, snapshot: nil)
+            return completion(Timeline(entries: [entry], policy: .after(.nextMidnight)))
+        }
+
+        let entries = days.enumerated().map { index, snapshot in
+            TodayEntry(
+                date: index == 0 ? .now : calendar.startOfDay(for: snapshot.date),
+                snapshot: snapshot
+            )
+        }
+        // `.atEnd`: ask again once the last day has been shown. The app
+        // reloads on every write anyway, so this is only the fallback for a
+        // phone nobody has opened in days.
+        completion(Timeline(entries: entries, policy: .atEnd))
     }
 }
 
