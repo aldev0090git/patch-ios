@@ -241,3 +241,236 @@ APPLE HEALTH, ЛИШЕ ЯКЩО ВИ ПОПРОСИТЕ
 • Експорт у JSON або таблицю будь-коли
 
 Patch доступний англійською, українською та російською.
+
+
+---
+
+# Localised listings — Spanish, German, French, Italian
+
+Drafted by Claude alongside the in-app strings, and **unreviewed by a native
+speaker of any of them**. Settings are quoted exactly as the app renders them,
+so the product page and the screen describe the same switch.
+
+## Spanish (es)
+
+### Subtitle (28/30)
+
+Metas, rachas y estadísticas
+
+### Promotional text (104/170)
+
+Cinco temas de color, en cada pantalla y en el widget. Oro, oro rosa, platino, papel o gris, en Ajustes.
+
+### Keywords (94/100)
+
+diario,rutina,agua,pasos,leer,gimnasio,ahorro,progreso,calendario,meta,widget,salud,constancia
+
+### Description (1755/4000)
+
+Minutos leídos. Flexiones hechas. Litros de agua. Dinero apartado el día de cobro. Un día sin fumar.
+
+La mayoría de las apps tratan todo eso como cosas distintas. Patch lo trata como una sola: una cantidad que acumulas hacia una meta diaria. Esa única idea hace que toda la app sea más simple, porque cada objetivo funciona igual.
+
+REGISTRA LO QUE QUIERAS
+
+• Tiempo, cantidades, distancia, volumen o dinero: fija una meta diaria y ve sumando
+• Botones rápidos adaptados al objetivo, o escribe la cantidad exacta
+• Confirmación diaria para lo que simplemente se hace o no se hace
+
+UN HORARIO QUE ENCAJA
+
+• Cada día, ciertos días de la semana, o ciertas fechas del mes para lo que sigue a la nómina
+• Los días en que un objetivo no toca no rompen tu racha
+• Hoy perdona: un día sin terminar se mide desde ayer en vez de mostrar cero
+
+MIRA DÓNDE ESTÁS
+
+• Hoy: lo que queda, de un vistazo
+• Calendario: un mes entero, y toca cualquier día para registrarlo — sin límite de cuánto puedes retroceder
+• Estadísticas: día, semana, mes, año o el periodo que elijas, con hecho frente a fallado en cada objetivo
+
+EN TU PANTALLA DE INICIO
+
+• Widgets pequeño y mediano con el progreso de hoy y lo siguiente
+• También widgets en la pantalla bloqueada
+• Cinco temas que el widget también lleva
+
+APPLE HEALTH, SOLO SI LO PIDES
+
+Activa «Rellenar desde Salud» en un objetivo y Patch lo mantiene al día con tus pasos, distancia o minutos de ejercicio. Patch nunca escribe en Salud y no lee nada hasta que tú lo activas.
+
+TUS DATOS SON TUYOS
+
+• Sin cuenta, sin servidor, sin analítica ni anuncios
+• Nada de lo que escribes sale de tu iPhone
+• Exporta todo en JSON o en hoja de cálculo cuando quieras
+
+Patch está en español, inglés, alemán, francés, italiano, ucraniano y ruso.
+
+## German (de)
+
+### Subtitle (27/30)
+
+Ziele, Serien und Statistik
+
+### Promotional text (117/170)
+
+Fünf Farbthemen, auf jedem Bildschirm und im Widget. Gold, Roségold, Platin, Papier oder Grau — in den Einstellungen.
+
+### Keywords (89/100)
+
+täglich,routine,wasser,schritte,lesen,sport,sparen,fortschritt,kalender,ziel,widget,serie
+
+### Description (1842/4000)
+
+Gelesene Minuten. Geschaffte Liegestütze. Liter Wasser. Geld, das am Zahltag zurückgelegt wird. Ein Tag ohne Zigarette.
+
+Die meisten Apps behandeln das als verschiedene Dinge. Patch behandelt es als eines: eine Menge, die sich auf ein Tagesziel summiert. Diese eine Idee macht die ganze App einfacher, weil jedes Ziel gleich funktioniert.
+
+VERFOLGE, WAS DU WILLST
+
+• Zeit, Anzahl, Distanz, Volumen oder Geld — setze ein Tagesziel und erfasse dagegen
+• Schnelltasten, die zum Ziel passen, oder tippe den genauen Wert ein
+• Tägliche Bestätigung für das, was man entweder tut oder nicht
+
+EIN PLAN, DER PASST
+
+• Jeden Tag, bestimmte Wochentage oder bestimmte Tage im Monat — etwa zum Gehaltseingang
+• Tage, an denen ein Ziel nicht ansteht, brechen die Serie nicht
+• Heute ist nachsichtig: ein unfertiger Tag wird ab gestern gezählt, statt null zu zeigen
+
+SIEH, WO DU STEHST
+
+• Heute: was noch offen ist, auf einen Blick
+• Kalender: ein ganzer Monat, und jeder Tag lässt sich antippen und nachtragen — beliebig weit zurück
+• Statistik: Tag, Woche, Monat, Jahr oder ein eigener Zeitraum, mit geschafft gegen verpasst für jedes Ziel
+
+AUF DEINEM HOME-BILDSCHIRM
+
+• Kleines und mittleres Widget mit dem heutigen Fortschritt und dem, was als Nächstes kommt
+• Auch Widgets für den Sperrbildschirm
+• Fünf Themen, die das Widget mitträgt
+
+APPLE HEALTH, NUR WENN DU WILLST
+
+Schalte „Aus Health übernehmen" für ein Ziel ein, und Patch hält es mit Schritten, Distanz oder Trainingsminuten aktuell. Patch schreibt nie nach Health und liest nichts, bevor du es einschaltest.
+
+DEINE DATEN GEHÖREN DIR
+
+• Kein Konto, kein Server, keine Analyse, keine Werbung
+• Nichts, was du eingibst, verlässt dein iPhone
+• Exportiere alles als JSON oder Tabelle, wann du willst
+
+Patch gibt es auf Deutsch, Englisch, Spanisch, Französisch, Italienisch, Ukrainisch und Russisch.
+
+## French (fr)
+
+### Subtitle (26/30)
+
+Objectifs, séries et stats
+
+### Promotional text (112/170)
+
+Cinq thèmes de couleur, sur chaque écran et dans le widget. Or, or rose, platine, papier ou gris, dans Réglages.
+
+### Keywords (94/100)
+
+quotidien,routine,eau,pas,lecture,sport,épargne,progrès,calendrier,objectif,widget,santé,série
+
+### Description (1921/4000)
+
+Des minutes de lecture. Des pompes. Des litres d'eau. De l'argent mis de côté le jour de paie. Une journée sans fumer.
+
+La plupart des applications traitent cela comme des choses différentes. Patch n'en fait qu'une : une quantité que l'on cumule vers un objectif quotidien. Cette seule idée simplifie toute l'application, parce que chaque objectif fonctionne pareil.
+
+SUIVEZ CE QUE VOUS VOULEZ
+
+• Temps, nombre, distance, volume ou argent : fixez un objectif quotidien et enregistrez
+• Des boutons rapides adaptés à l'objectif, ou saisissez la valeur exacte
+• Une confirmation quotidienne pour ce qui est fait ou ne l'est pas
+
+UN RYTHME QUI VOUS VA
+
+• Chaque jour, certains jours de la semaine, ou certaines dates du mois pour ce qui suit le salaire
+• Les jours où un objectif n'est pas prévu ne cassent pas la série
+• Aujourd'hui pardonne : une journée inachevée se compte depuis hier au lieu d'afficher zéro
+
+VOYEZ OÙ VOUS EN ÊTES
+
+• Aujourd'hui : ce qu'il reste, d'un coup d'œil
+• Calendrier : un mois entier, et touchez n'importe quel jour pour l'enregistrer — sans limite de recul
+• Statistiques : jour, semaine, mois, année ou une période choisie, avec fait contre manqué pour chaque objectif
+
+SUR VOTRE ÉCRAN D'ACCUEIL
+
+• Widgets petit et moyen montrant la progression du jour et la suite
+• Des widgets sur l'écran verrouillé aussi
+• Cinq thèmes que le widget porte également
+
+APPLE SANTÉ, SEULEMENT SI VOUS LE DEMANDEZ
+
+Activez « Remplir depuis Santé » pour un objectif et Patch le tient à jour avec vos pas, votre distance ou vos minutes d'exercice. Patch n'écrit jamais dans Santé et ne lit rien tant que vous ne l'activez pas.
+
+VOS DONNÉES SONT À VOUS
+
+• Pas de compte, pas de serveur, pas d'analyse, pas de publicité
+• Rien de ce que vous saisissez ne quitte votre iPhone
+• Exportez tout en JSON ou en tableur quand vous voulez
+
+Patch est en français, anglais, espagnol, allemand, italien, ukrainien et russe.
+
+## Italian (it)
+
+### Subtitle (30/30)
+
+Obiettivi, serie e statistiche
+
+### Promotional text (111/170)
+
+Cinque temi di colore, su ogni schermata e nel widget. Oro, oro rosa, platino, carta o grigio, in Impostazioni.
+
+### Keywords (98/100)
+
+quotidiano,routine,acqua,passi,lettura,palestra,risparmio,progresso,calendario,widget,salute,serie
+
+### Description (1879/4000)
+
+Minuti letti. Flessioni fatte. Litri d'acqua. Soldi messi da parte il giorno dello stipendio. Un giorno senza fumare.
+
+La maggior parte delle app tratta queste cose come diverse. Patch le tratta come una sola: una quantità che si accumula verso un obiettivo giornaliero. Questa singola idea rende tutta l'app più semplice, perché ogni obiettivo funziona allo stesso modo.
+
+REGISTRA QUELLO CHE VUOI
+
+• Tempo, conteggi, distanza, volume o denaro: imposta un obiettivo giornaliero e registra
+• Pulsanti rapidi adatti all'obiettivo, oppure digita il valore esatto
+• Conferma giornaliera per le cose che o si fanno o non si fanno
+
+UNA PIANIFICAZIONE CHE TI SEGUE
+
+• Ogni giorno, certi giorni della settimana, o certe date del mese per ciò che segue lo stipendio
+• I giorni in cui un obiettivo non è previsto non interrompono la serie
+• Oggi perdona: una giornata incompleta si misura da ieri invece di mostrare zero
+
+GUARDA A CHE PUNTO SEI
+
+• Oggi: cosa resta, a colpo d'occhio
+• Calendario: un mese intero, e tocca qualsiasi giorno per registrarlo — senza limiti su quanto indietro andare
+• Statistiche: giorno, settimana, mese, anno o un periodo scelto da te, con fatto e mancato per ogni obiettivo
+
+SULLA SCHERMATA HOME
+
+• Widget piccolo e medio con i progressi di oggi e cosa viene dopo
+• Anche widget nella schermata di blocco
+• Cinque temi che il widget indossa a sua volta
+
+APPLE SALUTE, SOLO SE LO CHIEDI
+
+Attiva «Compila da Salute» per un obiettivo e Patch lo tiene aggiornato con passi, distanza o minuti di attività. Patch non scrive mai in Salute e non legge nulla finché non lo attivi tu.
+
+I TUOI DATI SONO TUOI
+
+• Nessun account, nessun server, nessuna analisi, nessuna pubblicità
+• Niente di ciò che inserisci lascia il tuo iPhone
+• Esporta tutto in JSON o in un foglio di calcolo quando vuoi
+
+Patch è in italiano, inglese, spagnolo, tedesco, francese, ucraino e russo.

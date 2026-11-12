@@ -498,7 +498,8 @@ sort of thing nobody notices.
 
 ## Localisation
 
-English, Ukrainian and Russian, with English as the source language.
+Seven languages — English (the source), Ukrainian, Russian, Spanish, German,
+French and Italian.
 
 Units are formatted by Foundation rather than assembled by hand. Writing
 `"\(value) min"` would need "хв" in Ukrainian and "мин" in Russian, and would
@@ -512,8 +513,18 @@ a seeded goal still follows the phone's language months later. Renaming a goal
 clears the key — a name someone typed is theirs, and translating it out from
 under them would be wrong.
 
-> The Ukrainian and Russian strings were written without a native reviewer and
-> are worth a second pair of eyes.
+> None of the six translations has been reviewed by a native speaker. Two
+> wording bugs have already been found in the Russian that way, so assume the
+> same holds for the rest.
+
+German was the one to watch, and it is the reason every screen is looked at
+in every language rather than only diffed. The editor came out reading
+"Ziel / Ziel: Ziel erreichen" — section header, row label and half its value
+all the same word — which no amount of checking the catalogue would have
+shown. Its long compounds are otherwise fine: the three-segment Repeat picker
+fits "Jeden Tag | Bestimmte Tage | Bestimmte Daten" without truncating, which
+is exactly where Russian once failed with two options both cut to
+"Определённы…".
 
 The App Store listing is English only so far. Ukrainian and Russian versions
 are drafted in `docs/app-store-listing.md`, quoting the settings exactly as
