@@ -2,8 +2,8 @@
 
 A goal and habit tracker for iPhone, built in SwiftUI.
 
-**Submitted to the App Store** — 1.0, awaiting review.
-**On TestFlight meanwhile:** [testflight.apple.com/join/W2KmuhsA](https://testflight.apple.com/join/W2KmuhsA)
+**On the App Store:** [Patch: Habit Tracker](https://apps.apple.com/app/patch-habit-tracker/id6824669277) — 1.0, free.
+**Or join the beta:** [TestFlight](https://testflight.apple.com/join/W2KmuhsA)
 
 Reading twenty minutes a day, a hundred push-ups, two litres of water, money put
 aside when the salary lands, a day without smoking — Patch treats all of these as
@@ -207,6 +207,14 @@ the footer points at Settings rather than inventing a status.
 Small and medium on the home screen; circular, rectangular and inline on the
 Lock Screen. All of them read a snapshot file the app writes after every
 change — never the database.
+
+**The file holds a week, not a day.** A widget cannot refresh itself on time:
+`.after(.nextMidnight)` only *asks* WidgetKit for a new timeline, and those
+requests are granted on a budget, so the widget used to show yesterday's
+finished numbers until the app was next opened. Given the next seven days up
+front it turns over at midnight by itself — zero progress, and the goals
+actually scheduled for the new day rather than yesterday's list with the
+numbers wiped.
 
 **The widget cannot log, and that is the decision.** Letting an extension write
 would mean two processes mutating the same store, and for an app whose whole
@@ -440,15 +448,28 @@ swatch it launched with comes back selected.
 - [x] Apple Health — steps, walking distance and exercise minutes
 - [x] Reordering goals, and a screen that lists every one of them
 - [x] Five page themes, worn by the app and by the widget
-- [x] Submitted to the App Store
+- [x] On the App Store — 1.0, released 5 November 2026
 - [ ] Product page in Ukrainian and Russian — drafted, awaiting a native read
 - [ ] iCloud sync via SwiftData + CloudKit
 
 ## Shipping it
 
-Four things were required to submit that no amount of building the app would
-have surfaced, and all four were found the week of submission rather than the
-week of writing the code:
+Submitted on 22 October, approved on 5 November. The gap was not the review —
+it was an **updated Developer Program License Agreement** sitting unaccepted
+in App Store Connect, which parks a submission in "Waiting for Review" with no
+message anywhere to say so. The review ran the morning after it was accepted.
+Check the agreements first when a submission sits.
+
+The review itself came back as **Guideline 2.1, Information Needed** — the
+questionnaire Apple sends a developer account with no history. Not a problem
+with the app: six questions, a screen recording made on a physical device
+beginning with the app launch, and it went through. The answers live in
+`docs/app-store-listing.md` and in App Review Information, where they stay for
+future submissions.
+
+Four other things were required that no amount of building the app would have
+surfaced, all found the week of submission rather than the week of writing the
+code:
 
 **A privacy manifest.** `PrivacyInfo.xcprivacy` declaring every "required
 reason" API — `UserDefaults` is one, and this app stores every setting in it.
@@ -504,13 +525,19 @@ product page and the screen cannot describe the same switch differently.
 Swift 6.2 · SwiftUI · SwiftData · WidgetKit · HealthKit · Swift Testing ·
 SwiftLint (`--strict` in CI) · GitHub Actions
 
-373 tests in all — 189 in the domain package, which need no simulator and run
+378 tests in all — 194 in the domain package, which need no simulator and run
 in about 40 ms, and 184 in the app. UI tests sit outside CI and exist to catch
 what the others structurally cannot: a screen that renders empty, a row that
 draws across its neighbour, a confirmation whose only button is Delete, a
 background that swallows every tap on the screen beneath it.
 
-That last one is the clearest argument for them. A page theme made Today
+Two of them have since earned their keep twice over. A keyboard that could
+not be dismissed, and a widget that showed yesterday's numbers past midnight,
+were both found by someone using the app rather than by any test — and fixing
+the first broke a UI test that had been quietly swiping for 152 seconds to
+find a row, which no one had noticed because it passed.
+
+That first one is the clearest argument for them. A page theme made Today
 impossible to scroll or tap — `.clipped()` clips drawing but not hit testing —
 and the whole suite stayed green, because the only things it touched were the
 toolbar and the tab bar, both outside the broken area. `ThemedInteractionUITests`
