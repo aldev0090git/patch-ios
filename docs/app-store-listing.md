@@ -352,17 +352,17 @@ También en esta versión:
 
 ## German (de)
 
-### Subtitle (27/30)
+### Subtitle (29/30)
 
-Ziele, Serien und Statistik
+Ziele, Serien und Statistiken
 
 ### Promotional text (117/170)
 
 Fünf Farbthemen, auf jedem Bildschirm und im Widget. Gold, Roségold, Platin, Papier oder Grau — in den Einstellungen.
 
-### Keywords (89/100)
+### Keywords (94/100)
 
-täglich,routine,wasser,schritte,lesen,sport,sparen,fortschritt,kalender,ziel,widget,serie
+täglich,routine,wasser,schritte,lesen,sport,sparen,fortschritt,kalender,ziel,widget,gesundheit
 
 ### Description (1842/4000)
 
@@ -426,7 +426,7 @@ Cinq thèmes de couleur, sur chaque écran et dans le widget. Or, or rose, plati
 
 ### Keywords (94/100)
 
-quotidien,routine,eau,pas,lecture,sport,épargne,progrès,calendrier,objectif,widget,santé,série
+quotidien,routine,eau,pas,lecture,sport,épargne,progrès,calendrier,cible,widget,santé,habitude
 
 ### Description (1921/4000)
 
